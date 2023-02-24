@@ -7,7 +7,7 @@ public abstract class Grid {
 	private int numColumns;
 	
 	
-	Grid(int rows, int cols){
+	public Grid(int rows, int cols){
 		numRows = rows;
 		numColumns = cols;
 	}

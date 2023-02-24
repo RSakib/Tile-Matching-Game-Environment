@@ -8,6 +8,10 @@ public abstract class TileMatchingGame {
 	int score;
 	java.time.Clock clock;
 	
+	public TileMatchingGame() {
+		score = 0;
+	}
+	
 	public void quit() {
 		System.exit(0);
 	}
