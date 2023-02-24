@@ -43,5 +43,13 @@ public class TMGE {
 		players.add(newPlayer);
 		return newPlayer;
 	}
+
+	public int getCurrentNumPlayers() {
+		return currentNumPlayers;
+	}
+
+	public void setCurrentNumPlayers(int currentNumPlayers) {
+		this.currentNumPlayers = currentNumPlayers;
+	}
 	
 }
