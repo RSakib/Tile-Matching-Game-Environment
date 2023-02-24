@@ -9,18 +9,25 @@ public class TMGEController extends Application{
 	
 	TMGE tmge;
 	
+	static final int sWidth = 300;
+	static final int sHeight = 300;
+	
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		tmge = new TMGE();
 		primaryStage.setTitle("TMGE");
 		
 		Button button = new Button("Coolio");
+		StackPane buttonLayout = new StackPane();
+		Scene buttonScene = new Scene(buttonLayout, sWidth, sHeight);
+		button.setOnMouseClicked(event ->{primaryStage.setScene(buttonScene);});
 		
-		StackPane layout = new StackPane();
-		layout.getChildren().add(button);
+		StackPane menuLayout = new StackPane();
+		menuLayout.getChildren().add(button);
 		
-		Scene scene = new Scene(layout, 300, 250);
-		primaryStage.setScene(scene);
+		Scene menuScene = new Scene(menuLayout, sWidth, sHeight);
+		primaryStage.setScene(menuScene);
 		primaryStage.show();
 	}
 	
