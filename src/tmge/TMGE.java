@@ -12,7 +12,7 @@ public class TMGE {
 	// Supposed to be number of players that are going to play right now
 	private int currentNumPlayers;
 	
-	TMGE(){
+	public TMGE(){
 		gameFactory = new TileMatchingGameFactory();
 		// have players read from some text file or something for players
 		currentNumPlayers = 2;
