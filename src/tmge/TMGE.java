@@ -18,10 +18,10 @@ public class TMGE {
 		currentNumPlayers = 2;
 	}
 	
-	public void runGame() {
+	public void runGame(String gameName) {
 		for(int i = 0; i < currentNumPlayers; i++) {
-			Player currentPlayer = promptPlayerName();
-			TileMatchingGame game = gameFactory.createGame("");
+			//Player currentPlayer = promptPlayerName();
+			TileMatchingGame game = gameFactory.createGame(gameName);
 			game.run();
 		}
 	}
