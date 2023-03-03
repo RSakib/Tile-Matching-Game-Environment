@@ -2,8 +2,9 @@
 package tile;
 import java.util.List;
 import grid.Grid;
+import grid.Position;
 
 
 public interface iExploder {
-    List<Integer>explode(Grid g, int row, int col);
+    public List<Position>explode(Grid g, int row, int col);
 }
