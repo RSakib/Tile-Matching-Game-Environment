@@ -7,22 +7,20 @@ import tmge.TMGEView;
 
 public class TMGEApp extends Application{
 	
-	private TMGE model;
-	private TMGEView view;
-	
 	static final int sWidth = 300;
 	static final int sHeight = 300;
 	
 	
 	@Override
 	public void start(Stage pStage) throws Exception {
+		pStage.setTitle("TMGE");
+		
 		Scene newScene = new Scene(new StackPane(), sWidth, sHeight);
 		pStage.setScene(newScene);
 		
-		model = new TMGE();
-		view = new TMGEView(model, newScene);
-		pStage.setTitle("TMGE");
-		
+		TMGE model = new TMGE();
+		@SuppressWarnings("unused")
+		TMGEView view = new TMGEView(model, newScene);
 		
 		pStage.show();
 	}
