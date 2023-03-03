@@ -1,10 +1,11 @@
 package tmGame;
 
 import grid.Grid;
+import javafx.stage.Screen;
 
 public abstract class TileMatchingGame {
 	Grid grid;
-	//GameScreen screen;
+	Screen screen;
 	int score;
 	java.time.Clock clock;
 	

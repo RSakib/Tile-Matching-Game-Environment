@@ -9,10 +9,12 @@ import javafx.scene.layout.StackPane;
 
 public class TMGEView {
 	private TMGE model;
+	private TMGEModelController controller;
 	private Scene scene;
 	
-	public TMGEView(TMGE model, Scene scene) {
+	public TMGEView(TMGE model, TMGEModelController controller, Scene scene) {
 		this.model = model;
+		this.controller = controller;
 		this.scene = scene;
 		
 		setMainMenuScreen();

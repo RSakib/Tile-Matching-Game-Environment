@@ -3,6 +3,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import tmge.TMGE;
+import tmge.TMGEModelController;
 import tmge.TMGEView;
 
 public class TMGEApp extends Application{
@@ -19,8 +20,9 @@ public class TMGEApp extends Application{
 		pStage.setScene(newScene);
 		
 		TMGE model = new TMGE();
+		TMGEModelController controller = new TMGEModelController(model);
 		@SuppressWarnings("unused")
-		TMGEView view = new TMGEView(model, newScene);
+		TMGEView view = new TMGEView(model, controller, newScene);
 		
 		pStage.show();
 	}
