@@ -1,5 +1,6 @@
 package tmge;
 
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import tmGame.NullGameScreen;
 import tmGame.TileMatchingGame;
@@ -18,6 +19,7 @@ public class TMGEModelController {
 			game.setScreen(new NullGameScreen(pScene));;
 			game.run();
 		}
+		
 		return;
 	}
 	

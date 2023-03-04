@@ -4,7 +4,7 @@ import grid.Grid;
 
 public class NullGame extends TileMatchingGame {
 
-	static int i = 100;
+	static int i = 10;
 	
 	public NullGame(Grid grid) {
 		super(grid);
@@ -15,7 +15,7 @@ public class NullGame extends TileMatchingGame {
 	public boolean isGameOver() {
 		// TODO Auto-generated method stub
 		if(i == 0) {
-			i = 100;
+			i = 10;
 			return true;
 		}
 		else {
@@ -39,6 +39,12 @@ public class NullGame extends TileMatchingGame {
 
 	@Override
 	public void onClockTick() {
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return;
 
 	}

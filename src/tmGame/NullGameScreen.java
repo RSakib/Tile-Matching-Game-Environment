@@ -20,6 +20,7 @@ public class NullGameScreen extends GameScreen {
 		gridLayout.getChildren().add(new Text("This is a Null Game, get out of here :["));
 		
 		scene.setRoot(gridLayout);
+		
 	}
 
 }

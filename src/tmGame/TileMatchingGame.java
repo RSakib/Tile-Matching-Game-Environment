@@ -1,5 +1,7 @@
 package tmGame;
 
+import java.time.Clock;
+
 import grid.Grid;
 
 public abstract class TileMatchingGame {
@@ -12,6 +14,7 @@ public abstract class TileMatchingGame {
 		screen = null;
 		this.grid = grid;
 		score = 0;
+		clock = Clock.systemUTC();
 	}
 	
 	public void quit() {

@@ -2,6 +2,7 @@ package tmge;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -33,7 +34,28 @@ public class TMGEView {
 	class GameOptionHandler implements EventHandler<ActionEvent> {
 	    @Override
 	    public void handle(ActionEvent event) {
-	    	controller.runGame(((Button)event.getSource()).getId(), scene);;
+	    	startGame(event);
 	    }
 	};
+	
+	public void startGame(ActionEvent event) 
+    {
+        // Create a Runnable
+        Runnable task = new Runnable()
+        {
+            public void run()
+            {
+            	Parent prevRoot = scene.getRoot();
+    	    	controller.runGame(((Button)event.getSource()).getId(), scene);
+    	    	scene.setRoot(prevRoot);
+            }
+        };
+ 
+        // Run the task in a background thread
+        Thread backgroundThread = new Thread(task);
+        // Terminate the running thread if the application exits
+        backgroundThread.setDaemon(true);
+        // Start the thread
+        backgroundThread.start();
+    }   
 }
