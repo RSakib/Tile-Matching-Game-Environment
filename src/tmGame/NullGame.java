@@ -5,10 +5,12 @@ import tmGame.gameScreen.NullGameScreen;
 
 public class NullGame extends TileMatchingGame {
 
-	static int i = 10;
+	static final int LOOPS = 10;
+	static final int DURATION = 100;
+	static int i = LOOPS;
 	
-	public NullGame(Grid grid) {
-		super(grid);
+	public NullGame() {
+		super(null);
 		screen = new NullGameScreen();
 	}
 
@@ -16,7 +18,7 @@ public class NullGame extends TileMatchingGame {
 	public boolean isGameOver() {
 		// TODO Auto-generated method stub
 		if(i == 0) {
-			i = 10;
+			i = LOOPS;
 			return true;
 		}
 		else {
@@ -41,7 +43,7 @@ public class NullGame extends TileMatchingGame {
 	@Override
 	public void onClockTick() {
 		try {
-			Thread.sleep(500);
+			Thread.sleep(DURATION);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
