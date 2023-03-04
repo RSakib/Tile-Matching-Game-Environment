@@ -1,6 +1,8 @@
 package tmge;
 
 import javafx.scene.Scene;
+import tmGame.NullGameScreen;
+import tmGame.TileMatchingGame;
 
 public class TMGEModelController {
 	private TMGE model;
@@ -10,6 +12,12 @@ public class TMGEModelController {
 	}
 	
 	public void runGame(String gameName, Scene pScene) {
+		for(int i = 0; i < model.getCurrentNumPlayers(); i++) {
+			//Player currentPlayer = promptPlayerName();
+			TileMatchingGame game = model.createGame(gameName);
+			game.setScreen(new NullGameScreen(pScene));;
+			game.run();
+		}
 		return;
 	}
 	

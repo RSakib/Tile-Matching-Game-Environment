@@ -8,9 +8,9 @@ public abstract class TileMatchingGame {
 	int score;
 	static java.time.Clock clock;
 	
-	public TileMatchingGame(Grid grid, GameScreen screen) {
+	public TileMatchingGame(Grid grid) {
+		screen = null;
 		this.grid = grid;
-		this.screen = screen;
 		score = 0;
 	}
 	
@@ -24,9 +24,9 @@ public abstract class TileMatchingGame {
 	
 	public void run() {
 		while(!isGameOver()) {
-			display();
 			handleInput();
 			onClockTick();
+			display();
 		}
 	}
 	
@@ -34,5 +34,13 @@ public abstract class TileMatchingGame {
 	public abstract void display();
 	public abstract void handleInput();
 	public abstract void onClockTick();
+	
+	public GameScreen getScreen() {
+		return screen;
+	}
+
+	public void setScreen(GameScreen screen) {
+		this.screen = screen;
+	}
 
 }

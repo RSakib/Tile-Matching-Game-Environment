@@ -1,7 +1,6 @@
 package tmge;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,7 +21,7 @@ public class TMGEView {
 	
 	public void setMainMenuScreen() {
 		Button button = new Button("Coolio");
-		button.setId("NullGame");
+		button.setId("NULLGAME");
 		button.setOnAction(new GameOptionHandler());
 		
 		StackPane menuLayout = new StackPane();
@@ -34,7 +33,7 @@ public class TMGEView {
 	class GameOptionHandler implements EventHandler<ActionEvent> {
 	    @Override
 	    public void handle(ActionEvent event) {
-	    	System.out.println("Clicked " + ((Button)event.getSource()).getId());
+	    	controller.runGame(((Button)event.getSource()).getId(), scene);;
 	    }
 	};
 }

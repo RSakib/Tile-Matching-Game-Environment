@@ -4,20 +4,30 @@ import grid.Grid;
 
 public class NullGame extends TileMatchingGame {
 
-	public NullGame(Grid grid, GameScreen screen) {
-		super(grid, screen);
+	static int i = 100;
+	
+	public NullGame(Grid grid) {
+		super(grid);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public boolean isGameOver() {
 		// TODO Auto-generated method stub
-		return true;
+		if(i == 0) {
+			i = 100;
+			return true;
+		}
+		else {
+			i--;
+			return false;
+		}
+		
 	}
 
 	@Override
 	public void display() {
-		this.screen.displayGrid(grid);
+		screen.displayGrid(grid);
 
 	}
 

@@ -1,17 +1,17 @@
 package tmGame;
 
 import grid.Grid;
-import javafx.stage.Screen;
+import javafx.scene.Scene;
 
 public abstract class GameScreen {
-	Screen screen;
+	protected Scene scene;
 	
-	public Screen getScreen() {
-		return screen;
+	public Scene getScreen() {
+		return scene;
 	}
 
-	public GameScreen(Screen screen) {
-		this.screen = screen;
+	public GameScreen(Scene screen) {
+		this.scene = screen;
 	}
 	
 	public abstract void displayGrid(Grid grid);
