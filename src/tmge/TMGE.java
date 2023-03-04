@@ -1,8 +1,6 @@
 package tmge;
 
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import tmGame.TileMatchingGame;
 import tmGame.TileMatchingGameFactory;
 

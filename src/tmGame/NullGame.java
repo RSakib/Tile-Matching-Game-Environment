@@ -8,7 +8,7 @@ public class NullGame extends TileMatchingGame {
 	
 	public NullGame(Grid grid) {
 		super(grid);
-		// TODO Auto-generated constructor stub
+		screen = new NullGameScreen();
 	}
 
 	@Override

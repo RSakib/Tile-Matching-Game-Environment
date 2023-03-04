@@ -1,8 +1,7 @@
 package tmge;
 
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import tmGame.NullGameScreen;
+import tmGame.JavaFXScreen;
 import tmGame.TileMatchingGame;
 
 public class TMGEModelController {
@@ -16,7 +15,10 @@ public class TMGEModelController {
 		for(int i = 0; i < model.getCurrentNumPlayers(); i++) {
 			//Player currentPlayer = promptPlayerName();
 			TileMatchingGame game = model.createGame(gameName);
-			game.setScreen(new NullGameScreen(pScene));;
+			if(game.getScreen() instanceof JavaFXScreen) {
+				System.out.println("set scene to be primary scene");
+				((JavaFXScreen)game.getScreen()).setScene(pScene);
+			}
 			game.run();
 		}
 		

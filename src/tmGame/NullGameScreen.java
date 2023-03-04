@@ -5,11 +5,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
-public class NullGameScreen extends GameScreen {
-
-	public NullGameScreen(Scene scene) {
-		super(scene);
-		// TODO Auto-generated constructor stub
+public class NullGameScreen extends JavaFXScreen implements GameScreen {
+	private Scene scene;
+	
+	public NullGameScreen() {
+		scene = null;
 	}
 
 	@Override
@@ -21,6 +21,16 @@ public class NullGameScreen extends GameScreen {
 		
 		scene.setRoot(gridLayout);
 		
+	}
+
+	@Override
+	public Scene getScene() {
+		return scene;
+	}
+	
+	@Override
+	public void setScene(Scene scene) {
+		this.scene = scene;
 	}
 
 }
