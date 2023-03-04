@@ -1,8 +1,8 @@
 package tmge;
 
 import javafx.scene.Scene;
-import tmGame.JavaFXScreen;
 import tmGame.TileMatchingGame;
+import tmGame.gameScreen.JavaFXScreen;
 
 public class TMGEModelController {
 	private TMGE model;

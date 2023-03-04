@@ -1,4 +1,4 @@
-package tmGame;
+package tmGame.gameScreen;
 
 import javafx.scene.Scene;
 

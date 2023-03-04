@@ -3,6 +3,7 @@ package tmGame;
 import java.time.Clock;
 
 import grid.Grid;
+import tmGame.gameScreen.GameScreen;
 
 public abstract class TileMatchingGame {
 	Grid grid;

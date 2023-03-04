@@ -1,6 +1,7 @@
 package tmGame;
 
 import grid.Grid;
+import tmGame.gameScreen.NullGameScreen;
 
 public class NullGame extends TileMatchingGame {
 
