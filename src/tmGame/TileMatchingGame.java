@@ -1,13 +1,18 @@
 package tmGame;
 
 import grid.Grid;
-import javafx.stage.Screen;
 
 public abstract class TileMatchingGame {
 	Grid grid;
-	Screen screen;
+	GameScreen screen;
 	int score;
-	java.time.Clock clock;
+	static java.time.Clock clock;
+	
+	public TileMatchingGame(Grid grid, GameScreen screen) {
+		this.grid = grid;
+		this.screen = screen;
+		score = 0;
+	}
 	
 	public void quit() {
 		System.exit(0);
