@@ -2,10 +2,15 @@ package tmge;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 public class TMGEView {
 	private TMGE model;
@@ -25,10 +30,40 @@ public class TMGEView {
 		button.setId("NULLGAME");
 		button.setOnAction(new GameOptionHandler());
 		
+		HBox hbox = new HBox();
+	    hbox.setPadding(new Insets(15, 12, 15, 12));
+	    hbox.setSpacing(10);
+	    hbox.setStyle("-fx-background-color: #336699;");
+	    
+	    Text numPlayerText = new Text(controller.getNumPlayers());
+
+	    Button buttonIncrement = new Button("Increment Players");
+	    buttonIncrement.setOnAction(e -> {
+	    	controller.incrementPlayers();
+	    	numPlayerText.setText(controller.getNumPlayers());
+	    });
+
+	    Button buttonDecrement = new Button("Decrement Players");
+	    buttonDecrement.setOnAction(e -> {
+	    	controller.decrementPlayers();
+	    	numPlayerText.setText(controller.getNumPlayers());
+	    });
+	    
+	    
+	    numPlayerText.setScaleX(2);
+	    numPlayerText.setScaleY(2);
+	    numPlayerText.setFill(Color.WHITE);
+	    
+	    hbox.getChildren().addAll(buttonIncrement, buttonDecrement, numPlayerText);
+		
 		StackPane menuLayout = new StackPane();
 		menuLayout.getChildren().add(button);
 		
-		scene.setRoot(menuLayout);;
+		BorderPane mainMenuLayout = new BorderPane();
+		mainMenuLayout.setTop(hbox);
+		mainMenuLayout.setCenter(menuLayout);
+		
+		scene.setRoot(mainMenuLayout);
 	}
 	
 	class GameOptionHandler implements EventHandler<ActionEvent> {

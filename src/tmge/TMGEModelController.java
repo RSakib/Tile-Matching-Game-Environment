@@ -34,9 +34,12 @@ public class TMGEModelController {
 	}
 	
 	public void decrementPlayers() {
-		if(model.getCurrentNumPlayers() != 2) {
+		if(model.getCurrentNumPlayers() != 1) {
 			model.setCurrentNumPlayers(model.getCurrentNumPlayers() - 1);
 		}
 	}
 	
+	public String getNumPlayers() {
+		return String.valueOf(model.getCurrentNumPlayers());
+	}
 }
