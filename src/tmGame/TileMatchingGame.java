@@ -47,4 +47,12 @@ public abstract class TileMatchingGame {
 		this.screen = screen;
 	}
 
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 }

@@ -1,11 +1,13 @@
 package tmge;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -85,7 +87,10 @@ public class TMGEView {
     	    	scene.setRoot(prevRoot);
             }
         };
- 
+        
+        // TEMP run the prompt to get a player name
+        popUpPlayerPrompt().showAndWait();
+        
         // Run the task in a background thread
         Thread backgroundThread = new Thread(task);
         // Terminate the running thread if the application exits
@@ -93,4 +98,13 @@ public class TMGEView {
         // Start the thread
         backgroundThread.start();
     }   
+	
+	public TextInputDialog popUpPlayerPrompt() {
+		TextInputDialog td = new TextInputDialog("enter any text");
+		  
+        // setHeaderText
+        td.setHeaderText("enter your name");
+        
+        return td;
+	}
 }
