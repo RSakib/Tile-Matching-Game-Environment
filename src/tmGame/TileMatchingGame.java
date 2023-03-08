@@ -18,6 +18,10 @@ public abstract class TileMatchingGame {
 		clock = Clock.systemUTC();
 	}
 	
+	public TileMatchingGame() {
+		score = 0;
+	}
+	
 	public void quit() {
 		System.exit(0);
 	}

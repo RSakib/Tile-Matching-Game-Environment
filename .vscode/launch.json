@@ -9,6 +9,14 @@
             "name": "TMGEApp",
             "request": "launch",
             "mainClass": "TMGEApp",
+            "projectName": "Tile-Matching-Game-Environment_fa082ae8",
+            "vmArgs": "--module-path javafx-sdk-19.0.2.1/lib --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "TMGEApp",
+            "request": "launch",
+            "mainClass": "TMGEApp",
             "projectName": "Tile-Matching-Game-Environment_a3b4666a",
             "vmArgs": "--module-path javafx-sdk-19.0.2.1/lib --add-modules javafx.controls,javafx.fxml"
         }

@@ -6,7 +6,7 @@ public class Player {
 	private String username;
 	private ArrayList<Integer> Scores;
 	
-	Player(String name){
+	public Player(String name){
 		username = name;
 	}
 
