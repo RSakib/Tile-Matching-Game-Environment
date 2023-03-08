@@ -1,12 +1,26 @@
 package tmGame;
 
+import java.time.Clock;
+
 import grid.Grid;
+import tmGame.gameScreen.GameScreen;
 
 public abstract class TileMatchingGame {
 	Grid grid;
-	//GameScreen screen;
+	GameScreen screen;
 	int score;
-	java.time.Clock clock;
+	static java.time.Clock clock;
+	
+	public TileMatchingGame(Grid grid) {
+		screen = null;
+		this.grid = grid;
+		score = 0;
+		clock = Clock.systemUTC();
+	}
+	
+	public TileMatchingGame() {
+		score = 0;
+	}
 	
 	public TileMatchingGame() {
 		score = 0;
@@ -22,9 +36,9 @@ public abstract class TileMatchingGame {
 	
 	public void run() {
 		while(!isGameOver()) {
-			display();
 			handleInput();
 			onClockTick();
+			display();
 		}
 	}
 	
@@ -32,5 +46,21 @@ public abstract class TileMatchingGame {
 	public abstract void display();
 	public abstract void handleInput();
 	public abstract void onClockTick();
+	
+	public GameScreen getScreen() {
+		return screen;
+	}
+
+	public void setScreen(GameScreen screen) {
+		this.screen = screen;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
 
 }
