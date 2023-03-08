@@ -1,11 +1,12 @@
 package grid;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LMatchingPattern implements IMatchingPattern {
 	private int legLength;
-	private IMatchingPattern hzPattern;
-	private IMatchingPattern vtPattern;
+	private HorizontalMatchingPattern hzPattern;
+	private VerticalMatchingPattern vtPattern;
 	
 	public LMatchingPattern(int n) {
 		legLength = n;
@@ -14,42 +15,54 @@ public class LMatchingPattern implements IMatchingPattern {
 	}
 	
 	@Override
-	public List<Position> findMatch(Grid grid, int startRow, int startCol) {
-		List<Position> matches = hzPattern.findMatch(grid, startRow, startCol);
-		
-		if (matches.size() == 0) {
-			return matches;
+	public Match findMatch(Grid grid, Position position) {
+		Match hzMatch = hzPattern.findMatch(grid, position);
+		if (! (hzMatch instanceof NoMatch)) {
+			Position left = hzMatch.getPositions().get(0);
+			Position right = hzMatch.getPositions().get(hzMatch.getNumMatched() - 1);
+
+			// find match starting/ending at two ends of hzMatch.matchedPositions
+			List<Match> matches = new ArrayList<>();
+			Match leftUp = vtPattern.matchStartsAt(grid, new Position(left.row - (legLength - 1), left.col));
+			Match leftDown = vtPattern.matchStartsAt(grid, new Position(left.row, left.col));
+			Match rightUp = vtPattern.matchStartsAt(grid, new Position(right.row - (legLength - 1), right.col));
+			Match rightDown = vtPattern.matchStartsAt(grid, new Position(right.row, right.col));
+			matches.add(leftUp);
+			matches.add(leftDown);
+			matches.add(rightUp);
+			matches.add(rightDown);
+
+			for (Match m : matches) {
+				if (! (m instanceof NoMatch)) {
+					return new Match(this, m.getPositions());
+				}
+			}
 		}
-		
-		
-		// TODO Check to make sure vertical pattern start row/col is valid for the grid
-		List<Position> leftUp = vtPattern.findMatch(grid, startRow + legLength - 1, startCol);
-		List<Position> leftDown = vtPattern.findMatch(grid, startRow, startCol);
-		List<Position> rightUp = vtPattern.findMatch(grid, startRow + legLength - 1, startCol + legLength - 1);
-		List<Position> rightDown = vtPattern.findMatch(grid, startRow, startCol + legLength - 1);
-		if (leftUp.size() != 0) {
-			matches.remove(0);
-			matches.addAll(leftUp);
-			return matches;
-		} 
-		if (leftDown.size() != 0) {
-			matches.remove(0);
-			matches.addAll(leftDown);
-			return matches;
-		} 
-		if (rightUp.size() != 0) {
-			matches.remove(legLength - 1);
-			matches.addAll(rightUp);
-			return matches;
+
+		Match vtMatch = vtPattern.findMatch(grid, position);
+		if (! (vtMatch instanceof NoMatch)) {
+			Position top = vtMatch.getPositions().get(0);
+			Position bot = vtMatch.getPositions().get(vtMatch.getNumMatched() - 1);
+
+			// find match starting/ending at two ends of vtMatch.matchedPositions	
+			List<Match> matches = new ArrayList<>();
+			Match topLeft = vtPattern.matchStartsAt(grid, new Position(top.row, top.col - (legLength - 1)));
+			Match topRight = vtPattern.matchStartsAt(grid, new Position(top.row, top.col));
+			Match botLeft = vtPattern.matchStartsAt(grid, new Position(bot.row, bot.col - (legLength - 1)));
+			Match botRight = vtPattern.matchStartsAt(grid, new Position(bot.row, bot.col));
+			matches.add(topLeft);
+			matches.add(topRight);
+			matches.add(botLeft);
+			matches.add(botRight);
+
+			for (Match m : matches) {
+				if (! (m instanceof NoMatch)) {
+					return new Match(this, m.getPositions());
+				}
+			}
 		}
-		if (rightDown.size() != 0) {
-			matches.remove(legLength - 1);
-			matches.addAll(rightDown);
-			return matches;
-		}
-		
-		matches.clear();
-		return matches;	
+
+		return new NoMatch();
 	}
 
 }

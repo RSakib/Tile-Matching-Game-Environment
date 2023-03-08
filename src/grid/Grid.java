@@ -27,25 +27,20 @@ public abstract class Grid {
 	}
 	
 	
-	public Tile tileAt(int row, int col) {
+	public Tile tileAt(Position p) {
 		// if not valid position throw exception
 		
-		return grid[row][col];
+		return grid[p.row][p.col];
 	}
 	
 	
 	public boolean matchAt(Position p1, Position p2) {
-		if (!validPosition(p1.row, p1.col) || !validPosition(p2.row, p2.col)) {
-			return false;
-		}
-		
-//		return matcher.isMatch(grid[p1.row][p1.col], grid[p2.row][p2.col]);
 		return false;
 	}
 	
 	
 	
-	public abstract boolean validPosition(int row, int col);
+	public abstract boolean validPosition(Position p);
 	public abstract int matchTiles();
 	public abstract void applyGravity();
 }

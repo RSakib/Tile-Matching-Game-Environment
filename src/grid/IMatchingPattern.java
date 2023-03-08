@@ -3,5 +3,12 @@ package grid;
 import java.util.List;
 
 public interface IMatchingPattern {
-	public List<Position> findMatch(Grid grid, int startRow, int startCol);
+	/**
+	 * Checks whether the given position is a part of a match on the grid
+	 * All possibilities/orientations of the matching pattern are checked.
+	 * @param grid
+	 * @param position
+	 * @return A Match object describing the match, returns NoMatch() if no match found
+	 */
+	public Match findMatch(Grid grid, Position position);
 }
