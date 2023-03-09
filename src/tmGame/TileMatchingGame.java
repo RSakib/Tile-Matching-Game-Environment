@@ -21,10 +21,7 @@ public abstract class TileMatchingGame {
 	public TileMatchingGame() {
 		score = 0;
 	}
-	
-	public TileMatchingGame() {
-		score = 0;
-	}
+
 	
 	public void quit() {
 		System.exit(0);

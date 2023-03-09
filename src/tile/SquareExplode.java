@@ -12,16 +12,16 @@ public class SquareExplode implements iExploder{
         toExplode.add(new Position(row, col));
         //Check all other adjacent tiles, only add valid tiles
         //Checks for bottom row
-        if(g.validPosition(row+1, col)) toExplode.add(new Position(row+1, col));
-        if(g.validPosition(row+1, col+1)) toExplode.add(new Position(row+1, col+1));
-        if(g.validPosition(row+1, col-1)) toExplode.add(new Position(row+1, col-1));
+        if(g.validPosition(new Position(row+1, col))) toExplode.add(new Position(row+1, col));
+        if(g.validPosition(new Position(row+1, col+1))) toExplode.add(new Position(row+1, col+1));
+        if(g.validPosition(new Position(row+1, col-1))) toExplode.add(new Position(row+1, col-1));
         //Checks for top row
-        if(g.validPosition(row-1, col)) toExplode.add(new Position(row-1, col));
-        if(g.validPosition(row-1, col+1)) toExplode.add(new Position(row-1, col+1));
-        if(g.validPosition(row-1, col-1)) toExplode.add(new Position(row-1, col-1));
+        if(g.validPosition(new Position(row-1, col))) toExplode.add(new Position(row-1, col));
+        if(g.validPosition(new Position(row-1, col+1))) toExplode.add(new Position(row-1, col+1));
+        if(g.validPosition(new Position(row-1, col-1))) toExplode.add(new Position(row-1, col-1));
         //Checks for current row
-        if(g.validPosition(row, col+1)) toExplode.add(new Position(row, col+1));
-        if(g.validPosition(row, col-1)) toExplode.add(new Position(row, col-1));
+        if(g.validPosition(new Position(row, col+1))) toExplode.add(new Position(row, col+1));
+        if(g.validPosition(new Position(row, col-1))) toExplode.add(new Position(row, col-1));
         return toExplode;
     }
 }
