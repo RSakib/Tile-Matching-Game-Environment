@@ -1,5 +1,5 @@
 package tile;
 
 public interface IMatcher {
-    public boolean isMatcher();
+    public boolean isMatch(Tile t1, Tile t2);
 }
