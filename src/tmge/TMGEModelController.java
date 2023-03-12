@@ -1,6 +1,7 @@
 package tmge;
 
 import javafx.scene.Scene;
+import javafx.scene.control.TextInputDialog;
 import tmGame.TileMatchingGame;
 import tmGame.gameScreen.JavaFXScreen;
 
@@ -12,20 +13,15 @@ public class TMGEModelController {
 	}
 	
 	public void runGame(String gameName, Scene pScene) {
-		for(int i = 0; i < model.getCurrentNumPlayers(); i++) {
-			//Player currentPlayer = promptPlayerName();
-			TileMatchingGame game = model.createGame(gameName);
-			if(game.getScreen() instanceof JavaFXScreen) {
-				System.out.println("set scene to be primary scene");
-				((JavaFXScreen)game.getScreen()).setScene(pScene);
-			}
-			game.run();
-		}
 		
-		return;
-	}
-	
-	public void promptForPlayer() {
+		TileMatchingGame game = model.createGame(gameName);
+		if(game.getScreen() instanceof JavaFXScreen) {
+			System.out.println("set scene to be primary scene");
+			((JavaFXScreen)game.getScreen()).setScene(pScene);
+		}
+		game.run();
+		updatePlayerHighScore(model.getCurrentPlayer(), game.getScore());
+		
 		return;
 	}
 	
@@ -39,6 +35,25 @@ public class TMGEModelController {
 		}
 	}
 	
+	public boolean findOrCreatePlayer(String playerName) {
+		Player player = model.findPlayer(playerName);
+		if(player == null) {
+			player = model.createNewPlayer(playerName);
+			model.setCurrentPlayer(player);
+			return false;
+		}
+		else{
+			model.setCurrentPlayer(player);
+			return true;
+		}
+	}
+
+	public void updatePlayerHighScore(Player player, int score) {
+		if (player.getHighScore() < score) {
+			player.setHighScore(score);
+		}
+	}
+
 	public String getNumPlayers() {
 		return String.valueOf(model.getCurrentNumPlayers());
 	}
