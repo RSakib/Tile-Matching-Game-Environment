@@ -34,13 +34,31 @@ public abstract class Grid {
 	}
 	
 	
-	public boolean matchAt(Position p1, Position p2) {
+	public boolean matchAt(Position p1) 
+	{
+		//Loop through all set of matching patterns
+		for (IMatchingPattern pattern: matchingPatterns)
+		{
+			pattern.findMatch(this, p1); //stub, need to ask in discord
+		}
+		//Use for-each loop to loop through the set (look up online)
+			//Check if that position is a match given the matching pattern
 		return false;
 	}
 	
 	
 	
-	public abstract boolean validPosition(Position p);
+	public boolean validPosition(Position p)
+	{
+		//Checks if position is within the array bounds
+		if(p.row >= 0 && p.row < numRows && p.col >= 0 && p.col < numColumns)
+		{
+			//If valid row and column, return true
+			return true;
+		}
+		//Else, return false
+		return false;
+	}
 	public abstract int matchTiles();
 	public abstract void applyGravity();
 }
