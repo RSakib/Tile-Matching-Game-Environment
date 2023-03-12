@@ -1,4 +1,5 @@
 /bin
+bin
 bin/TMGEApp.class
 bin/grid/Grid.class
 bin/grid/HorizontalMatchingPattern.class
