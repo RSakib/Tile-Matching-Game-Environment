@@ -39,11 +39,12 @@ public abstract class Grid {
 		//Loop through all set of matching patterns
 		for (IMatchingPattern pattern: matchingPatterns)
 		{
+			Match matchedPattern = pattern.findMatch(this, p1);
 			//if there is at least one match, return true
-			if(!(pattern.findMatch(this, p1) instanceof NoMatch))
+			if(!(matchedPattern instanceof NoMatch))
 			{
 				//Using instanceof to check, there might be a better way -- waiting for response from team
-				return pattern.findMatch(this, p1); //stub, need to reference the design pattern specifically
+				return matchedPattern; //stub, need to reference the design pattern specifically
 			}
 		}
 		//Use for-each loop to loop through the set (look up online)
