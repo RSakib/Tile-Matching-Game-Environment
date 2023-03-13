@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import grid.Grid;
 import grid.Position;
 
-public class NoExplode implements iExploder{
+public class NoExplode implements IExploder{
     public List<Position>explode(Grid g, int row, int col)
     {
         //Returns an empty list of ArrayList<Position>

@@ -1,5 +1,7 @@
 package grid;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import tile.Tile;
@@ -18,11 +20,11 @@ public abstract class Grid {
 		// initialize to empty tiles
 	}
 	
-	public int getNumRows() {
+	public final int getNumRows() {
 		return numRows;
 	}
 	
-	public int getNumCols() {
+	public final int getNumCols() {
 		return numColumns;
 	}
 	
@@ -31,6 +33,13 @@ public abstract class Grid {
 		// if not valid position throw exception
 		
 		return grid[p.row][p.col];
+	}
+
+
+	public void setTile(Position p, Tile t){
+		// assert valid position
+
+		grid[p.row][p.col] = t;
 	}
 	
 	
@@ -50,6 +59,29 @@ public abstract class Grid {
 		//Use for-each loop to loop through the set (look up online)
 			//Check if that position is a match given the matching pattern
 		return new NoMatch(); //returns no match if no match
+	}
+
+
+	/**
+	 * Recursively computes a list of positions that should be exploded by starting an explosion at the given position
+	 * @param p
+	 * @return
+	 */
+	public List<Position> getExplodedTiles(Position p) {
+		Tile tile = tileAt(p);
+		if (tile.isExploded()) {
+			return new ArrayList<>();
+		}
+
+		List<Position> explodedPositions = tile.explode(this, p);
+		for (Position explodedPos: explodedPositions) {
+			Tile explodedTile = tileAt(explodedPos);
+			if (! explodedPos.equals(p)) {
+				explodedPositions.addAll(getExplodedTiles(explodedPos));
+			}
+			explodedTile.setExploded(true);
+		}
+		return explodedPositions;
 	}
 	
 	

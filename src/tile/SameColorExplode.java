@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import grid.Position;
 
-public class SameColorExplode implements iExploder{
+public class SameColorExplode implements IExploder{
     public List<Position>explode(Grid g, int row, int col)
     {
         //Work in progress
