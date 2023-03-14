@@ -1,7 +1,6 @@
 package tmge;
 
 import javafx.scene.Scene;
-import javafx.scene.control.TextInputDialog;
 import tmGame.TileMatchingGame;
 import tmGame.gameScreen.JavaFXScreen;
 

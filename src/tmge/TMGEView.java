@@ -9,7 +9,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -92,8 +91,10 @@ public class TMGEView {
 						name = popUpPlayerPrompt().showAndWait();
 					});
 					
+					// Find a better way to do Nothing in a while loop
+					// Because the java compiler optimizes this wait away when its necessary
 					while (name == null) {
-						System.out.println("waiting");
+						System.out.print("");
 					}
 					controller.findOrCreatePlayer(name.get());
 
