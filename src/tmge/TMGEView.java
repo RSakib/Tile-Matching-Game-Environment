@@ -101,8 +101,8 @@ public class TMGEView {
 					Parent prevRoot = scene.getRoot();
 					controller.runGame(((Button)event.getSource()).getId(), scene);
 					scene.setRoot(prevRoot);
-				}
-            }
+				    }
+          }
         };
 			
 		// Run the task in a background thread
@@ -111,6 +111,7 @@ public class TMGEView {
 		backgroundThread.setDaemon(true);
 		// Start the thread
 		backgroundThread.start();
+
 			
     }   
 	

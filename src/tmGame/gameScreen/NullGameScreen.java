@@ -33,8 +33,9 @@ public class NullGameScreen extends JavaFXScreen implements GameScreen {
 				gameBoard.add(new StackPane(tile, text), j, i);
 
 			}
-    	}
+    }
 		System.out.println("Working");
+
 
 		scene.setRoot(gameBoard);
 		
