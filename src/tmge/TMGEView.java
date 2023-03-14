@@ -115,9 +115,7 @@ public class TMGEView {
 			// Start the thread
 			backgroundThread.start();
 			
-			while (backgroundThread.isAlive()) {
-				Thread.onSpinWait();
-			}
+			
 			
 		}
 		scene.setRoot(prevRoot);
