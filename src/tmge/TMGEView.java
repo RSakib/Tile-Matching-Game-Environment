@@ -1,5 +1,7 @@
 package tmge;
 
+import java.util.Optional;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +21,7 @@ public class TMGEView {
 	private TMGE model;
 	private TMGEModelController controller;
 	private Scene scene;
+	Optional<String> name = null;
 	
 	public TMGEView(TMGE model, TMGEModelController controller, Scene scene) {
 		this.model = model;
@@ -83,44 +86,31 @@ public class TMGEView {
         {
             public void run()
             {
-            	Parent prevRoot = scene.getRoot();
-    	    	controller.runGame(((Button)event.getSource()).getId(), scene);
-    	    	scene.setRoot(prevRoot);
+				for(int i = 0; i < model.getCurrentNumPlayers(); i++) {
+					name = null;
+					Platform.runLater(() -> {
+						name = popUpPlayerPrompt().showAndWait();
+					});
+					
+					while (name == null) {
+						System.out.println("waiting");
+					}
+					controller.findOrCreatePlayer(name.get());
+
+					Parent prevRoot = scene.getRoot();
+					controller.runGame(((Button)event.getSource()).getId(), scene);
+					scene.setRoot(prevRoot);
+				}
             }
         };
-        Parent prevRoot = scene.getRoot();
-		for(int i = 0; i < model.getCurrentNumPlayers(); i++) {
-			// run the prompt to get a player name
-			TextInputDialog prompt = popUpPlayerPrompt();
-			var name = prompt.showAndWait();
-
-			// Text look
-			BorderPane playerLayout = new BorderPane();
-			if(controller.findOrCreatePlayer(name.get())) {
-				
-				Text numPlayerText = new Text("Welcome Back " + model.getCurrentPlayer().getUsername());
-				playerLayout.setCenter(numPlayerText);
-				scene.setRoot(playerLayout);
-			}
-			else {
-				Text numPlayerText = new Text("Newcomer: " + model.getCurrentPlayer().getUsername() + " is playing");
-				playerLayout.setCenter(numPlayerText);
-				scene.setRoot(playerLayout);
-			}
 			
-			// Run the task in a background thread
-			Thread backgroundThread = new Thread(task);
-			// Terminate the running thread if the application exits
-			backgroundThread.setDaemon(true);
-			// Start the thread
-			backgroundThread.start();
+		// Run the task in a background thread
+		Thread backgroundThread = new Thread(task);
+		// Terminate the running thread if the application exits
+		backgroundThread.setDaemon(true);
+		// Start the thread
+		backgroundThread.start();
 			
-			while (backgroundThread.isAlive()) {
-				Thread.onSpinWait();
-			}
-			
-		}
-		scene.setRoot(prevRoot);
     }   
 	
 	public TextInputDialog popUpPlayerPrompt() {
