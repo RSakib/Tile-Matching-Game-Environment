@@ -1,5 +1,7 @@
 package tmge;
 
+import java.util.Optional;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -7,7 +9,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -19,6 +20,7 @@ public class TMGEView {
 	private TMGE model;
 	private TMGEModelController controller;
 	private Scene scene;
+	Optional<String> name = null;
 	
 	public TMGEView(TMGE model, TMGEModelController controller, Scene scene) {
 		this.model = model;
@@ -83,42 +85,34 @@ public class TMGEView {
         {
             public void run()
             {
-            	Parent prevRoot = scene.getRoot();
-    	    	controller.runGame(((Button)event.getSource()).getId(), scene);
-    	    	scene.setRoot(prevRoot);
-            }
-        };
-        Parent prevRoot = scene.getRoot();
-		for(int i = 0; i < model.getCurrentNumPlayers(); i++) {
-			// run the prompt to get a player name
-			TextInputDialog prompt = popUpPlayerPrompt();
-			var name = prompt.showAndWait();
+				for(int i = 0; i < model.getCurrentNumPlayers(); i++) {
+					name = null;
+					Platform.runLater(() -> {
+						name = popUpPlayerPrompt().showAndWait();
+					});
+					
+					// Find a better way to do Nothing in a while loop
+					// Because the java compiler optimizes this wait away when its necessary
+					while (name == null) {
+						System.out.print("");
+					}
+					controller.findOrCreatePlayer(name.get());
 
-			// Text look
-			BorderPane playerLayout = new BorderPane();
-			if(controller.findOrCreatePlayer(name.get())) {
-				
-				Text numPlayerText = new Text("Welcome Back " + model.getCurrentPlayer().getUsername());
-				playerLayout.setCenter(numPlayerText);
-				scene.setRoot(playerLayout);
-			}
-			else {
-				Text numPlayerText = new Text("Newcomer: " + model.getCurrentPlayer().getUsername() + " is playing");
-				playerLayout.setCenter(numPlayerText);
-				scene.setRoot(playerLayout);
-			}
+					Parent prevRoot = scene.getRoot();
+					controller.runGame(((Button)event.getSource()).getId(), scene);
+					scene.setRoot(prevRoot);
+				    }
+          }
+        };
 			
-			// Run the task in a background thread
-			Thread backgroundThread = new Thread(task);
-			// Terminate the running thread if the application exits
-			backgroundThread.setDaemon(true);
-			// Start the thread
-			backgroundThread.start();
+		// Run the task in a background thread
+		Thread backgroundThread = new Thread(task);
+		// Terminate the running thread if the application exits
+		backgroundThread.setDaemon(true);
+		// Start the thread
+		backgroundThread.start();
+
 			
-			
-			
-		}
-		scene.setRoot(prevRoot);
     }   
 	
 	public TextInputDialog popUpPlayerPrompt() {
