@@ -2,20 +2,21 @@ package grid;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
+import tile.IMatcher;
 import tile.Tile;
 
 public abstract class Grid {
 	private int numRows;
 	private int numColumns;
-//	private IMatcher matcher;
-	private Set<IMatchingPattern> matchingPatterns;
+	private IMatcher matcher;
+	private IMatchingPattern[] matchingPatterns;
 	private Tile[][] grid;
 	
-	public Grid(int rows, int cols){
-		numRows = rows;
-		numColumns = cols;
+	public Grid(int rows, int cols, IMatcher matcher, IMatchingPattern[] patterns){
+		this.numRows = rows;
+		this.numColumns = cols;
+		this.matcher = matcher;
+		this.matchingPatterns = patterns;
 		grid = new Tile[rows][cols];
 		// initialize to empty tiles
 	}
@@ -26,6 +27,11 @@ public abstract class Grid {
 	
 	public final int getNumCols() {
 		return numColumns;
+	}
+
+
+	public final IMatcher getMatcher() {
+		return matcher;
 	}
 	
 	

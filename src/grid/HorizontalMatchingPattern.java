@@ -3,6 +3,7 @@ package grid;
 import java.util.ArrayList;
 import java.util.List;
 
+import tile.IMatcher;
 import tile.Tile;
 
 public class HorizontalMatchingPattern implements IMatchingPattern{
@@ -30,16 +31,15 @@ public class HorizontalMatchingPattern implements IMatchingPattern{
 			return new NoMatch();
 		}
 
-		Tile starTile = grid.tileAt(startPosition);
-		// UNCOMMENT WHEN IMATCHER IS IMPLEMENTED
-		// IMatcher matcher = grid.getMatcher();
+		Tile startTile = grid.tileAt(startPosition);
+		IMatcher matcher = grid.getMatcher();
 		List<Position> matches = new ArrayList<>();
 		for (int i = 0; i < numMatching; i++) {
 			int row = startPosition.row;
 			int col = startPosition.col + i;
 			Position p = new Position(row, col);
 			
-			if (!grid.validPosition(p)) { //|| !matcher.isMatch(grid.tileAt(p))) {
+			if (!grid.validPosition(p) || !matcher.isMatch(startTile, grid.tileAt(p))) {
 				return new NoMatch();
 			}
 			matches.add(p);

@@ -22,6 +22,11 @@ public abstract class Tile {
 	}
 
 
+	public void setExploder(IExploder exploder) {
+		this.exploder = exploder;
+	}
+
+
 	public void setMatched(boolean matched) {
 		this.matched = matched;
 	}

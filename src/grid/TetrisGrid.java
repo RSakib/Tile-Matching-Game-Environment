@@ -1,15 +1,26 @@
 package grid;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import tile.EmptyTile;
+import tile.IMatcher;
+import tile.NonEmptyMatcher;
 import tile.Tile;
 
 public class TetrisGrid extends FallingBlockGrid {
+    public static int ROWS = 23;
+    public static int COLS = 10;
+    public static int[] ROWS_CLEARED_SCORE = { 0, 40, 100, 300, 1200};
+    public static IMatcher MATCHER = new NonEmptyMatcher();
+    public static IMatchingPattern[] PATTERNS = {
+        new HorizontalMatchingPattern(COLS)
+    };
 
     public TetrisGrid() {
-        super(23, 10);
+        super(ROWS, COLS, MATCHER, PATTERNS);
     }
 
     @Override
@@ -61,7 +72,11 @@ public class TetrisGrid extends FallingBlockGrid {
             }
         }
 
-        // remove exploded tiles and calculated score
+        // remove exploded tiles and calculate score
+        for (Position p : explodedPositions) {
+            setTile(p, new EmptyTile());
+        }
+        
         int rowsCleared = explodedPositions.size() / getNumCols();
         int score = scorePerRow(rowsCleared);
 
