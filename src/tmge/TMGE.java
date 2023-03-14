@@ -7,6 +7,7 @@ import tmGame.TileMatchingGameFactory;
 public class TMGE {
 	private TileMatchingGameFactory gameFactory;
 	private ArrayList<Player> players;
+	private Player currentPlayer;
 	// Supposed to be number of players that are going to play right now
 	private int currentNumPlayers;
 	
@@ -21,10 +22,27 @@ public class TMGE {
 		return gameFactory.createGame(gameName);
 	}
 	
-	private Player makeNewPlayer(String name) {
+	public Player createNewPlayer(String name) {
 		Player newPlayer = new Player(name);
 		players.add(newPlayer);
 		return newPlayer;
+	}
+
+	public Player findPlayer(String name) {
+		for(Player player:players){
+			if(player.getUsername().contentEquals(name)) {
+				return player;
+			};
+		}
+		return null;
+	}
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
 	}
 
 	public int getCurrentNumPlayers() {

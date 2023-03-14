@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -87,16 +88,39 @@ public class TMGEView {
     	    	scene.setRoot(prevRoot);
             }
         };
-        
-        // TEMP run the prompt to get a player name
-        popUpPlayerPrompt().showAndWait();
-        
-        // Run the task in a background thread
-        Thread backgroundThread = new Thread(task);
-        // Terminate the running thread if the application exits
-        backgroundThread.setDaemon(true);
-        // Start the thread
-        backgroundThread.start();
+        Parent prevRoot = scene.getRoot();
+		for(int i = 0; i < model.getCurrentNumPlayers(); i++) {
+			// run the prompt to get a player name
+			TextInputDialog prompt = popUpPlayerPrompt();
+			var name = prompt.showAndWait();
+
+			// Text look
+			BorderPane playerLayout = new BorderPane();
+			if(controller.findOrCreatePlayer(name.get())) {
+				
+				Text numPlayerText = new Text("Welcome Back " + model.getCurrentPlayer().getUsername());
+				playerLayout.setCenter(numPlayerText);
+				scene.setRoot(playerLayout);
+			}
+			else {
+				Text numPlayerText = new Text("Newcomer: " + model.getCurrentPlayer().getUsername() + " is playing");
+				playerLayout.setCenter(numPlayerText);
+				scene.setRoot(playerLayout);
+			}
+			
+			// Run the task in a background thread
+			Thread backgroundThread = new Thread(task);
+			// Terminate the running thread if the application exits
+			backgroundThread.setDaemon(true);
+			// Start the thread
+			backgroundThread.start();
+			
+			while (backgroundThread.isAlive()) {
+				Thread.onSpinWait();
+			}
+			
+		}
+		scene.setRoot(prevRoot);
     }   
 	
 	public TextInputDialog popUpPlayerPrompt() {

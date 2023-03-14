@@ -1,11 +1,9 @@
 package tmge;
 
-import java.util.ArrayList;
-
 public class Player {
 	private String username;
-	private ArrayList<Integer> Scores;
-	
+	private int highScore;
+
 	public Player(String name){
 		username = name;
 	}
@@ -14,13 +12,11 @@ public class Player {
 		return username;
 	}
 
-	public ArrayList<Integer> getScores() {
-		return Scores;
+	public int getHighScore() {
+		return highScore;
 	}
 
-	public void setScores(ArrayList<Integer> scores) {
-		Scores = scores;
+	public void setHighScore(int highScore) {
+		this.highScore = highScore;
 	}
-	
-
 }
