@@ -91,7 +91,11 @@ public abstract class Grid {
 	}
 	
 	
-	
+	/**
+	 * Returns whether or not the position on the grid is valid
+	 * @param p The position to test
+	 * @return boolean
+	 */
 	public boolean validPosition(Position p)
 	{
 		//Checks if position is within the array bounds
