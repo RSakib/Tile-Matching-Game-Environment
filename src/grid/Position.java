@@ -8,4 +8,9 @@ public class Position {
 		this.row = row; 
 		this.col = col;
 	}
+
+
+	public boolean equals(Position other) {
+		return this.row == other.row && this.col == other.col;
+	}
 }

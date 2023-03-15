@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import grid.Position;
 
-public class SelfExplode implements iExploder{
+public class SelfExplode implements IExploder{
     public List<Position>explode(Grid g, int row, int col)
     {
         //Only explodes a single tile

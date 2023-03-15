@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import grid.Position;
 
-public class CrossExplode implements iExploder{
+public class CrossExplode implements IExploder{
     public List<Position>explode(Grid g, int row, int col)
     {
                 //Returns a list of the positions that consist of the entire row and column of the match to explode

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import grid.Position;
 
-public class SquareExplode implements iExploder{
+public class SquareExplode implements IExploder{
     public List<Position>explode(Grid g, int row, int col)
     {
         //Returns a list of positions that explodes all valid adjacent tiles to the list

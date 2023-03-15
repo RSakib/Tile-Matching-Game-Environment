@@ -1,29 +1,37 @@
 package grid;
 
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
+import tile.IMatcher;
 import tile.Tile;
 
 public abstract class Grid {
 	private int numRows;
 	private int numColumns;
-//	private IMatcher matcher;
-	private Set<IMatchingPattern> matchingPatterns;
+	private IMatcher matcher;
+	private IMatchingPattern[] matchingPatterns;
 	private Tile[][] grid;
 	
-	public Grid(int rows, int cols){
-		numRows = rows;
-		numColumns = cols;
+	public Grid(int rows, int cols, IMatcher matcher, IMatchingPattern[] patterns){
+		this.numRows = rows;
+		this.numColumns = cols;
+		this.matcher = matcher;
+		this.matchingPatterns = patterns;
 		grid = new Tile[rows][cols];
 		// initialize to empty tiles
 	}
 	
-	public int getNumRows() {
+	public final int getNumRows() {
 		return numRows;
 	}
 	
-	public int getNumCols() {
+	public final int getNumCols() {
 		return numColumns;
+	}
+
+
+	public final IMatcher getMatcher() {
+		return matcher;
 	}
 	
 	
@@ -31,6 +39,13 @@ public abstract class Grid {
 		// if not valid position throw exception
 		
 		return grid[p.row][p.col];
+	}
+
+
+	public void setTile(Position p, Tile t){
+		// assert valid position
+
+		grid[p.row][p.col] = t;
 	}
 	
 	
@@ -51,9 +66,36 @@ public abstract class Grid {
 			//Check if that position is a match given the matching pattern
 		return new NoMatch(); //returns no match if no match
 	}
+
+
+	/**
+	 * Recursively computes a list of positions that should be exploded by starting an explosion at the given position
+	 * @param p
+	 * @return
+	 */
+	public List<Position> getExplodedTiles(Position p) {
+		Tile tile = tileAt(p);
+		if (tile.isExploded()) {
+			return new ArrayList<>();
+		}
+
+		List<Position> explodedPositions = tile.explode(this, p);
+		for (Position explodedPos: explodedPositions) {
+			Tile explodedTile = tileAt(explodedPos);
+			if (! explodedPos.equals(p)) {
+				explodedPositions.addAll(getExplodedTiles(explodedPos));
+			}
+			explodedTile.setExploded(true);
+		}
+		return explodedPositions;
+	}
 	
 	
-	
+	/**
+	 * Returns whether or not the position on the grid is valid
+	 * @param p The position to test
+	 * @return boolean
+	 */
 	public boolean validPosition(Position p)
 	{
 		//Checks if position is within the array bounds
