@@ -40,9 +40,12 @@ public abstract class TileMatchingGame {
 	}
 	
 	public abstract boolean isGameOver();
-	public abstract void display();
 	public abstract void handleInput();
 	public abstract void onClockTick();
+
+	public void display() {
+		screen.displayGrid(grid);
+	}
 	
 	public GameScreen getScreen() {
 		return screen;

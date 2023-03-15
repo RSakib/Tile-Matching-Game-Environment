@@ -12,8 +12,7 @@ public class TetrisGame extends TileMatchingGame {
 
     @Override
     public void display() {
-        // TODO Auto-generated method stub
-        
+        super.display();
     }
 
     @Override

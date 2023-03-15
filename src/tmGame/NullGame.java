@@ -29,7 +29,7 @@ public class NullGame extends TileMatchingGame {
 
 	@Override
 	public void display() {
-		screen.displayGrid(grid);
+		super.display();
 
 	}
 
