@@ -8,7 +8,7 @@ public class TileMatchingGameFactory {
 		if(title.contentEquals("NULLGAME")) {
 			return new NullGame();
 		}
-		else if(title.contentEquals("TETRIS")) {
+		else if(title.contentEquals("TETRISGAME")) {
 			return new TetrisGame(new TetrisGrid());
 		}
 		return null;

@@ -1,6 +1,7 @@
 package tmGame;
 
 import java.time.Clock;
+import java.time.Duration;
 
 import grid.Grid;
 import tmGame.gameScreen.GameScreen;
@@ -32,10 +33,16 @@ public abstract class TileMatchingGame {
 	}
 	
 	public void run() {
+		var nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
 		while(!isGameOver()) {
-			handleInput();
-			onClockTick();
-			display();
+			if (clock.instant().compareTo(nextTick) > 0) {
+				System.out.println("It has been 10 Nanoseconds");
+				nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
+				handleInput();
+				onClockTick();
+				display();
+			}
+			
 		}
 	}
 	
