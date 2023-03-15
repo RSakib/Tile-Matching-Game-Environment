@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -34,6 +36,9 @@ public class TMGEView {
 		Button button = new Button("Coolio");
 		button.setId("NULLGAME");
 		button.setOnAction(new GameOptionHandler());
+		Button tetrisButton = new Button("Tetris");
+		tetrisButton.setId("TETRISGAME");
+		tetrisButton.setOnAction(new GameOptionHandler());
 		
 		HBox hbox = new HBox();
 	    hbox.setPadding(new Insets(15, 12, 15, 12));
@@ -61,8 +66,16 @@ public class TMGEView {
 	    
 	    hbox.getChildren().addAll(buttonIncrement, buttonDecrement, numPlayerText);
 		
-		StackPane menuLayout = new StackPane();
-		menuLayout.getChildren().add(button);
+		VBox buttonPanel = new VBox(
+			button, tetrisButton
+		);
+
+		buttonPanel.setAlignment(Pos.CENTER);
+		buttonPanel.setSpacing(10);
+
+		StackPane menuLayout = new StackPane(
+			buttonPanel
+		);
 		
 		BorderPane mainMenuLayout = new BorderPane();
 		mainMenuLayout.setTop(hbox);
