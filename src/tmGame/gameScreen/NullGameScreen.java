@@ -11,10 +11,6 @@ import javafx.scene.text.Text;
 
 public class NullGameScreen extends JavaFXScreen implements GameScreen {
 	private Scene scene;
-	
-	public NullGameScreen() {
-		scene = null;
-	}
 
 	@Override
 	public void displayGrid(Grid grid) {
@@ -41,14 +37,5 @@ public class NullGameScreen extends JavaFXScreen implements GameScreen {
 		
 	}
 
-	@Override
-	public Scene getScene() {
-		return scene;
-	}
-	
-	@Override
-	public void setScene(Scene scene) {
-		this.scene = scene;
-	}
 
 }

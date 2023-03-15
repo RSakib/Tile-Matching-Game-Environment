@@ -2,6 +2,8 @@ package grid;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import tile.EmptyTile;
 import tile.IMatcher;
 import tile.Tile;
 
@@ -19,6 +21,7 @@ public abstract class Grid {
 		this.matchingPatterns = patterns;
 		grid = new Tile[rows][cols];
 		// initialize to empty tiles
+		initializeGrid();
 	}
 	
 	public final int getNumRows() {
@@ -107,6 +110,15 @@ public abstract class Grid {
 		//Else, return false
 		return false;
 	}
+	
+	public void initializeGrid() {
+		for (int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numColumns; j++) {
+				setTile(new Position(i, j),new EmptyTile());
+			}
+		}
+	}
+
 	public abstract int matchTiles();
 	public abstract void applyGravity();
 }
