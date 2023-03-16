@@ -4,6 +4,7 @@ import java.util.Set;
 
 import tile.EmptyTile;
 import tile.IMatcher;
+import tile.Tile;
 
 public abstract class FallingBlockGrid extends Grid {
     private IFallable currentFaller;
@@ -15,6 +16,12 @@ public abstract class FallingBlockGrid extends Grid {
 
     public IFallable getCurrentFaller() {
         return currentFaller;
+    }
+
+    @Override
+    public Tile tileAt(Position p) {
+        Tile tileInFaller = getCurrentFaller().getBlock().get(p);
+        return tileInFaller == null ? super.tileAt(p) : tileInFaller;
     }
 
     public void moveFallerDown() {
