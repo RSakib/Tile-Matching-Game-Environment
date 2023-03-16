@@ -48,25 +48,29 @@ public class TetrisGrid extends FallingBlockGrid {
             }
         }
 
-        currentFaller.shift(direction);
+        // currentFaller.shift(direction);
     }
 
     @Override
     public int matchTiles() {
+        int score = 0;
+
+        int rowsMatched = 0;
         // Mark matched tiles
         for (int row = 0; row < getNumRows(); row++) {
-            for (int col = 0; col < getNumCols(); col++) {
-                Position pos = new Position(row, col);
-                if (! tileAt(pos).isMatched()) {
-                    Match m = matchAt(new Position(row, col));
-                    if (! (m instanceof NoMatch)) {
-                        for (Position p : m.getPositions()) {
-                            tileAt(p).setMatched(true);
-                        }
+            Position pos = new Position(row, 0);
+            if (! tileAt(pos).isMatched()) {
+                Match m = matchAt(pos);
+                if (! (m instanceof NoMatch)) {
+                    rowsMatched += 1;
+                    for (Position p : m.getPositions()) {
+                        tileAt(p).setMatched(true);
                     }
                 }
             }
         }
+
+        score += scorePerRow(rowsMatched);
 
 
         // Calculate tiles to explode
@@ -87,9 +91,6 @@ public class TetrisGrid extends FallingBlockGrid {
             setTile(p, new EmptyTile());
         }
         
-        int rowsCleared = explodedPositions.size() / getNumCols();
-        int score = scorePerRow(rowsCleared);
-
         applyGravity();
 
         return score;

@@ -20,8 +20,12 @@ public abstract class FallingBlockGrid extends Grid {
 
     @Override
     public Tile tileAt(Position p) {
-        Tile tileInFaller = getCurrentFaller().getBlock().get(p);
-        return tileInFaller == null ? super.tileAt(p) : tileInFaller;
+        if (currentFaller != null){
+            Tile tileInFaller = currentFaller.getBlock().get(p);
+            return tileInFaller == null ? super.tileAt(p) : tileInFaller;
+        }
+
+        return super.tileAt(p);
     }
 
     public void moveFallerDown() {
