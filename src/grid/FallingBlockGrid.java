@@ -18,6 +18,10 @@ public abstract class FallingBlockGrid extends Grid {
         return currentFaller;
     }
 
+    public void setCurrentFaller(IFallable faller) {
+        currentFaller = faller;
+    }
+
     @Override
     public Tile tileAt(Position p) {
         if (currentFaller != null){
@@ -37,6 +41,7 @@ public abstract class FallingBlockGrid extends Grid {
             if (! fallerPositions.contains(below) && (!validPosition(below) || !(tileAt(below) instanceof EmptyTile))) {
                 // faller can't move down
                 currentFaller.freeze();
+                return;
             }
         }
 
