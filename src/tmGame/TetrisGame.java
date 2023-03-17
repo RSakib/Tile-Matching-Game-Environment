@@ -1,11 +1,12 @@
 package tmGame;
 
 import grid.Grid;
+import grid.TetrisGrid;
 import tmGame.gameScreen.TetrisGameScreen;
 
 public class TetrisGame extends TileMatchingGame {
 
-    public TetrisGame(Grid grid) {
+    public TetrisGame(TetrisGrid grid) {
         super(grid);
         screen = new TetrisGameScreen();
     }
@@ -29,7 +30,11 @@ public class TetrisGame extends TileMatchingGame {
 
     @Override
     public void onClockTick() {
-        
+        TetrisGrid tGrid = ((TetrisGrid)grid);
+        if (tGrid.getCurrentFaller() == null || tGrid.getCurrentFaller().isFrozen()) {
+            tGrid.setCurrentFaller(tGrid.createFaller());
+        }
+        tGrid.moveFallerDown();
     }
     
 }
