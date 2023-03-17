@@ -31,32 +31,46 @@ public class TetrisGrid extends FallingBlockGrid {
 
     @Override
     public void rotateFaller() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'rotateFaller'");
+        // test if can rotateFaller
     }
 
     @Override
     public void shiftFaller(Direction direction) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'shiftFaller'");
+        // test if can shiftFaller
+        IFallable currentFaller = getCurrentFaller();
+        Set<Position> fallerPositions = currentFaller.getBlock().keySet();
+
+        for (Position p : fallerPositions) {
+            Position adjacent = p.translate(direction);
+            if (! fallerPositions.contains(adjacent) && (!validPosition(adjacent) || ! (tileAt(adjacent) instanceof EmptyTile))) {
+                // can't shift in direction
+                return;
+            }
+        }
+
+        // currentFaller.shift(direction);
     }
 
     @Override
     public int matchTiles() {
+        int score = 0;
+
+        int rowsMatched = 0;
         // Mark matched tiles
         for (int row = 0; row < getNumRows(); row++) {
-            for (int col = 0; col < getNumCols(); col++) {
-                Position pos = new Position(row, col);
-                if (! tileAt(pos).isMatched()) {
-                    Match m = matchAt(new Position(row, col));
-                    if (! (m instanceof NoMatch)) {
-                        for (Position p : m.getPositions()) {
-                            tileAt(p).setMatched(true);
-                        }
+            Position pos = new Position(row, 0);
+            if (! tileAt(pos).isMatched()) {
+                Match m = matchAt(pos);
+                if (! (m instanceof NoMatch)) {
+                    rowsMatched += 1;
+                    for (Position p : m.getPositions()) {
+                        tileAt(p).setMatched(true);
                     }
                 }
             }
         }
+
+        score += scorePerRow(rowsMatched);
 
 
         // Calculate tiles to explode
@@ -77,9 +91,6 @@ public class TetrisGrid extends FallingBlockGrid {
             setTile(p, new EmptyTile());
         }
         
-        int rowsCleared = explodedPositions.size() / getNumCols();
-        int score = scorePerRow(rowsCleared);
-
         applyGravity();
 
         return score;
