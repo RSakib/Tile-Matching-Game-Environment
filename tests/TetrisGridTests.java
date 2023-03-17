@@ -2,9 +2,18 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.junit.*;
 
+import grid.Direction;
 import grid.Grid;
+import grid.IFallable;
 import grid.Position;
 import grid.TetrisGrid;
 import tile.EmptyTile;
@@ -17,6 +26,57 @@ public class TetrisGridTests {
             setExploder(new SelfExplode());
         }
     };
+
+    class SquareTestFaller implements IFallable {
+        List<Position> block;
+        boolean frozen;
+
+        public SquareTestFaller(Position topLeft) {
+            block = new ArrayList<>();
+            block.add(topLeft);
+            block.add(topLeft.translate(Direction.RIGHT));
+            block.add(topLeft.translate(Direction.DOWN));
+            block.add(topLeft.translate(Direction.RIGHT).translate(Direction.DOWN));
+            frozen = false;
+        }
+
+        @Override
+        public void rotate() {
+        }
+
+        @Override
+        public void shift() {
+        }
+
+        @Override
+        public void fall() {
+            List<Position> newBlock = new ArrayList<>();
+            for (Position p: block) {
+                newBlock.add(p.translate(Direction.DOWN));
+            }
+            block = newBlock;
+        }
+
+        @Override
+        public void freeze() {
+            frozen = true;
+        }
+
+        @Override
+        public boolean isFrozen() {
+            return frozen;
+        }
+
+        @Override
+        public Map<Position, Tile> getBlock() {
+            Map<Position, Tile> blockMap = new HashMap<>();
+            for (Position p : block) {
+                blockMap.put(p, new NonEmptyTile());
+            }
+            return blockMap;
+        }
+        
+    }
 
     private void assertGridEquals(int[][] expected, Grid grid){
         for (int r = 0; r < expected.length; r++) {
@@ -42,6 +102,20 @@ public class TetrisGridTests {
         }
     }
     
+
+    @Test
+    public void PositionsHashCorrectly() {
+        Set<Position> positions = new HashSet<>();
+        positions.add(new Position(0, 0));
+        int hashCode = new Position(0, 0).hashCode();
+        int hashCode2 = new Position(0, 0).hashCode();
+        System.out.println(hashCode);
+        Position p = new Position(0, 0);
+        assertTrue(p.equals(new Position(0, 0)));
+        assertTrue(positions.contains(new Position(0, 0)));
+    }
+
+
     @Test
     public void FullRowIsCleared() {
         TetrisGrid grid = new TetrisGrid();
@@ -287,5 +361,134 @@ public class TetrisGridTests {
         int score = grid.matchTiles();
         assertEquals(TetrisGrid.ROWS_CLEARED_SCORE[4], score);
         assertGridEquals(endGrid, grid);
+    }
+
+
+    @Test
+    public void FallerFallsDownOne() {
+        TetrisGrid grid = new TetrisGrid();
+
+        int[][] startGrid = {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        };
+
+        int[][] endGrid = {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+            {1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        };
+
+        setGrid(startGrid, grid);
+        grid.setCurrentFaller(new SquareTestFaller(new Position(0, 0)));
+        grid.moveFallerDown();
+        assertGridEquals(endGrid, grid);
+    }
+
+
+    @Test
+    public void FallerFreezesWhenHitsBottom() {
+        TetrisGrid grid = new TetrisGrid();
+
+        int[][] startGrid = {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        };
+
+        int[][] endGrid = {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+            {1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+        };
+
+        setGrid(startGrid, grid);
+        grid.setCurrentFaller(new SquareTestFaller(new Position(0, 0)));
+        for (int i = 0; i < 22; i++) {
+            grid.moveFallerDown();
+        }
+        assertGridEquals(endGrid, grid);
+        assertTrue(grid.getCurrentFaller().isFrozen());
     }
 }
