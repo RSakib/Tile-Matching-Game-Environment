@@ -1,5 +1,9 @@
-package grid;
-import java.util.List;
+package grid.IFallableBlocks;
+import java.util.ArrayList;
+
+import grid.Direction;
+import grid.IFallable;
+import grid.Position;
 import tile.Tile;
 
 
@@ -7,7 +11,7 @@ import tile.Tile;
 public class TetrisReverseZBlock extends IFallable{
     public Direction direction;
 
-    public TetrisReverseZBlock(List<Position> blockPositions, Tile tileType){
+    public TetrisReverseZBlock(ArrayList<Position> blockPositions, Tile tileType){
         super(blockPositions, tileType);
         direction = Direction.UP;
     }

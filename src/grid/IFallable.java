@@ -1,19 +1,21 @@
 package grid;
 import java.util.Map;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.*;
 
 import tile.Tile;
 
 public abstract class IFallable {
-    List<Position> blockPositions;
-    Tile tileType;
-    boolean isFrozen;
+    public ArrayList<Position> blockPositions;
+    public Position spawnPosition;
+    public Tile tileType;
+    public boolean isFrozen;
 
-    public IFallable(List<Position> blockPositions, Tile tileType){
-        this.blockPositions = blockPositions;
+    public IFallable(Position spawnPosition, Tile tileType){
+        this.spawnPosition = spawnPosition;
         this.tileType = tileType;
         this.isFrozen = false;
+        this.blockPositions = new ArrayList<Position>(4);
     }
 
     public abstract void rotate();
