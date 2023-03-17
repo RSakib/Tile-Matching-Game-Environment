@@ -29,9 +29,7 @@ public class TetrisGameScreen extends JavaFXScreen implements GameScreen{
                 }
 				tile.setStroke(Color.BLACK);
 
-				Text text = new Text("sweet");
-				text.setFont(Font.font(12));
-				gameBoard.add(new StackPane(tile, text), j, i);
+				gameBoard.add(new StackPane(tile), j, i);
 
 			}
         }
