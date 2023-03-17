@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import grid.IFallableBlocks.TetrisSquareBlock;
 import tile.EmptyTile;
 import tile.IMatcher;
 import tile.NonEmptyMatcher;
@@ -26,7 +27,7 @@ public class TetrisGrid extends FallingBlockGrid {
 
     @Override
     public IFallable createFaller() {
-        setCurrentFaller(new TetrisSquareBlock(new Position(4,COLS/2), new TetrisTile()));
+        return new TetrisSquareBlock(new Position(4,COLS/2), new TetrisTile());
     }
 
     @Override

@@ -30,7 +30,6 @@ public class TetrisGame extends TileMatchingGame {
     @Override
     public void onClockTick() {
         
-        
     }
     
 }
