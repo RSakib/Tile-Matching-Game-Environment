@@ -1,16 +1,16 @@
 package grid;
 import java.util.Map;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.*;
 
 import tile.Tile;
 
 public abstract class IFallable {
-    List<Position> blockPositions;
-    Tile tileType;
-    boolean isFrozen;
+    public ArrayList<Position> blockPositions;
+    public Tile tileType;
+    public boolean isFrozen;
 
-    public IFallable(List<Position> blockPositions, Tile tileType){
+    public IFallable(ArrayList<Position> blockPositions, Tile tileType){
         this.blockPositions = blockPositions;
         this.tileType = tileType;
         this.isFrozen = false;

@@ -1,6 +1,9 @@
-package grid;
+package grid.IFallableBlocks;
 
 import java.util.List;
+
+import grid.IFallable;
+import grid.Position;
 import tile.Tile;
 
 public class TetrisSquareBlock extends IFallable{
