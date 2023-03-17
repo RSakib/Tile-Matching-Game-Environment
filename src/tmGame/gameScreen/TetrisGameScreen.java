@@ -3,8 +3,6 @@ package tmGame.gameScreen;
 import grid.Grid;
 import grid.Position;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import tile.EmptyTile;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.GridPane;

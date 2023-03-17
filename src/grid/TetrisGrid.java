@@ -8,6 +8,7 @@ import java.util.Set;
 import tile.EmptyTile;
 import tile.IMatcher;
 import tile.NonEmptyMatcher;
+import tile.TetrisTile;
 import tile.Tile;
 
 public class TetrisGrid extends FallingBlockGrid {
@@ -25,8 +26,7 @@ public class TetrisGrid extends FallingBlockGrid {
 
     @Override
     public IFallable createFaller() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createFaller'");
+        setCurrentFaller(new TetrisSquareBlock(new Position(4,COLS/2), new TetrisTile()));
     }
 
     @Override

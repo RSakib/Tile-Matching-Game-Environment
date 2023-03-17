@@ -29,7 +29,7 @@ public class TetrisGame extends TileMatchingGame {
 
     @Override
     public void onClockTick() {
-        // TODO Auto-generated method stub
+        
         
     }
     
