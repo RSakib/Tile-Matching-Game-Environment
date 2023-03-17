@@ -27,7 +27,7 @@ public class TetrisGrid extends FallingBlockGrid {
 
     @Override
     public IFallable createFaller() {
-        return new TetrisSquareBlock(new Position(4,COLS/2), new TetrisTile());
+        return new TetrisSquareBlock(new Position(ROWS-3,COLS/2-1), new TetrisTile());
     }
 
     @Override
