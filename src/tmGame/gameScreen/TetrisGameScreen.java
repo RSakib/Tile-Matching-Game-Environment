@@ -3,8 +3,6 @@ package tmGame.gameScreen;
 import grid.Grid;
 import grid.Position;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import tile.EmptyTile;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.GridPane;
@@ -17,10 +15,10 @@ public class TetrisGameScreen extends JavaFXScreen implements GameScreen{
         // TODO Auto-generated method stub
 		GridPane gameBoard = new GridPane();
 
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
+		for (int i = 4; i < grid.getNumRows(); i++) {
+			for (int j = 0; j < grid.getNumCols(); j++) {
 
-				Rectangle tile = new Rectangle(50, 50);
+				Rectangle tile = new Rectangle(10, 10);
                 if(grid.tileAt(new Position(i,j)) instanceof EmptyTile) {
                     tile.setFill(Color.GREY);
                 }
