@@ -73,42 +73,72 @@ public class BejeweledGrid extends Grid{
 
     @Override
     public void applyGravity() {
-        //Go through grid to find empty tiles
-        for(int row = 0; row < getNumRows(); row++)
+        pullColumnsDown(); //Pull existing columns down
+        //Fill empty spaces with new, random Bejeweled Tiles
+    }
+
+    private void pullColumnsDown()
+    {
+        for(int currRow = 0; currRow < getNumRows(); currRow++)
         {
-            for(int col = 0; col < getNumCols(); col++)
+            for(int currCol = 0; currCol < getNumCols(); currCol++)
             {
-                Position currPosition = new Position(row, col);
+                ArrayList<Position>columnTiles = new ArrayList<Position>();
+                Position currPosition = new Position(currRow, currCol);
                 Tile currTile = tileAt(currPosition);
-                if(currTile instanceof EmptyTile)
+                if((!(currTile instanceof EmptyTile)) && isBelowEmpty(currPosition))
                 {
-                    //Shift everything down by one column
-                    int rowAbove = row -1;
-                    for(int currRowAbove = rowAbove; currRowAbove >= TOP_ROW_INDICATOR; currRowAbove--)
+                    columnTiles = getColumnOrder(currPosition);
+                    Position floor = getFloorPosition(currPosition);
+                    for(int i = 0; i < columnTiles.size(); i++)
                     {
-                        if(rowAbove >= 0 && rowAbove < getNumRows())
-                        {
-                            Tile tileAbove = tileAt(new Position(row-1, col));
-                            //Check if empty. If not, set currentTile to tile above
-                            if(!(tileAbove instanceof EmptyTile))
-                            {
-                                //recursively bring down column up to 0
-                                setTile(currPosition, tileAbove);
-                            }
-                        }
-                        else
-                        {
-                            //Create new Tile -- Empty Tile is Top Row
-                        }
+                        setTile(floor, tileAt(columnTiles.get(i)));
+                        floor.row--;
                     }
-                } 
+                }
+
             }
         }
     }
-        //If empty, bring the row above it down 
-        //If top row, generate new tiles
-        //Run matchAt to see if there are any matches
-        //If no matches, end method    
+
+    private ArrayList<Position> getColumnOrder(Position currPosition)
+    {
+        ArrayList<Position>columnTiles = new ArrayList<Position>();
+        //Loop to record order of the rest of the column
+        for(int i = currPosition.row; i >= 0; i--)
+        {
+            Position rowPosition = new Position(i, currPosition.col);
+            Tile colTile = tileAt(rowPosition);
+            if(!(colTile instanceof EmptyTile))
+            {
+                columnTiles.add(rowPosition);
+            }
+        }
+        return columnTiles;
     }
-    
+    private boolean isBelowEmpty(Position currPosition)
+    {
+        //Helper method to check if tile immediately below is empty
+        Position below = currPosition;
+        below.col += 1; //Position Below is column below
+        Tile tileBelow = tileAt(below);
+        if(tileBelow instanceof EmptyTile)
+        {
+            return true;
+        }
+        return false;
+    }
+    private Position getFloorPosition(Position currPosition)
+    {
+        Position floor = new Position(getNumRows()-1, currPosition.col);
+        for(int currRow = currPosition.row; currRow < getNumRows(); currRow++)
+        {
+            if(!isBelowEmpty(currPosition))
+            {
+                floor = new Position(currRow+1, currPosition.col);
+                return floor;
+            }
+        }
+        return floor;
+    }
 }
