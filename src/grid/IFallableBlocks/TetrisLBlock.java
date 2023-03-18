@@ -20,8 +20,39 @@ public class TetrisLBlock extends IFallable{
         blockPositions.add(new Position(spawnPosition.row-1, spawnPosition.col));
     }
     public void rotate(){
+        Position axis = blockPositions.get(0);
         if(direction == Direction.UP){
-
+            Position pos = new Position(axis.row, axis.col-1);
+            blockPositions.set(1, pos);
+            pos = new Position(axis.row+1, axis.col-1);
+            blockPositions.set(2,pos);
+            pos = new Position(axis.row, axis.col+1);
+            blockPositions.set(3, pos);
+            direction = Direction.RIGHT;
+        }else if(direction == Direction.RIGHT){
+            Position pos = new Position(axis.row-1, axis.col);
+            blockPositions.set(1, pos);
+            pos = new Position(axis.row-1, axis.col-1);
+            blockPositions.set(2,pos);
+            pos = new Position(axis.row+1, axis.col);
+            blockPositions.set(3, pos);
+            direction = Direction.DOWN;
+        }else if(direction == Direction.DOWN){
+            Position pos = new Position(axis.row, axis.col+1);
+            blockPositions.set(1, pos);
+            pos = new Position(axis.row-1, axis.col+1);
+            blockPositions.set(2,pos);
+            pos = new Position(axis.row, axis.col-1);
+            blockPositions.set(3, pos);
+            direction = Direction.LEFT;
+        }else if(direction == Direction.UP){
+            Position pos = new Position(axis.row-1, axis.col);
+            blockPositions.set(1, pos);
+            pos = new Position(axis.row+1, axis.col);
+            blockPositions.set(2,pos);
+            pos = new Position(axis.row+1, axis.col+1);
+            blockPositions.set(3, pos);
+            direction = Direction.UP;
         }
     }
 }
