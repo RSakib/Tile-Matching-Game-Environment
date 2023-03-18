@@ -31,7 +31,7 @@ public abstract class IFallable {
     }
     public void fall(){
         for (Position blockPosition : blockPositions){
-            blockPosition.row -= 1;
+            blockPosition.row += 1;
         }
     };
 

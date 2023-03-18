@@ -13,7 +13,7 @@ import tile.TetrisTile;
 import tile.Tile;
 
 public class TetrisGrid extends FallingBlockGrid {
-    public static int ROWS = 23;
+    public static int ROWS = 24;
     public static int COLS = 10;
     public static int[] ROWS_CLEARED_SCORE = { 0, 40, 100, 300, 1200};
     public static IMatcher MATCHER = new NonEmptyMatcher();
@@ -23,11 +23,12 @@ public class TetrisGrid extends FallingBlockGrid {
 
     public TetrisGrid() {
         super(ROWS, COLS, MATCHER, PATTERNS);
+        setCurrentFaller(createFaller());
     }
 
     @Override
     public IFallable createFaller() {
-        return new TetrisSquareBlock(new Position(ROWS-3,COLS/2-1), new TetrisTile());
+        return new TetrisSquareBlock(new Position(1,COLS/2-1), new TetrisTile());
     }
 
     @Override
@@ -159,6 +160,13 @@ public class TetrisGrid extends FallingBlockGrid {
             Tile t2 = tileAt(p2);
             setTile(p1, t2);
             setTile(p2, t1);
+        }
+    }
+
+    @Override
+    protected void addFallerToGrid(IFallable faller) {
+        for(Position pos : faller.blockPositions) {
+            setTile(pos, new TetrisTile());
         }
     }
 }

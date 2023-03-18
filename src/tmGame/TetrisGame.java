@@ -31,9 +31,6 @@ public class TetrisGame extends TileMatchingGame {
     @Override
     public void onClockTick() {
         TetrisGrid tGrid = ((TetrisGrid)grid);
-        if (tGrid.getCurrentFaller() == null || tGrid.getCurrentFaller().isFrozen()) {
-            tGrid.setCurrentFaller(tGrid.createFaller());
-        }
         tGrid.moveFallerDown();
     }
     

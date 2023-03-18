@@ -15,7 +15,7 @@ public class TetrisGameScreen extends JavaFXScreen implements GameScreen{
         // TODO Auto-generated method stub
 		GridPane gameBoard = new GridPane();
 
-		for (int i = grid.getNumRows()-5; i > 0; i--) {
+		for (int i = 4; i < grid.getNumRows(); i++) {
 			for (int j = 0; j < grid.getNumCols(); j++) {
 
 				Rectangle tile = new Rectangle(10, 10);
