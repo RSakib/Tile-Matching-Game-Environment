@@ -10,9 +10,13 @@ import grid.Position;
 public class TetrisIBlock extends IFallable{
     public Direction direction;
 
-    public TetrisIBlock(ArrayList<Position> blockPositions, Tile tileType){
-        super(blockPositions, tileType);
+    public TetrisIBlock(Position spawnPosition, Tile tileType){
+        super(spawnPosition, tileType);
         direction = Direction.UP;
+        blockPositions.add(spawnPosition);
+        blockPositions.add(new Position(spawnPosition.row+1, spawnPosition.col));
+        blockPositions.add(new Position(spawnPosition.row+2, spawnPosition.col));
+        blockPositions.add(new Position(spawnPosition.row-1, spawnPosition.col));
     }
     public void rotate(){
         Position axis = blockPositions.get(0);
@@ -23,6 +27,7 @@ public class TetrisIBlock extends IFallable{
             blockPositions.set(2,pos);
             pos = new Position(axis.row, axis.col+1);
             blockPositions.set(3, pos);
+            direction = Direction.RIGHT;
         }else if(direction == Direction.LEFT || direction == Direction.RIGHT){
             Position pos = new Position(axis.row+1, axis.col);
             blockPositions.set(1, pos);
@@ -30,6 +35,7 @@ public class TetrisIBlock extends IFallable{
             blockPositions.set(2,pos);
             pos = new Position(axis.row-1, axis.col);
             blockPositions.set(3, pos);
+            direction = Direction.UP;
         }
     }
 }

@@ -11,8 +11,8 @@ import tile.Tile;
 public class TetrisReverseLBlock extends IFallable{
     public Direction direction;
 
-    public TetrisReverseLBlock(ArrayList<Position> blockPositions, Tile tileType){
-        super(blockPositions, tileType);
+    public TetrisReverseLBlock(Position spawnPosition, Tile tileType){
+        super(spawnPosition, tileType);
         direction = Direction.UP;
     }
     public void rotate(){

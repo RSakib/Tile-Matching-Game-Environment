@@ -11,8 +11,8 @@ import tile.Tile;
 public class TetrisTBlock extends IFallable{
     public Direction direction;
 
-    public TetrisTBlock(ArrayList<Position> blockPositions, Tile tileType){
-        super(blockPositions, tileType);
+    public TetrisTBlock(Position spawnPosition, Tile tileType){
+        super(spawnPosition, tileType);
         direction = Direction.UP;
     }
     public void rotate(){
