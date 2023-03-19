@@ -50,7 +50,7 @@ public class TetrisGrid extends FallingBlockGrid {
             }
         }
 
-        // currentFaller.shift(direction);
+        currentFaller.shift(direction);
     }
 
     @Override
