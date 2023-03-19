@@ -1,11 +1,12 @@
 package tmGame.gameScreen;
 
+import grid.Grid;
 import javafx.scene.Scene;
 
-public abstract class JavaFXScreen {
+public abstract class GameScreenJFX {
 	protected Scene scene;
 	
-	public JavaFXScreen() {
+	public GameScreenJFX() {
 		scene = null;
 	}
 
@@ -17,4 +18,5 @@ public abstract class JavaFXScreen {
 		this.scene = scene;
 	}
 	
+	public abstract void displayGrid(Grid grid);
 }

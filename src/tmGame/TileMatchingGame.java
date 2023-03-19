@@ -4,11 +4,11 @@ import java.time.Clock;
 import java.time.Duration;
 
 import grid.Grid;
-import tmGame.gameScreen.GameScreen;
+import tmGame.gameScreen.GameScreenJFX;
 
 public abstract class TileMatchingGame {
 	Grid grid;
-	GameScreen screen;
+	GameScreenJFX screen;
 	int score;
 	static java.time.Clock clock;
 	
@@ -54,11 +54,11 @@ public abstract class TileMatchingGame {
 		screen.displayGrid(grid);
 	}
 	
-	public GameScreen getScreen() {
+	public GameScreenJFX getScreen() {
 		return screen;
 	}
 
-	public void setScreen(GameScreen screen) {
+	public void setScreen(GameScreenJFX screen) {
 		this.screen = screen;
 	}
 
