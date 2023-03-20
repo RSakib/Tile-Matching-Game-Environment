@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
-public class TetrisGameScreen extends JavaFXScreen implements GameScreen{
+public class TetrisGameScreen extends GameScreenJFX{
 
     @Override
     public void displayGrid(Grid grid) {
