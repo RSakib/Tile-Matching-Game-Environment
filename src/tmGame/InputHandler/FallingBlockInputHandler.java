@@ -28,7 +28,10 @@ public class FallingBlockInputHandler extends InputHandlerJFX {
                 ((FallingBlockGrid)game.getGrid()).rotateFaller();
             }
             else if (input == DOWNCODE) {
-                ((FallingBlockGrid)game.getGrid()).moveFallerDown();
+                if(game.isGameRunning() && !((FallingBlockGrid)game.getGrid()).getCurrentFaller().isFrozen()) {
+                    ((FallingBlockGrid)game.getGrid()).moveFallerDown();
+                }
+                
             }
             else {
                 return;

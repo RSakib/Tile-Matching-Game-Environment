@@ -24,7 +24,8 @@ public class GridOverflowed implements GameOverCondition{
             for(int col = 0; col < maxCol; col++)
             {
                 Tile currTile = grid.tileAt(new Position(row, col));
-                if(!(currTile instanceof EmptyTile) && !(grid.getCurrentFaller().blockPositions.contains(new Position(row, col))))
+                if(grid.getCurrentFaller().isFrozen()
+                    || (!(currTile instanceof EmptyTile) && !(grid.getCurrentFaller().getBlock().keySet().contains(new Position(row, col)))))
                 {
                     return true;
                 }

@@ -62,7 +62,6 @@ public abstract class FallingBlockGrid extends Grid {
 
     public void addFallerToGrid(IFallable faller) {
         faller.getBlock().forEach((pos, tile) -> setTile(pos, tile));
-        setCurrentFaller(null);
     }
 
     public abstract IFallable createFaller();

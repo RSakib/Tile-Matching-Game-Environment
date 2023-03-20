@@ -37,7 +37,7 @@ public class TetrisGrid extends FallingBlockGrid {
     public IFallable createFaller() {
 
 
-        IFallable newFaller
+        IFallable newFaller;
         Random randomGenerator = new Random();
         Position spawnPosition = new Position(3, COLS/2-1);
 
@@ -58,7 +58,7 @@ public class TetrisGrid extends FallingBlockGrid {
             newFaller = new TetrisTBlock(spawnPosition);
         }
         
-        for (Position point : newFaller.blockPositions) {
+        for (Position point : newFaller.getBlock().keySet()) {
             if (!(tileAt(point) instanceof EmptyTile)) {
                 return null;
             }

@@ -14,7 +14,9 @@ public abstract class TileMatchingGame {
 	InputHandlerJFX inputHandler;
 	GameOverCondition gameOver;
 	boolean isGameRunning;
-	
+
+
+
 	public TileMatchingGame(Grid grid) {
 		screen = null;
 		this.grid = grid;
@@ -66,6 +68,10 @@ public abstract class TileMatchingGame {
 
 	public Grid getGrid() {
 		return grid;
+	}
+
+	public boolean isGameRunning() {
+		return isGameRunning;
 	}
 
 }
