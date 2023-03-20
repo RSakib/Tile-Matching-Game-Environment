@@ -19,7 +19,7 @@ public class GridOverflowed implements GameOverCondition{
     public boolean isGameOver() {
         //Check if there are any blocks above the highest row. If so, return true.
         int maxCol = grid.getNumCols();
-        for(int row = 0; row <= 4; row++)
+        for(int row = 0; row <= 3; row++)
         {
             for(int col = 0; col < maxCol; col++)
             {
