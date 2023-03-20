@@ -21,6 +21,9 @@ public class TetrisGameScreen extends GameScreenJFX{
 				Rectangle tile = new Rectangle(10, 10);
                 if(grid.tileAt(new Position(i,j)) instanceof EmptyTile) {
                     tile.setFill(Color.GREY);
+                    if (i < 5) {
+                        tile.setFill(Color.BLACK);
+                    }
                 }
                 else {
                     tile.setFill(Color.RED);
