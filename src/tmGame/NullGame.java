@@ -14,22 +14,22 @@ public class NullGame extends TileMatchingGame {
 	}
 
 	@Override
-	public boolean isGameOver() {
+	public void isGameOver() {
 		// TODO Auto-generated method stub
 		if(i == 0) {
 			i = LOOPS;
-			return true;
+			isGameRunning = false;
 		}
 		else {
 			i--;
-			return false;
+			isGameRunning = true;
 		}
 		
 	}
 
 	@Override
 	public void display() {
-		screen.displayGrid(grid);
+		super.display();
 
 	}
 

@@ -3,15 +3,24 @@ package grid;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
+import grid.IFallableBlocks.TetrisIBlock;
+import grid.IFallableBlocks.TetrisJBlock;
+import grid.IFallableBlocks.TetrisLBlock;
+import grid.IFallableBlocks.TetrisOBlock;
+import grid.IFallableBlocks.TetrisSBlock;
+import grid.IFallableBlocks.TetrisTBlock;
+import grid.IFallableBlocks.TetrisZBlock;
 import tile.EmptyTile;
 import tile.IMatcher;
 import tile.NonEmptyMatcher;
+import tile.TetrisTile;
 import tile.Tile;
 
 public class TetrisGrid extends FallingBlockGrid {
-    public static int ROWS = 23;
+    public static int ROWS = 24;
     public static int COLS = 10;
     public static int[] ROWS_CLEARED_SCORE = { 0, 40, 100, 300, 1200};
     public static IMatcher MATCHER = new NonEmptyMatcher();
@@ -21,17 +30,61 @@ public class TetrisGrid extends FallingBlockGrid {
 
     public TetrisGrid() {
         super(ROWS, COLS, MATCHER, PATTERNS);
+        setCurrentFaller(createFaller());
     }
 
     @Override
     public IFallable createFaller() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createFaller'");
+
+
+        IFallable newFaller;
+        Random randomGenerator = new Random();
+        Position spawnPosition = new Position(3, COLS/2-1);
+
+        int i = randomGenerator.nextInt(7);
+        if (i == 0) {
+            newFaller = new TetrisOBlock(spawnPosition);
+        } else if (i == 1) {
+            newFaller = new TetrisIBlock(spawnPosition);
+        } else if (i == 2) {
+            newFaller = new TetrisLBlock(spawnPosition);
+        } else if (i == 3) {
+            newFaller = new TetrisJBlock(spawnPosition);
+        } else if (i == 4) {
+            newFaller = new TetrisSBlock(spawnPosition);
+        } else if (i == 5){
+            newFaller = new TetrisZBlock(spawnPosition);
+        } else {
+            newFaller = new TetrisTBlock(spawnPosition);
+        }
+        
+        for (Position point : newFaller.getBlock().keySet()) {
+            if (!(tileAt(point) instanceof EmptyTile)) {
+                return null;
+            }
+        }
+        return newFaller;
+        
     }
 
     @Override
     public void rotateFaller() {
         // test if can rotateFaller
+        IFallable currentFaller = getCurrentFaller();
+        Set<Position> currentPositions = currentFaller.getBlock().keySet();
+        currentFaller.rotateClockwise();
+        Set<Position> rotatedPositions = currentFaller.getBlock().keySet();
+        currentFaller.rotateCounterClockwise(); // undo rotation for tile checking
+
+        for (Position p: rotatedPositions) {
+            if (! currentPositions.contains(p) && (!validPosition(p) || !(tileAt(p) instanceof EmptyTile))) {
+                // can't rotate faller
+                System.out.println(p);
+                return;
+            }
+        }
+
+        currentFaller.rotateClockwise();
     }
 
     @Override
@@ -48,7 +101,7 @@ public class TetrisGrid extends FallingBlockGrid {
             }
         }
 
-        // currentFaller.shift(direction);
+        currentFaller.shift(direction);
     }
 
     @Override

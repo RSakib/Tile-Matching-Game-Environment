@@ -40,7 +40,18 @@ public abstract class FallingBlockGrid extends Grid {
             Position below = p.translate(Direction.DOWN);
             if (! fallerPositions.contains(below) && (!validPosition(below) || !(tileAt(below) instanceof EmptyTile))) {
                 // faller can't move down
+                System.out.println("Freeze the block");
                 currentFaller.freeze();
+                int scoredelta = matchTiles();
+                if(scoredelta == 0){
+                    score += scoredelta;
+                    addFallerToGrid(currentFaller);
+                }
+                IFallable newFaller = createFaller();
+                if (newFaller != null) {
+                    setCurrentFaller(newFaller);
+                }
+
                 return;
             }
         }
@@ -48,9 +59,16 @@ public abstract class FallingBlockGrid extends Grid {
         currentFaller.fall();
     }
 
+
+    public void addFallerToGrid(IFallable faller) {
+        faller.getBlock().forEach((pos, tile) -> setTile(pos, tile));
+    }
+
     public abstract IFallable createFaller();
 
     public abstract void rotateFaller();
 
     public abstract void shiftFaller(Direction direction);
+
+
 }

@@ -1,7 +1,6 @@
 package tmGame.gameScreen;
 
 import grid.Grid;
-import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -9,13 +8,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class NullGameScreen extends JavaFXScreen implements GameScreen {
-	private Scene scene;
-	
-	public NullGameScreen() {
-		scene = null;
-	}
-
+public class NullGameScreen extends GameScreenJFX{
 	@Override
 	public void displayGrid(Grid grid) {
 		// TODO Auto-generated method stub
@@ -31,7 +24,7 @@ public class NullGameScreen extends JavaFXScreen implements GameScreen {
 				Text text = new Text("sweet");
 				text.setFont(Font.font(12));
 				gameBoard.add(new StackPane(tile, text), j, i);
-
+				
 			}
     }
 		System.out.println("Working");
@@ -41,14 +34,5 @@ public class NullGameScreen extends JavaFXScreen implements GameScreen {
 		
 	}
 
-	@Override
-	public Scene getScene() {
-		return scene;
-	}
-	
-	@Override
-	public void setScene(Scene scene) {
-		this.scene = scene;
-	}
 
 }
