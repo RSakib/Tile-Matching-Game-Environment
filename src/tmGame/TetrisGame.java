@@ -26,17 +26,10 @@ public class TetrisGame extends TileMatchingGame {
     }
 
     @Override
-    public boolean isGameOver() {
-        // TODO Auto-generated method stub
-
-        return gameOver.isGameOver();
-    }
-
-    @Override
     public void onClockTick() {
         TetrisGrid tGrid = ((TetrisGrid)grid);
         tGrid.moveFallerDown();
-        isGameRunning = !isGameOver();
+        isGameOver();
     }
     
 }

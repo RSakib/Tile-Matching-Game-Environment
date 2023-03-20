@@ -42,7 +42,9 @@ public abstract class TileMatchingGame {
 		}
 	}
 	
-	public abstract boolean isGameOver();
+	public void isGameOver() {
+		isGameRunning = !gameOver.isGameOver();
+	}
 	public abstract void handleInput();
 	public abstract void onClockTick();
 
