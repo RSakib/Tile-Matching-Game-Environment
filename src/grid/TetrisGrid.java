@@ -35,25 +35,36 @@ public class TetrisGrid extends FallingBlockGrid {
 
     @Override
     public IFallable createFaller() {
+
+
+        IFallable newFaller
         Random randomGenerator = new Random();
         Position spawnPosition = new Position(3, COLS/2-1);
 
         int i = randomGenerator.nextInt(7);
         if (i == 0) {
-            return new TetrisOBlock(spawnPosition);
+            newFaller = new TetrisOBlock(spawnPosition);
         } else if (i == 1) {
-            return new TetrisIBlock(spawnPosition);
+            newFaller = new TetrisIBlock(spawnPosition);
         } else if (i == 2) {
-            return new TetrisLBlock(spawnPosition);
+            newFaller = new TetrisLBlock(spawnPosition);
         } else if (i == 3) {
-            return new TetrisJBlock(spawnPosition);
+            newFaller = new TetrisJBlock(spawnPosition);
         } else if (i == 4) {
-            return new TetrisSBlock(spawnPosition);
+            newFaller = new TetrisSBlock(spawnPosition);
         } else if (i == 5){
-            return new TetrisZBlock(spawnPosition);
+            newFaller = new TetrisZBlock(spawnPosition);
         } else {
-            return new TetrisTBlock(spawnPosition);
+            newFaller = new TetrisTBlock(spawnPosition);
         }
+        
+        for (Position point : newFaller.blockPositions) {
+            if (!(tileAt(point) instanceof EmptyTile)) {
+                return null;
+            }
+        }
+        return newFaller;
+        
     }
 
     @Override
