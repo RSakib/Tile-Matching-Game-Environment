@@ -2,6 +2,7 @@ package tmGame;
 
 import grid.Grid;
 import grid.TetrisGrid;
+import tmGame.InputHandler.FallingBlockInputHandler;
 import tmGame.gameScreen.TetrisGameScreen;
 
 public class TetrisGame extends TileMatchingGame {
@@ -9,6 +10,7 @@ public class TetrisGame extends TileMatchingGame {
     public TetrisGame(TetrisGrid grid) {
         super(grid);
         screen = new TetrisGameScreen();
+        inputHandler = new FallingBlockInputHandler(this);
     }
 
     @Override
