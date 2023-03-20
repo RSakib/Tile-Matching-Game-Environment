@@ -13,11 +13,13 @@ public abstract class TileMatchingGame {
 	static java.time.Clock clock;
 	InputHandlerJFX inputHandler;
 	GameOverCondition gameOver;
+	boolean isGameRunning;
 	
 	public TileMatchingGame(Grid grid) {
 		screen = null;
 		this.grid = grid;
 		clock = Clock.systemUTC();
+		isGameRunning = true;
 	}
 	
 
@@ -28,7 +30,7 @@ public abstract class TileMatchingGame {
 	
 	public void run() {
 		var nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
-		while(!isGameOver()) {
+		while(isGameRunning) {
 			if (clock.instant().compareTo(nextTick) > 0) {
 				System.out.println("It has been 1 second");
 				nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
