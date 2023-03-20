@@ -1,23 +1,26 @@
 package grid.IFallableBlocks;
+import tile.Tile;
 import java.util.ArrayList;
 
 import grid.Direction;
 import grid.IFallable;
 import grid.Position;
-import tile.Tile;
 
 
+public class TetrisZBlock extends TetrisBlock{
+    private static Position[][] rotationPositions = {
+        {new Position(-1, -1), new Position(-1, 0), new Position(0, 0), new Position(0, 1)},
+        {new Position(-1, 1), new Position(0, 1), new Position(0, 0), new Position(1, 0)},
+        {new Position(1, 1), new Position(1, 0), new Position(0, 0), new Position(0, -1)},
+        {new Position(1, -1), new Position(0, -1), new Position(0, 0), new Position(-1, 0)},
+    };
 
-public class TetrisZBlock extends IFallable{
-    public Direction direction;
-
-    public TetrisZBlock(ArrayList<Position> blockPositions, Tile tileType){
-        super(blockPositions, tileType);
-        direction = Direction.UP;
+    public TetrisZBlock(Position spawnPosition){
+        super(spawnPosition);
     }
-    public void rotate(){
-        if(direction == Direction.UP){
-            
-        }
+
+    @Override
+    public Position[][] rotationPositions() {
+        return rotationPositions;
     }
 }

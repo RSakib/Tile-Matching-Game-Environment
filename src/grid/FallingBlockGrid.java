@@ -51,11 +51,18 @@ public abstract class FallingBlockGrid extends Grid {
                 if (newFaller != null) {
                     setCurrentFaller(newFaller);
                 }
+
                 return;
             }
         }
 
         currentFaller.fall();
+    }
+
+
+    public void addFallerToGrid(IFallable faller) {
+        faller.getBlock().forEach((pos, tile) -> setTile(pos, tile));
+        setCurrentFaller(null);
     }
 
     public abstract IFallable createFaller();
@@ -64,5 +71,5 @@ public abstract class FallingBlockGrid extends Grid {
 
     public abstract void shiftFaller(Direction direction);
 
-    protected abstract void addFallerToGrid(IFallable faller);
+
 }
