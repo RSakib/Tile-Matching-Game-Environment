@@ -1,4 +1,5 @@
 package tmGame;
+import grid.FallingBlockGrid;
 import grid.Grid;
 import grid.Position;
 import tile.EmptyTile;
@@ -6,13 +7,11 @@ import tile.Tile;
 
 public class GridOverflowed implements GameOverCondition{
 
-    private Grid grid;
-    private int highestRow;
+    private FallingBlockGrid grid;
 
-    GridOverflowed(Grid grid, int highestRow)
+    GridOverflowed(FallingBlockGrid grid)
     {
         this.grid = grid;
-        this.highestRow = highestRow;
     }
 
 
@@ -20,12 +19,12 @@ public class GridOverflowed implements GameOverCondition{
     public boolean isGameOver() {
         //Check if there are any blocks above the highest row. If so, return true.
         int maxCol = grid.getNumCols();
-        for(int row = highestRow; row >= 0; row--)
+        for(int row = 0; row <= 4; row++)
         {
             for(int col = 0; col < maxCol; col++)
             {
                 Tile currTile = grid.tileAt(new Position(row, col));
-                if(!(currTile instanceof EmptyTile))
+                if(!(currTile instanceof EmptyTile) && !(grid.getCurrentFaller().blockPositions.contains(new Position(row, col))))
                 {
                     return true;
                 }

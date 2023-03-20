@@ -10,6 +10,7 @@ public class TetrisGame extends TileMatchingGame {
     public TetrisGame(TetrisGrid grid) {
         super(grid);
         screen = new TetrisGameScreen();
+        gameOver = new GridOverflowed(grid);
         inputHandler = new FallingBlockInputHandler(this);
     }
 
@@ -27,7 +28,8 @@ public class TetrisGame extends TileMatchingGame {
     @Override
     public boolean isGameOver() {
         // TODO Auto-generated method stub
-        return false;
+        
+        return gameOver.isGameOver();
     }
 
     @Override

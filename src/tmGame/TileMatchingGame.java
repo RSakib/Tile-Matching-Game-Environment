@@ -12,6 +12,7 @@ public abstract class TileMatchingGame {
 	GameScreenJFX screen;
 	static java.time.Clock clock;
 	InputHandlerJFX inputHandler;
+	GameOverCondition gameOver;
 	
 	public TileMatchingGame(Grid grid) {
 		screen = null;
