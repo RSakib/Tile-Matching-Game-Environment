@@ -47,7 +47,10 @@ public abstract class FallingBlockGrid extends Grid {
                     score += scoredelta;
                     addFallerToGrid(currentFaller);
                 }
-                setCurrentFaller(createFaller());
+                IFallable newFaller = createFaller();
+                if (newFaller != null) {
+                    setCurrentFaller(newFaller);
+                }
                 return;
             }
         }

@@ -14,7 +14,7 @@ public class GridOverflowed implements GameOverCondition{
         this.grid = grid;
     }
 
-
+    
     @Override
     public boolean isGameOver() {
         //Check if there are any blocks above the highest row. If so, return true.
