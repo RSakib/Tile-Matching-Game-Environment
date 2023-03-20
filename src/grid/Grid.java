@@ -8,6 +8,7 @@ import tile.IMatcher;
 import tile.Tile;
 
 public abstract class Grid {
+	protected int score;
 	private int numRows;
 	private int numColumns;
 	private IMatcher matcher;
@@ -35,6 +36,10 @@ public abstract class Grid {
 
 	public final IMatcher getMatcher() {
 		return matcher;
+	}
+
+	public final int getScore() {
+		return score;
 	}
 	
 	

@@ -10,28 +10,19 @@ import tmGame.gameScreen.GameScreenJFX;
 public abstract class TileMatchingGame {
 	Grid grid;
 	GameScreenJFX screen;
-	int score;
 	static java.time.Clock clock;
 	InputHandlerJFX inputHandler;
 	
 	public TileMatchingGame(Grid grid) {
 		screen = null;
 		this.grid = grid;
-		score = 0;
 		clock = Clock.systemUTC();
 	}
 	
-	public TileMatchingGame() {
-		score = 0;
-	}
 
 	
 	public void quit() {
 		System.exit(0);
-	}
-	
-	public void updateScore(int delta) {
-		score += delta;
 	}
 	
 	public void run() {
@@ -65,11 +56,7 @@ public abstract class TileMatchingGame {
 	}
 
 	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
+		return grid.getScore();
 	}
 
 	public Grid getGrid() {
