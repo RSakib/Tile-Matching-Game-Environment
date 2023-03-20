@@ -15,8 +15,8 @@ public class TetrisSBlock extends TetrisBlock{
         {new Position(1, 0), new Position(0, 0), new Position(0, -1), new Position(-1, -1)},
     };
 
-    public TetrisSBlock(Position spawnPosition, Tile tileType){
-        super(spawnPosition, tileType);
+    public TetrisSBlock(Position spawnPosition){
+        super(spawnPosition);
     }
 
     @Override

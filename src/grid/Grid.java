@@ -119,6 +119,22 @@ public abstract class Grid {
 		}
 	}
 
+
+	public String toString() {
+		String str = "";
+		for (int r = 0; r < getNumRows(); r++) {
+			for (int c = 0; c < getNumCols(); c++) {
+				if (tileAt(new Position(r, c)) instanceof EmptyTile) {
+					str += "0 ";
+				} else {
+					str += "1 ";
+				}
+			}
+			str += "\n";
+		}
+		return str;
+	}
+
 	public abstract int matchTiles();
 	public abstract void applyGravity();
 }

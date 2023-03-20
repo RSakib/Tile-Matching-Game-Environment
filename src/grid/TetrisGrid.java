@@ -3,10 +3,16 @@ package grid;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
+import grid.IFallableBlocks.TetrisIBlock;
+import grid.IFallableBlocks.TetrisJBlock;
+import grid.IFallableBlocks.TetrisLBlock;
 import grid.IFallableBlocks.TetrisOBlock;
 import grid.IFallableBlocks.TetrisSBlock;
+import grid.IFallableBlocks.TetrisTBlock;
+import grid.IFallableBlocks.TetrisZBlock;
 import tile.EmptyTile;
 import tile.IMatcher;
 import tile.NonEmptyMatcher;
@@ -29,7 +35,25 @@ public class TetrisGrid extends FallingBlockGrid {
 
     @Override
     public IFallable createFaller() {
-        return new TetrisSBlock(new Position(3,COLS/2-1), new TetrisTile());
+        Random randomGenerator = new Random();
+        Position spawnPosition = new Position(3, COLS/2-1);
+
+        int i = randomGenerator.nextInt(7);
+        if (i == 0) {
+            return new TetrisOBlock(spawnPosition);
+        } else if (i == 1) {
+            return new TetrisIBlock(spawnPosition);
+        } else if (i == 2) {
+            return new TetrisLBlock(spawnPosition);
+        } else if (i == 3) {
+            return new TetrisJBlock(spawnPosition);
+        } else if (i == 4) {
+            return new TetrisSBlock(spawnPosition);
+        } else if (i == 5){
+            return new TetrisZBlock(spawnPosition);
+        } else {
+            return new TetrisTBlock(spawnPosition);
+        }
     }
 
     @Override
