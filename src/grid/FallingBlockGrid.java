@@ -42,7 +42,9 @@ public abstract class FallingBlockGrid extends Grid {
                 // faller can't move down
                 System.out.println("Freeze the block");
                 currentFaller.freeze();
-                if(matchTiles() == 0){
+                int scoredelta = matchTiles();
+                if(scoredelta == 0){
+                    score += scoredelta;
                     addFallerToGrid(currentFaller);
                 }
                 setCurrentFaller(createFaller());
