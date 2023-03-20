@@ -3,11 +3,14 @@ package grid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import tile.Color;
 import tile.EmptyTile;
 import tile.IMatcher;
 import tile.SameColorMatcher;
 import tile.Tile;
+import tile.BejeweledTile;
 
 public class BejeweledGrid extends Grid{
 
@@ -18,7 +21,10 @@ public class BejeweledGrid extends Grid{
         new HorizontalMatchingPattern(COLS),
         new VerticalMatchingPattern(ROWS)
     };
-    private final static int TOP_ROW_INDICATOR = -1; //for use in applyGravity to indicate top row
+    private Color[] colors = {
+        Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.PURPLE, Color.WHITE};
+    
+    Random colorGenerator = new Random();
 
     BejeweledGrid(int rows, int cols, IMatcher matcher, IMatchingPattern[] patterns)
     {
@@ -75,6 +81,7 @@ public class BejeweledGrid extends Grid{
     public void applyGravity() {
         pullColumnsDown(); //Pull existing columns down
         //Fill empty spaces with new, random Bejeweled Tiles
+        fillEmpty();
     }
 
     private void pullColumnsDown()
@@ -140,5 +147,24 @@ public class BejeweledGrid extends Grid{
             }
         }
         return floor;
+    }
+
+    private void fillEmpty()
+    {
+        //Fills all empty tiles on the board to be random
+        for(int row = 0; row < getNumRows(); row++)
+        {
+            for(int col = 0; col < getNumCols(); col++)
+            {
+                Position currPosition = new Position(row, col);
+                if(tileAt(currPosition) instanceof EmptyTile)
+                {
+                    //set random bejeweled tile
+                    int colorNum = colorGenerator.nextInt(0, 7);
+                    BejeweledTile newTile = new BejeweledTile(colors[colorNum]);
+                    setTile(currPosition, newTile);
+                }
+            }
+        }
     }
 }
