@@ -24,14 +24,11 @@ public class FallingBlockInputHandler extends InputHandlerJFX {
             else if (input == RIGHTCODE) {
                 ((FallingBlockGrid)game.getGrid()).shiftFaller(Direction.RIGHT);
             }
-            else if (input == UPCODE) {
+            else if (input == UPCODE || input == ACTIONCODE) {
                 ((FallingBlockGrid)game.getGrid()).rotateFaller();
             }
             else if (input == DOWNCODE) {
                 ((FallingBlockGrid)game.getGrid()).shiftFaller(Direction.DOWN);
-            }
-            else if (input == ACTIONCODE) {
-                ((FallingBlockGrid)game.getGrid()).rotateFaller();
             }
             else {
                 return;
