@@ -4,6 +4,7 @@ import java.time.Clock;
 import java.time.Duration;
 
 import grid.Grid;
+import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameScreen.GameScreenJFX;
 
 public abstract class TileMatchingGame {
@@ -11,6 +12,7 @@ public abstract class TileMatchingGame {
 	GameScreenJFX screen;
 	int score;
 	static java.time.Clock clock;
+	InputHandlerJFX inputHandler;
 	
 	public TileMatchingGame(Grid grid) {
 		screen = null;
@@ -68,6 +70,10 @@ public abstract class TileMatchingGame {
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	public Grid getGrid() {
+		return grid;
 	}
 
 }
