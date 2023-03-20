@@ -15,6 +15,7 @@
 			"javafx-sdk-19.0.2.1/lib/javafx.web.jar",
 			"javafx-sdk-19.0.2.1/lib/javafx-swt.jar",
 			"test-lib\\**\\*.jar"
-		]
+		],
+		"java.debug.settings.onBuildFailureProceed": true
 	}
 }

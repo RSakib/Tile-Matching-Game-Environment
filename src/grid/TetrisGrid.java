@@ -5,7 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import grid.IFallableBlocks.TetrisSquareBlock;
+import grid.IFallableBlocks.TetrisOBlock;
+import grid.IFallableBlocks.TetrisSBlock;
 import tile.EmptyTile;
 import tile.IMatcher;
 import tile.NonEmptyMatcher;
@@ -28,12 +29,27 @@ public class TetrisGrid extends FallingBlockGrid {
 
     @Override
     public IFallable createFaller() {
-        return new TetrisSquareBlock(new Position(1,COLS/2-1), new TetrisTile());
+        return new TetrisSBlock(new Position(3,COLS/2-1), new TetrisTile());
     }
 
     @Override
     public void rotateFaller() {
         // test if can rotateFaller
+        IFallable currentFaller = getCurrentFaller();
+        Set<Position> currentPositions = currentFaller.getBlock().keySet();
+        currentFaller.rotateClockwise();
+        Set<Position> rotatedPositions = currentFaller.getBlock().keySet();
+        currentFaller.rotateCounterClockwise(); // undo rotation for tile checking
+
+        for (Position p: rotatedPositions) {
+            if (! currentPositions.contains(p) && (!validPosition(p) || !(tileAt(p) instanceof EmptyTile))) {
+                // can't rotate faller
+                System.out.println(p);
+                return;
+            }
+        }
+
+        currentFaller.rotateClockwise();
     }
 
     @Override
@@ -50,7 +66,7 @@ public class TetrisGrid extends FallingBlockGrid {
             }
         }
 
-        // currentFaller.shift(direction);
+        currentFaller.shift(direction);
     }
 
     @Override
@@ -160,13 +176,6 @@ public class TetrisGrid extends FallingBlockGrid {
             Tile t2 = tileAt(p2);
             setTile(p1, t2);
             setTile(p2, t1);
-        }
-    }
-
-    @Override
-    protected void addFallerToGrid(IFallable faller) {
-        for(Position pos : faller.blockPositions) {
-            setTile(pos, new TetrisTile());
         }
     }
 }

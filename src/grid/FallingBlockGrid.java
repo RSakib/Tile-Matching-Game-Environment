@@ -33,6 +33,10 @@ public abstract class FallingBlockGrid extends Grid {
     }
 
     public void moveFallerDown() {
+        if (currentFaller.isFrozen()) {
+            addFallerToGrid(currentFaller);
+            setCurrentFaller(createFaller());
+        }
         IFallable currentFaller = getCurrentFaller();
         Set<Position> fallerPositions = currentFaller.getBlock().keySet();
         
@@ -42,13 +46,18 @@ public abstract class FallingBlockGrid extends Grid {
                 // faller can't move down
                 System.out.println("Freeze the block");
                 currentFaller.freeze();
-                addFallerToGrid(currentFaller);
-                setCurrentFaller(createFaller());
+                // addFallerToGrid(currentFaller);
+                // setCurrentFaller(createFaller());
                 return;
             }
         }
 
         currentFaller.fall();
+    }
+
+
+    public void addFallerToGrid(IFallable faller) {
+        faller.getBlock().forEach((pos, tile) -> setTile(pos, tile));
     }
 
     public abstract IFallable createFaller();
@@ -57,5 +66,5 @@ public abstract class FallingBlockGrid extends Grid {
 
     public abstract void shiftFaller(Direction direction);
 
-    protected abstract void addFallerToGrid(IFallable faller);
+
 }

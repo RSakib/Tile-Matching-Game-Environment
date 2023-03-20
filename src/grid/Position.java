@@ -43,4 +43,21 @@ public class Position {
 			return null; // throw error maybe
 		}
 	}
+
+	public void move(Direction d) {
+		if (d == Direction.UP) {
+			row -= 1;
+		} else if (d == Direction.DOWN) {
+			row += 1;
+		} else if (d == Direction.LEFT) {
+			col -= 1;
+		} else if (d == Direction.RIGHT) {
+			col += 1;
+		}
+	}
+
+
+	public String toString() {
+		return String.format("(row: %d, col: %d)", row, col);
+	}
 }
