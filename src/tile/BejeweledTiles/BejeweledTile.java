@@ -1,4 +1,8 @@
-package tile;
+package tile.BejeweledTiles;
+
+import tile.Color;
+import tile.SelfExplode;
+import tile.Tile;
 
 public class BejeweledTile extends Tile{
     private Color color;
