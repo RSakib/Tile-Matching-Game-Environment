@@ -3,9 +3,7 @@ import java.util.Map;
 
 import grid.Direction;
 import grid.Position;
-import grid.IFallable;
 
-import java.util.ArrayList;
 import java.util.*;
 
 import tile.TetrisTile;

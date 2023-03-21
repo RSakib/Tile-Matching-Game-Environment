@@ -2,6 +2,7 @@ package grid;
 
 import java.util.Set;
 
+import grid.IFallableBlocks.IFallable;
 import tile.EmptyTile;
 import tile.IMatcher;
 import tile.Tile;

@@ -5,7 +5,7 @@ import grid.Position;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import tile.Color;
+import tile.TileColor;
 
 public class BejeweledGameScreen extends GameScreenJFX{
 
