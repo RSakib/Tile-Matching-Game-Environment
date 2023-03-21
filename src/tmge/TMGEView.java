@@ -40,8 +40,8 @@ public class TMGEView {
 		tetrisButton.setId("TETRISGAME");
 		tetrisButton.setOnAction(new GameOptionHandler());
 		Button bejeweledButton = new Button("Bejeweled");
-		tetrisButton.setId("BEJEWELEDGAME");
-		tetrisButton.setOnAction(new GameOptionHandler());
+		bejeweledButton.setId("BEJEWELEDGAME");
+		bejeweledButton.setOnAction(new GameOptionHandler());
 		
 		HBox hbox = new HBox();
 	    hbox.setPadding(new Insets(15, 12, 15, 12));

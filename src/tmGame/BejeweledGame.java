@@ -14,8 +14,7 @@ public class BejeweledGame extends TileMatchingGame{
 
     @Override
     public void onClockTick() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onClockTick'");
+        
     }
     
 }
