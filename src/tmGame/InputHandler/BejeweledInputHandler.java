@@ -5,6 +5,7 @@ import grid.Position;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import tmGame.BejeweledGame;
 import tmGame.TileMatchingGame;
 
 public class BejeweledInputHandler extends InputHandlerJFX{
@@ -15,6 +16,9 @@ public class BejeweledInputHandler extends InputHandlerJFX{
         public void handle(MouseEvent event) {
             Position p = positionFromClick(event);
             System.out.println(p);
+
+            BejeweledGame bejeweledGame = (BejeweledGame) game;
+            bejeweledGame.newSelectedPosition(p);
         }
 
 
