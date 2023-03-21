@@ -8,8 +8,8 @@ import tmge.TMGEView;
 
 public class TMGEApp extends Application{
 	
-	static final int sWidth = 300;
-	static final int sHeight = 300;
+	static final int sWidth = 600;
+	static final int sHeight = 400;
 	
 	
 	@Override

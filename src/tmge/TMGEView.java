@@ -1,6 +1,8 @@
 package tmge;
 
+import java.lang.StackWalker.Option;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -24,7 +26,7 @@ public class TMGEView {
 	private Scene currentScene;
 	private Parent mainMenu;
 	private Parent playerView;
-	Optional<String> name = null;
+	String playerName = "";
 	
 	public TMGEView(TMGE model, TMGEModelController controller, Scene scene) {
 		this.model = model;
@@ -37,6 +39,13 @@ public class TMGEView {
 	}
 	
 	public Parent setMainMenuScreen() {
+		class GameOptionHandler implements EventHandler<ActionEvent> {
+			@Override
+			public void handle(ActionEvent event) {
+				startGame(event);
+			}
+		};
+
 		Button button = new Button("Coolio");
 		button.setId("NULLGAME");
 		button.setOnAction(new GameOptionHandler());
@@ -87,13 +96,12 @@ public class TMGEView {
 		
 		return mainMenuLayout;
 	}
+
+	public Parent setPlayerView() {
+		this.playerView = playerView;
+	}
 	
-	class GameOptionHandler implements EventHandler<ActionEvent> {
-	    @Override
-	    public void handle(ActionEvent event) {
-	    	startGame(event);
-	    }
-	};
+	
 	
 	public void startGame(ActionEvent event) 
     {
@@ -103,17 +111,25 @@ public class TMGEView {
             public void run()
             {
 				for(int i = 0; i < model.getCurrentNumPlayers(); i++) {
-					name = null;
+					final CountDownLatch latch = new CountDownLatch(1);
 					Platform.runLater(() -> {
-						name = popUpPlayerPrompt().showAndWait();
+						var popup = popUpPlayerPrompt().showAndWait();
+						while (!popup.isPresent()) {
+							popup = popUpPlayerPrompt().showAndWait();
+						}
+						playerName = popup.get();
+						latch.countDown();
 					});
 					
-					// Find a better way to do Nothing in a while loop
-					// Because the java compiler optimizes this wait away when its necessary
-					while (name == null) {
-						System.out.print("");
+					synchronized(playerName) {
+						try {
+							latch.await();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						controller.findOrCreatePlayer(playerName);
 					}
-					controller.findOrCreatePlayer(name.get());
+					
 
 					Parent prevRoot = currentScene.getRoot();
 					controller.runGame(((Button)event.getSource()).getId(), currentScene);
