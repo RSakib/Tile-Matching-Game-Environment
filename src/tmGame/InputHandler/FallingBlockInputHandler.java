@@ -18,25 +18,24 @@ public class FallingBlockInputHandler extends InputHandlerJFX {
 	    @Override
 	    public void handle(KeyEvent keyEvent) {
             KeyCode input = keyEvent.getCode();
-            if (input == LEFTCODE) {
-                ((FallingBlockGrid)game.getGrid()).shiftFaller(Direction.LEFT);
-            }
-            else if (input == RIGHTCODE) {
-                ((FallingBlockGrid)game.getGrid()).shiftFaller(Direction.RIGHT);
-            }
-            else if (input == UPCODE || input == ACTIONCODE) {
-                ((FallingBlockGrid)game.getGrid()).rotateFaller();
-            }
-            else if (input == DOWNCODE) {
-                if(game.isGameRunning() && !((FallingBlockGrid)game.getGrid()).getCurrentFaller().isFrozen()) {
+            if(game.isGameRunning() && !((FallingBlockGrid)game.getGrid()).getCurrentFaller().isFrozen()) {
+                if (input == LEFTCODE) {
+                    ((FallingBlockGrid)game.getGrid()).shiftFaller(Direction.LEFT);
+                }
+                else if (input == RIGHTCODE) {
+                    ((FallingBlockGrid)game.getGrid()).shiftFaller(Direction.RIGHT);
+                }
+                else if (input == UPCODE || input == ACTIONCODE) {
+                    ((FallingBlockGrid)game.getGrid()).rotateFaller();
+                }
+                else if (input == DOWNCODE) {
                     ((FallingBlockGrid)game.getGrid()).moveFallerDown();
                 }
-                
-            }
-            else {
-                return;
-            }
+                else {
+                    return;
+                }
             game.display();
+            }
 	    }
 	};
 

@@ -21,18 +21,22 @@ import javafx.scene.text.Text;
 public class TMGEView {
 	private TMGE model;
 	private TMGEModelController controller;
-	private Scene scene;
+	private Scene currentScene;
+	private Parent mainMenu;
+	private Parent playerView;
 	Optional<String> name = null;
 	
 	public TMGEView(TMGE model, TMGEModelController controller, Scene scene) {
 		this.model = model;
 		this.controller = controller;
-		this.scene = scene;
+		this.currentScene = scene;
 		
-		setMainMenuScreen();
+		mainMenu = setMainMenuScreen();
+
+		scene.setRoot(mainMenu);
 	}
 	
-	public void setMainMenuScreen() {
+	public Parent setMainMenuScreen() {
 		Button button = new Button("Coolio");
 		button.setId("NULLGAME");
 		button.setOnAction(new GameOptionHandler());
@@ -81,7 +85,7 @@ public class TMGEView {
 		mainMenuLayout.setTop(hbox);
 		mainMenuLayout.setCenter(menuLayout);
 		
-		scene.setRoot(mainMenuLayout);
+		return mainMenuLayout;
 	}
 	
 	class GameOptionHandler implements EventHandler<ActionEvent> {
@@ -111,9 +115,9 @@ public class TMGEView {
 					}
 					controller.findOrCreatePlayer(name.get());
 
-					Parent prevRoot = scene.getRoot();
-					controller.runGame(((Button)event.getSource()).getId(), scene);
-					scene.setRoot(prevRoot);
+					Parent prevRoot = currentScene.getRoot();
+					controller.runGame(((Button)event.getSource()).getId(), currentScene);
+					currentScene.setRoot(prevRoot);
 				    }
           }
         };
