@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import tmGame.BejeweledGame;
 import tmGame.TileMatchingGame;
+import tmGame.gameScreen.GameScreenJFX;
 
 public class BejeweledInputHandler extends InputHandlerJFX{
 
@@ -26,8 +27,9 @@ public class BejeweledInputHandler extends InputHandlerJFX{
             double x = event.getX();
             double y = event.getY();
 
-            int row = (int) (y / game.getScreen().getScene().getHeight());
-            int col = (int) (x / game.getScreen().getScene().getWidth());
+            GameScreenJFX screen = game.getScreen();
+            int row = (int) (y / screen.tileHeight(game.getGrid()));
+            int col = (int) (x / screen.tileWidth(game.getGrid()));
             return new Position(row, col);
         }
 
