@@ -1,10 +1,6 @@
 package grid.IFallableBlocks;
 
-import java.util.ArrayList;
-
-import grid.IFallable;
 import grid.Position;
-import tile.Tile;
 
 public class TetrisJBlock extends TetrisBlock{
     private static Position[][] rotationPositions = {

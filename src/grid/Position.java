@@ -1,7 +1,5 @@
 package grid;
 
-import java.util.Objects;
-
 public class Position {
 	public int row;
 	public int col;

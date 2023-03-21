@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import grid.IFallableBlocks.IFallable;
 import grid.IFallableBlocks.TetrisIBlock;
 import grid.IFallableBlocks.TetrisJBlock;
 import grid.IFallableBlocks.TetrisLBlock;

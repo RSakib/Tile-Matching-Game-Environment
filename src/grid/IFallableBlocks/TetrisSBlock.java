@@ -1,9 +1,4 @@
 package grid.IFallableBlocks;
-import tile.Tile;
-import java.util.ArrayList;
-
-import grid.Direction;
-import grid.IFallable;
 import grid.Position;
 
 

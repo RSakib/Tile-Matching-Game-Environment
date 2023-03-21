@@ -1,8 +1,8 @@
-package grid;
+package grid.IFallableBlocks;
 import java.util.Map;
 
-import java.util.ArrayList;
-import java.util.*;
+import grid.Direction;
+import grid.Position;
 
 import tile.Tile;
 
