@@ -21,7 +21,15 @@ public abstract class Tile {
 		return color;
 	}
 
+	public void setColor(Color c) {
+		color = c;
+	}
 
+	public IExploder getExploder() {
+		return exploder;
+	}
+
+	
 	public void setExploder(IExploder exploder) {
 		this.exploder = exploder;
 	}

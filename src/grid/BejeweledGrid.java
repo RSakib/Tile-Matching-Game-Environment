@@ -2,7 +2,9 @@
 package grid;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import tile.Color;
@@ -10,7 +12,9 @@ import tile.EmptyTile;
 import tile.IMatcher;
 import tile.SameColorMatcher;
 import tile.Tile;
-import tile.BejeweledTile;
+import tile.BejeweledTiles.BejeweledTile;
+import tile.BejeweledTiles.SameColorPowerUp;
+import tile.BejeweledTiles.SquareTilePowerUp;
 
 public class BejeweledGrid extends Grid{
 
@@ -18,36 +22,73 @@ public class BejeweledGrid extends Grid{
     public static int COLS = 8;
     public static IMatcher IMATCHER = new SameColorMatcher();
     public static IMatchingPattern[] PATTERNS = {
-        new HorizontalMatchingPattern(COLS),
-        new VerticalMatchingPattern(ROWS)
+        new HorizontalMatchingPattern(4),
+        new VerticalMatchingPattern(4),
+        new HorizontalMatchingPattern(3),
+        new VerticalMatchingPattern(3)
     };
-    private Color[] colors = {
-        Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.PURPLE, Color.WHITE};
-    
-    Random colorGenerator = new Random();
+    public static int SCORE_MULTIPLIER = 100;
 
-    BejeweledGrid(int rows, int cols, IMatcher matcher, IMatchingPattern[] patterns)
+    private Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.PURPLE, Color.WHITE};
+    private Random colorGenerator = new Random();
+
+    public BejeweledGrid()
     {
-        super(rows, cols, matcher, patterns);
+        super(ROWS, COLS, IMATCHER, PATTERNS);
     }
 
     @Override
     public int matchTiles() {
+        List<Position> allPositions = new ArrayList<>();
+        for (int r = 0; r < getNumRows(); r++) {
+            for (int c = 0; c < getNumCols(); c++) {
+                allPositions.add(new Position(r, c));
+            }
+        }
+        return matchTiles(allPositions);
+    }
+
+    @Override
+    public void applyGravity() {
+        pullColumnsDown(); //Pull existing columns down
+    }
+
+
+    public int swapTiles(Position p1, Position p2) {
+        // check if tiles are adjacent
+
+        swapTilesAt(p1, p2);
+        List<Position> positionsToCheck = new ArrayList<>();
+        positionsToCheck.add(p1);
+        positionsToCheck.add(p2);
+        int score = matchTiles(positionsToCheck);
+        if (score == 0) {
+            // swap tiles back because no match
+            swapTiles(p1, p2);
+        }
+        return score;
+    }
+
+    private int matchTiles(List<Position> positionsToCheck) {
+        Map<Position, Tile> powerupTiles = new HashMap<>();
+
         // Mark matched tiles
-        for (int row = 0; row < getNumRows(); row++) {
-            for (int col = 0; col < getNumCols(); col++) {
-                Position pos = new Position(row, col);
-                if (! tileAt(pos).isMatched()) {
-                    Match m = matchAt(new Position(row, col));
-                    if (! (m instanceof NoMatch)) {
-                        for (Position p : m.getPositions()) {
-                            tileAt(p).setMatched(true);
-                        }
+        for (Position pos : positionsToCheck) {
+            Tile tile = tileAt(pos);
+            if (! tile.isMatched()) {
+                Match m = matchAt(pos);
+                if (! (m instanceof NoMatch)) {
+                    for (Position p : m.getPositions()) {
+                        tileAt(p).setMatched(true);
+                    }
+                    // if match is horizontal or vertical 4, make powerup
+                    IMatchingPattern matchPattern = m.getPattern();
+                    if ((matchPattern instanceof HorizontalMatchingPattern || matchPattern instanceof VerticalMatchingPattern) && m.getNumMatched() == 4) {
+                        powerupTiles.put(pos, new SquareTilePowerUp(tile.getColor()));
                     }
                 }
             }
         }
-
 
         // Calculate tiles to explode
         List<Position> explodedPositions = new ArrayList<Position>();
@@ -59,30 +100,25 @@ public class BejeweledGrid extends Grid{
                     List<Position> exploded = getExplodedTiles(pos);
                     explodedPositions.addAll(exploded);
                 }
-                //Need to check if power up blocks created as well
             }
         }
 
+        //Calculate score
+        int score = SCORE_MULTIPLIER*explodedPositions.size(); // if no matches, returns 0
         // remove exploded tiles and calculate score
-        for (Position p : explodedPositions) {
-            setTile(p, new EmptyTile());
+        if(score > 0)
+        {
+            for (Position p : explodedPositions) {
+                setTile(p, new EmptyTile());
+            }
+            // add powerup tiles to grid
+            powerupTiles.forEach((p, t) -> setTile(p, t));
+            applyGravity();
+            fillEmpty();
         }
-        
-        //Bejeweled Calculation is different from Tetris - Based on type of match
-        //int rowsCleared = explodedPositions.size() / getNumCols();
-        //int score = scorePerRow(rowsCleared);
-
-        applyGravity();
-
-        return 0; //stub return, modifications to Bejeweled score required
+        return score; 
     }
 
-    @Override
-    public void applyGravity() {
-        pullColumnsDown(); //Pull existing columns down
-        //Fill empty spaces with new, random Bejeweled Tiles
-        fillEmpty();
-    }
 
     private void pullColumnsDown()
     {
@@ -126,10 +162,8 @@ public class BejeweledGrid extends Grid{
     private boolean isBelowEmpty(Position currPosition)
     {
         //Helper method to check if tile immediately below is empty
-        Position below = currPosition;
-        below.col += 1; //Position Below is column below
-        Tile tileBelow = tileAt(below);
-        if(tileBelow instanceof EmptyTile)
+        Position below = currPosition.translate(Direction.DOWN);
+        if(validPosition(below) && tileAt(below) instanceof EmptyTile)
         {
             return true;
         }
@@ -137,21 +171,21 @@ public class BejeweledGrid extends Grid{
     }
     private Position getFloorPosition(Position currPosition)
     {
-        Position floor = new Position(getNumRows()-1, currPosition.col);
-        for(int currRow = currPosition.row; currRow < getNumRows(); currRow++)
+        // Position floor = new Position(getNumRows()+1, currPosition.col);
+        for(int currRow = currPosition.row + 1; currRow < getNumRows(); currRow++)
         {
-            if(!isBelowEmpty(currPosition))
+            Position pos = new Position(currRow, currPosition.col);
+            if(!isBelowEmpty(pos))
             {
-                floor = new Position(currRow+1, currPosition.col);
-                return floor;
+                return pos;
             }
         }
-        return floor;
+        return currPosition;
     }
 
     private void fillEmpty()
     {
-        //Fills all empty tiles on the board to be random
+        //Fill empty spaces with new, random Bejeweled Tiles
         for(int row = 0; row < getNumRows(); row++)
         {
             for(int col = 0; col < getNumCols(); col++)
@@ -160,7 +194,7 @@ public class BejeweledGrid extends Grid{
                 if(tileAt(currPosition) instanceof EmptyTile)
                 {
                     //set random bejeweled tile
-                    int colorNum = colorGenerator.nextInt(0, 7);
+                    int colorNum = colorGenerator.nextInt(7);
                     BejeweledTile newTile = new BejeweledTile(colors[colorNum]);
                     setTile(currPosition, newTile);
                 }
