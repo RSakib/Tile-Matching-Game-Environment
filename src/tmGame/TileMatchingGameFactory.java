@@ -1,6 +1,6 @@
 package tmGame;
 
-import grid.TetrisGrid;
+import grid.*;
 
 
 public class TileMatchingGameFactory {
@@ -10,6 +10,9 @@ public class TileMatchingGameFactory {
 		}
 		else if(title.contentEquals("TETRISGAME")) {
 			return new TetrisGame(new TetrisGrid());
+		}
+		else if(title.contentEquals("BEJEWELEDGAME")) {
+			//return new BejeweledGame(new BejeweledGrid());
 		}
 		return null;
 	}

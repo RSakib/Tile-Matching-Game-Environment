@@ -1,4 +1,4 @@
-package tmGame;
+package tmGame.gameOverConditions;
 import grid.FallingBlockGrid;
 import grid.Grid;
 import grid.Position;
@@ -9,7 +9,7 @@ public class GridOverflowed implements GameOverCondition{
 
     private FallingBlockGrid grid;
 
-    GridOverflowed(FallingBlockGrid grid)
+    public GridOverflowed(FallingBlockGrid grid)
     {
         this.grid = grid;
     }

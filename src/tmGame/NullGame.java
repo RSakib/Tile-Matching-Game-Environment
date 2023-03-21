@@ -33,11 +33,6 @@ public class NullGame extends TileMatchingGame {
 
 	}
 
-	@Override
-	public void handleInput() {
-		return;
-
-	}
 
 	@Override
 	public void onClockTick() {
