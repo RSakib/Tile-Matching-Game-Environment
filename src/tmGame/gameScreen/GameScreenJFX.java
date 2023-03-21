@@ -17,6 +17,15 @@ public abstract class GameScreenJFX {
 	public void setScene(Scene scene) {
 		this.scene = scene;
 	}
+
+
+	public int tileWidth(Grid g) {
+		return (int) (scene.getWidth() / g.getNumCols());
+	}
+
+	public int tileHeight(Grid g) {
+		return (int) (scene.getHeight() / g.getNumRows());
+	}
 	
 	public abstract void displayGrid(Grid grid);
 }
