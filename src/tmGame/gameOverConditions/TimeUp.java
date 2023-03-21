@@ -1,4 +1,4 @@
-package tmGame;
+package tmGame.gameOverConditions;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -9,7 +9,7 @@ public class TimeUp implements GameOverCondition{
     private Clock maxTime; 
     private long gameLength = 3; 
 
-    TimeUp(Clock startTime)
+    public TimeUp(Clock startTime)
     {
         //This clock is the time that the player started.
         this.startTime = startTime;
