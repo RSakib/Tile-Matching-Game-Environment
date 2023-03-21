@@ -51,8 +51,6 @@ public class BejeweledGrid extends Grid{
     @Override
     public void applyGravity() {
         pullColumnsDown(); //Pull existing columns down
-        //Fill empty spaces with new, random Bejeweled Tiles
-        fillEmpty();
     }
 
 
@@ -116,6 +114,7 @@ public class BejeweledGrid extends Grid{
             // add powerup tiles to grid
             powerupTiles.forEach((p, t) -> setTile(p, t));
             applyGravity();
+            fillEmpty();
         }
         return score; 
     }
@@ -186,7 +185,7 @@ public class BejeweledGrid extends Grid{
 
     private void fillEmpty()
     {
-        //Fills all empty tiles on the board to be random
+        //Fill empty spaces with new, random Bejeweled Tiles
         for(int row = 0; row < getNumRows(); row++)
         {
             for(int col = 0; col < getNumCols(); col++)
