@@ -10,7 +10,7 @@ import tile.EmptyTile;
 import tile.IMatcher;
 import tile.SameColorMatcher;
 import tile.Tile;
-import tile.BejeweledTile;
+import tile.BejeweledTiles.BejeweledTile;
 
 public class BejeweledGrid extends Grid{
 
@@ -48,7 +48,6 @@ public class BejeweledGrid extends Grid{
             }
         }
 
-
         // Calculate tiles to explode
         List<Position> explodedPositions = new ArrayList<Position>();
         for (int row = 0; row < getNumRows(); row++) {
@@ -63,18 +62,17 @@ public class BejeweledGrid extends Grid{
             }
         }
 
+        //Calculate score
+        int score = 100*explodedPositions.size(); // if no matches, returns 0
         // remove exploded tiles and calculate score
-        for (Position p : explodedPositions) {
-            setTile(p, new EmptyTile());
+        if(score > 0)
+        {
+            for (Position p : explodedPositions) {
+                setTile(p, new EmptyTile());
+            }
+            applyGravity();
         }
-        
-        //Bejeweled Calculation is different from Tetris - Based on type of match
-        //int rowsCleared = explodedPositions.size() / getNumCols();
-        //int score = scorePerRow(rowsCleared);
-
-        applyGravity();
-
-        return 0; //stub return, modifications to Bejeweled score required
+        return score; 
     }
 
     @Override
@@ -82,6 +80,66 @@ public class BejeweledGrid extends Grid{
         pullColumnsDown(); //Pull existing columns down
         //Fill empty spaces with new, random Bejeweled Tiles
         fillEmpty();
+    }
+
+    public matchTiles(Position original, Position swapped)
+    {
+        //Check swapped position for any matches
+        if (! tileAt(swapped).isMatched()) {
+            Match m = matchAt(swapped);
+            if (! (m instanceof NoMatch)) {
+                for (Position p : m.getPositions()) {
+                    tileAt(p).setMatched(true);
+                }
+            }
+        }
+        //Check original for any matches
+        if(! tileAt(original).isMatched())
+        {
+            Match m = matchAt(original);
+            if(!(m instanceof NoMatch)){
+                for(Position p : m.getPositions())
+                {
+                    tileAt(p).setMatched(true);
+                }
+            }
+        }
+
+        //Calculate tiles to explode
+        List<Position> explodedPositions = new ArrayList<Position>();
+        for (int row = 0; row < getNumRows(); row++) {
+            for (int col = 0; col < getNumCols(); col++) {
+                Position pos = new Position(row, col);
+                Tile tile = tileAt(pos);
+                if (tile.isMatched()) {
+                    List<Position> exploded = getExplodedTiles(pos);
+                    explodedPositions.addAll(exploded);
+                }
+            }
+        }
+
+        //Calculate current score
+        int currentScore = 100 * explodedPositions.size(); //stub
+
+        //Look for power up tiles
+        makeHorizontalPowerUp(explodedPositions, swapped, original);
+        makeVerticalPowerUp(explodedPositions, swapped, original);
+
+        //Explode remaining tiles
+        for (Position p : explodedPositions) {
+            setTile(p, new EmptyTile());
+        }
+
+        //Apply gravity
+        applyGravity()
+
+        //Loop through board to find natural matches. Repeat until clear
+        int addedScore = matchTiles();
+        while(addedScore != 0) //0 = no matches were found looping through board
+        {
+            currentScore += addedScore;
+            addedScore = matchTiles();
+        }
     }
 
     private void pullColumnsDown()
@@ -166,5 +224,59 @@ public class BejeweledGrid extends Grid{
                 }
             }
         }
+    }
+
+    private void makeHorizontalPowerUp(List<Position> explodedPositions, Position swapped, Position original)
+    {
+        //Checks if swapped position is part of a power up match. Original used only for creating Same Color Explosion power up
+        int horizontalMatched = 0;
+        for(Position p: explodedPositions)
+        {
+            if(p.row == swapped.row)
+            {
+                horizontalMatched++;
+            }
+        }
+        //Determine if horizontalBomb or PowerUp
+        if(horizontalMatched >= 5)
+        {
+            //Same Color Explosion created
+            SameColorPowerUp powerup = new SameColorPowerUp(tileAt(original).getColor());
+            setTile(swapped, powerup);
+            //Remove from exploded positions
+            explodedPositions.remove(swapped);
+        }
+        else if(horizontalMatched >= 4)
+        {
+            SquareTilePowerUp powerup = new SquareTilePowerUp(tileAt(swapped).getColor());
+            explodedPositions.remove(swapped);
+        }
+    }
+
+    private void makeVeritcalPowerUp(List<Position> explodedPositions, Position swapped, Position original)
+    {
+                //Checks if swapped position is part of a power up match. Original used only for creating Same Color Explosion power up
+                int verticalMatched = 0;
+                for(Position p: explodedPositions)
+                {
+                    if(p.col == swapped.col)
+                    {
+                        veritcalMatched++;
+                    }
+                }
+                //Determine if horizontalBomb or PowerUp
+                if(verticalMatched >= 5)
+                {
+                    //Same Color Explosion created
+                    SameColorPowerUp powerup = new SameColorPowerUp(tileAt(original).getColor());
+                    setTile(swapped, powerup);
+                    //Remove from exploded positions
+                    explodedPositions.remove(swapped);
+                }
+                else if(verticalMatched >= 4)
+                {
+                    SquareTilePowerUp powerup = new SquareTilePowerUp(tileAt(swapped).getColor());
+                    explodedPositions.remove(swapped);
+                }
     }
 }
