@@ -35,6 +35,7 @@ public class BejeweledGrid extends Grid{
     public BejeweledGrid()
     {
         super(ROWS, COLS, IMATCHER, PATTERNS);
+        fillEmpty();
     }
 
     @Override
