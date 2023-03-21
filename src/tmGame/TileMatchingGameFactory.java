@@ -12,7 +12,6 @@ public class TileMatchingGameFactory {
 			return new TetrisGame(new TetrisGrid());
 		}
 		else if(title.contentEquals("BEJEWELEDGAME")) {
-			System.out.println("bejewjew"); 
 			return new BejeweledGame(new BejeweledGrid());
 		}
 		return null;
