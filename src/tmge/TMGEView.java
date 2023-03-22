@@ -1,7 +1,5 @@
 package tmge;
 
-import java.lang.StackWalker.Option;
-import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 
 import javafx.application.Platform;
@@ -14,7 +12,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -34,6 +34,7 @@ public class TMGEView {
 		this.currentScene = scene;
 		
 		mainMenu = setMainMenuScreen();
+		playerView = setPlayerView();
 
 		scene.setRoot(mainMenu);
 	}
@@ -46,9 +47,14 @@ public class TMGEView {
 			}
 		};
 
-		Button button = new Button("Coolio");
-		button.setId("NULLGAME");
-		button.setOnAction(new GameOptionHandler());
+		Button button = new Button("Player LeaderBoard");
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				playerView = setPlayerView()
+				currentScene.setRoot(playerView);
+			}
+		});
 		Button tetrisButton = new Button("Tetris");
 		tetrisButton.setId("TETRISGAME");
 		tetrisButton.setOnAction(new GameOptionHandler());
@@ -98,7 +104,29 @@ public class TMGEView {
 	}
 
 	public Parent setPlayerView() {
-		this.playerView = playerView;
+		Text leaderboardText = new Text("LeaderBoard");
+		Button backButton = new Button("Back to Main Menu");
+		backButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				currentScene.setRoot(mainMenu);
+			}
+			
+		});
+		FlowPane topBar = new FlowPane(backButton, leaderboardText);
+		topBar.setAlignment(Pos.CENTER);
+
+
+		VBox PlayerLayout = new VBox();
+		PlayerLayout.getChildren().add(topBar);
+		for (Player player : model.getPlayers()) {
+
+			PlayerLayout.getChildren().add(new Text(player.getUsername() + " " + player.getHighScore()));
+		}
+		
+
+		return PlayerLayout;
 	}
 	
 	
