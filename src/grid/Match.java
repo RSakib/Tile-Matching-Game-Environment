@@ -24,4 +24,8 @@ public class Match {
     public int getNumMatched() {
         return this.matchedPositions.size();
     }
+
+    public boolean isMatch() {
+        return ! (this instanceof NoMatch);
+    }
 }

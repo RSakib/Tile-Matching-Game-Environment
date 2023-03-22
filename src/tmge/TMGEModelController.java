@@ -14,6 +14,7 @@ public class TMGEModelController {
 		
 		TileMatchingGame game = model.createGame(gameName);
 		game.getScreen().setScene(pScene);
+		System.out.println("Set scene for game screen");
 		game.run();
 		updatePlayerHighScore(model.getCurrentPlayer(), game.getScore());
 		

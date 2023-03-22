@@ -2,76 +2,133 @@ package tmGame;
 
 import java.time.Clock;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 import grid.Grid;
+import grid.IMatchingPattern;
+import grid.Match;
+import grid.NoMatch;
+import grid.Position;
+import grid.IGravity.IGravity;
+import tile.Tile;
 import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.GameOverCondition;
 import tmGame.gameScreen.GameScreenJFX;
 
 public abstract class TileMatchingGame {
-	Grid grid;
-	GameScreenJFX screen;
-	static java.time.Clock clock;
-	InputHandlerJFX inputHandler;
-	GameOverCondition gameOver;
-	boolean isGameRunning;
+	protected Grid grid;
+	protected GameScreenJFX screen;
+	protected InputHandlerJFX inputHandler;
+	protected GameOverCondition gameOver;
+	protected IMatchingPattern[] matchingPatterns;
+	protected IGravity gravity;
+	protected int score;
+	private boolean isRunning;
 
+	protected static java.time.Clock clock = Clock.systemUTC();
 
-
-	public TileMatchingGame(Grid grid) {
-		screen = null;
-		this.grid = grid;
-		clock = Clock.systemUTC();
-		isGameRunning = true;
+	public TileMatchingGame() {
+		this.isRunning = true;
 	}
-	
 
-	
-	public void quit() {
+
+	public final void quit() {
 		System.exit(0);
 	}
-	
-	public void run() {
+
+	public final void run() {
 		var nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
-		while(isGameRunning) {
+		while(isRunning()) {
 			if (clock.instant().compareTo(nextTick) > 0) {
 				// System.out.println("It has been 1 second");
 				nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
 				onClockTick();
 				display();
 			}
-			
 		}
 	}
 	
-	public void isGameOver() {
-		isGameRunning = !gameOver.isGameOver();
-	}
-
-	public abstract void onClockTick();
-
 	public void display() {
 		screen.displayGrid(grid);
 	}
-	
+
+	public boolean isRunning() {
+		return this.isRunning;
+	}
+
+	public void applyGravity() {
+		gravity.applyGravity(grid);
+	}
+
+	public void checkGameOver() {
+		this.isRunning = !gameOver.isGameOver();
+	}
+
 	public GameScreenJFX getScreen() {
 		return screen;
 	}
 
-	public void setScreen(GameScreenJFX screen) {
-		this.screen = screen;
-	}
-
 	public int getScore() {
-		return grid.getScore();
+		return score;
 	}
 
 	public Grid getGrid() {
 		return grid;
 	}
 
-	public boolean isGameRunning() {
-		return isGameRunning;
+	public void setScreen(GameScreenJFX screen) {
+		this.screen = screen;
 	}
 
+	public void setInputHandler(InputHandlerJFX inputHandler) {
+		this.inputHandler = inputHandler;
+	}
+
+	public void updateScore(int points) {
+		this.score += points;
+	}
+
+	protected Match matchAt(Position pos) 
+	{
+		//Loop through all matching patterns
+		for (IMatchingPattern pattern: matchingPatterns)
+		{
+			Match match = pattern.findMatch(grid, pos);
+			if(match.isMatch())
+			{
+				// mark matched tiles
+				for (Position p : match.getPositions()) {
+					grid.tileAt(p).setMatched(true);
+				}
+				return match; //stub, need to reference the design pattern specifically
+			}
+		}
+		return new NoMatch(); //returns no match if no match
+	}
+
+
+	protected List<Position> explodeAt(Position pos) {
+		Tile tile = grid.tileAt(pos);
+		if (tile.isExploded()) {
+			return new ArrayList<>();
+		}
+
+		tile.setExploded(true);
+		List<Position> allExplodedPositions = new ArrayList<>();
+		List<Position> explodedPositions = tile.explode(grid, pos);
+		allExplodedPositions.addAll(explodedPositions);
+		for (Position explodedPos: explodedPositions) {
+			if (! grid.tileAt(explodedPos).equals(pos)) {
+				allExplodedPositions.addAll(explodeAt(explodedPos));
+			}
+		}
+		return allExplodedPositions;
+	}
+
+
+
+
+	public abstract void onClockTick();
+	public abstract boolean matchTiles();
 }

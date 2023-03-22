@@ -20,7 +20,7 @@ public class VerticalMatchingPattern implements IMatchingPattern{
 
 		for (int rowOffset = 0; rowOffset > -numMatching; rowOffset--) {
 			Match m = matchStartsAt(grid, new Position(position.row + rowOffset, position.col));
-			if (! (m instanceof NoMatch)) {
+			if (m.isMatch()) {
 				return m;
 			}
 		}
@@ -34,14 +34,13 @@ public class VerticalMatchingPattern implements IMatchingPattern{
 		}
 
 		Tile startTile = grid.tileAt(startPosition);
-		IMatcher matcher = grid.getMatcher(); 
 		List<Position> matches = new ArrayList<>();
 		for (int i = 0; i < numMatching; i++) {
 			int row = startPosition.row + i;
 			int col = startPosition.col;
 			Position p = new Position(row, col);
 			
-			if (!grid.validPosition(p) || !matcher.isMatch(startTile, grid.tileAt(p))) {
+			if (!grid.validPosition(p) || !startTile.isMatch(grid.tileAt(p))) {
 				return new NoMatch();
 			}
 			matches.add(p);

@@ -18,7 +18,7 @@ public class HorizontalMatchingPattern implements IMatchingPattern{
 	public Match findMatch(Grid grid, Position position) {
 		for (int colOffset = 0; colOffset > -numMatching; colOffset--) {
 			Match m = matchStartsAt(grid, new Position(position.row, position.col + colOffset));
-			if (! (m instanceof NoMatch)) {
+			if (m.isMatch()) {
 				return m;
 			}
 		}
@@ -32,14 +32,13 @@ public class HorizontalMatchingPattern implements IMatchingPattern{
 		}
 
 		Tile startTile = grid.tileAt(startPosition);
-		IMatcher matcher = grid.getMatcher();
 		List<Position> matches = new ArrayList<>();
 		for (int i = 0; i < numMatching; i++) {
 			int row = startPosition.row;
 			int col = startPosition.col + i;
 			Position p = new Position(row, col);
 			
-			if (!grid.validPosition(p) || !matcher.isMatch(startTile, grid.tileAt(p))) {
+			if (!grid.validPosition(p) || !startTile.isMatch(grid.tileAt(p))) {
 				return new NoMatch();
 			}
 			matches.add(p);

@@ -7,72 +7,79 @@ import tile.EmptyTile;
 import tile.IMatcher;
 import tile.Tile;
 
-public abstract class Grid {
-	protected int score;
+public class Grid {
 	private int numRows;
 	private int numColumns;
-	private IMatcher matcher;
-	private IMatchingPattern[] matchingPatterns;
 	private Tile[][] grid;
 	
-	public Grid(int rows, int cols, IMatcher matcher, IMatchingPattern[] patterns){
+	public Grid(int rows, int cols){
 		this.numRows = rows;
 		this.numColumns = cols;
-		this.matcher = matcher;
-		this.matchingPatterns = patterns;
 		grid = new Tile[rows][cols];
 		// initialize to empty tiles
 		initializeGrid();
 	}
 	
-	public final int getNumRows() {
+
+	public int getNumRows() {
 		return numRows;
 	}
 	
-	public final int getNumCols() {
+
+	public int getNumCols() {
 		return numColumns;
 	}
 
 
-	public final IMatcher getMatcher() {
-		return matcher;
-	}
-
-	public final int getScore() {
-		return score;
+	/**
+	 * Checks if position is within the array bounds
+	 * @param p
+	 * @return
+	 */
+	public boolean validPosition(Position p)
+	{
+		if(p.row >= 0 && p.row < numRows && p.col >= 0 && p.col < numColumns)
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	
 	public Tile tileAt(Position p) {
-		// if not valid position throw exception
-		
+		// TODO: if not valid position throw exception
 		return grid[p.row][p.col];
 	}
 
 
 	public void setTile(Position p, Tile t){
-		// assert valid position
-
+		// TODO: assert valid position
 		grid[p.row][p.col] = t;
 	}
-	
-	
-	public Match matchAt(Position p1) 
-	{
-		//Loop through all set of matching patterns
-		for (IMatchingPattern pattern: matchingPatterns)
-		{
-			Match matchedPattern = pattern.findMatch(this, p1);
-			//if there is at least one match, return true
-			if(!(matchedPattern instanceof NoMatch))
-			{
-				//Using instanceof to check, there might be a better way -- waiting for response from team
-				return matchedPattern; //stub, need to reference the design pattern specifically
+
+
+	public List<Position> allPositions() {
+		List<Position> allPositions = new ArrayList<>();
+		for (int r = 0; r < getNumRows(); r++) {
+			for (int c = 0; c < getNumCols(); c++) {
+				allPositions.add(new Position(r, c));
 			}
 		}
-		//Use for-each loop to loop through the set (look up online)
-			//Check if that position is a match given the matching pattern
-		return new NoMatch(); //returns no match if no match
+		return allPositions;
+	}
+
+	/**
+	 * Sets all exploded tiles to empty tiles
+	 */
+	public void removeExplodedTiles() {
+		for (int r = 0; r < getNumRows(); r++) {
+			for (int c = 0; c < getNumCols(); c++) {
+				Position p = new Position(r, c);
+				if (tileAt(p).isExploded()) {
+					setTile(p, new EmptyTile());
+				}
+			}
+		}
 	}
 
 
@@ -100,36 +107,65 @@ public abstract class Grid {
 		return allExplodedPositions;
 	}
 	
-	
-	/**
-	 * Returns whether or not the position on the grid is valid
-	 * @param p The position to test
-	 * @return boolean
-	 */
-	public boolean validPosition(Position p)
-	{
-		//Checks if position is within the array bounds
-		if(p.row >= 0 && p.row < numRows && p.col >= 0 && p.col < numColumns)
-		{
-			//If valid row and column, return true
-			return true;
-		}
-		//Else, return false
-		return false;
-	}
-
 
 	public void swapTilesAt(Position p1, Position p2) {
 		Tile temp = tileAt(p1);
 		setTile(p1, tileAt(p2));
 		setTile(p2, temp);
 	}
+
+
+	public void swapRows(int r1, int r2) {
+		for (int i = 0; i < getNumCols(); i++) {
+			Position p1 = new Position(r1, i);
+			Position p2 = new Position(r2, i);
+			swapTilesAt(p1, p2);
+		}
+	}
+
+
+	public boolean isEmptyRow(int rowNum) {
+		for (int i = 0; i < getNumCols(); i++) {
+            if ( tileAt(new Position(rowNum, i)).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+	}
+
+
+	public Position nonEmptyPositionAbove(Position startPos) {
+		for (int r = startPos.row - 1; r >= 0; r--) {
+            Position p = new Position(r, startPos.col);
+            if (! tileAt(p).isEmpty()) {
+                return p;
+            }
+        }
+        return null;
+	}
+
+	/**
+	 * Returns the row number of the next non empty row above the given starting row
+	 * Returns -1 if there are no non-empty rows above the given starting row
+	 * @param startRow
+	 * @return
+	 */
+	public int nonEmptyRowAbove(int startRow) {
+        for (int row = startRow - 1; row >= 0; row--) {
+            if (! isEmptyRow(row)) {
+                return row;
+            }
+        }
+        return -1;
+    }
 	
+
+
 	
-	public void initializeGrid() {
+	private void initializeGrid() {
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
-				setTile(new Position(i, j),new EmptyTile());
+				setTile(new Position(i, j), new EmptyTile());
 			}
 		}
 	}
@@ -149,7 +185,4 @@ public abstract class Grid {
 		}
 		return str;
 	}
-
-	public abstract int matchTiles();
-	public abstract void applyGravity();
 }

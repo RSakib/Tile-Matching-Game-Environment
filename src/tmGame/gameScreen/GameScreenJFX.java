@@ -1,6 +1,7 @@
 package tmGame.gameScreen;
 
 import grid.Grid;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 
@@ -28,6 +29,10 @@ public abstract class GameScreenJFX {
 	public int tileHeight(Grid g) {
 		return (int) (scene.getHeight() / g.getNumRows());
 	}
+
+	// public Parent getRoot() {
+	// 	return board;
+	// }
 	
 	public abstract void displayGrid(Grid grid);
 }
