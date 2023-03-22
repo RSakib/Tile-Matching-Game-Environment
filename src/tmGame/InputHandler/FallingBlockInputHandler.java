@@ -1,11 +1,11 @@
 package tmGame.InputHandler;
 
 import grid.Direction;
-import grid.FallingBlockGrid;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import tmGame.FallingBlockGame;
 import tmGame.TileMatchingGame;
 
 public class FallingBlockInputHandler extends InputHandlerJFX {
@@ -17,29 +17,30 @@ public class FallingBlockInputHandler extends InputHandlerJFX {
     class InputSelect implements EventHandler<KeyEvent> {
 	    @Override
 	    public void handle(KeyEvent keyEvent) {
+            FallingBlockGame fbGame = (FallingBlockGame) game;
             KeyCode input = keyEvent.getCode();
-            if(game.isRunning() && !((FallingBlockGrid)game.getGrid()).getCurrentFaller().isFrozen()) {
+            if(fbGame.isRunning()) {
                 if (input == LEFTCODE) {
-                    ((FallingBlockGrid)game.getGrid()).shiftFaller(Direction.LEFT);
+                    fbGame.shiftFaller(Direction.LEFT);
                 }
                 else if (input == RIGHTCODE) {
-                    ((FallingBlockGrid)game.getGrid()).shiftFaller(Direction.RIGHT);
+                    fbGame.shiftFaller(Direction.RIGHT);
                 }
                 else if (input == UPCODE || input == ACTIONCODE) {
-                    ((FallingBlockGrid)game.getGrid()).rotateFaller();
+                    fbGame.rotateFaller();
                 }
                 else if (input == DOWNCODE) {
-                    ((FallingBlockGrid)game.getGrid()).moveFallerDown();
+                    fbGame.moveFallerDown();
                 }
                 else {
                     return;
                 }
-            game.display();
+                fbGame.display();
             }
 	    }
 	};
 
-    public FallingBlockInputHandler(TileMatchingGame game) {
+    public FallingBlockInputHandler(FallingBlockGame game) {
         super(game);
         Platform.runLater(() -> {
             game.getScreen().getScene().setOnKeyPressed(new InputSelect());

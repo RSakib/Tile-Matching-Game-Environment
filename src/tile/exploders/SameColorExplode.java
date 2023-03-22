@@ -1,8 +1,9 @@
-package tile;
+package tile.exploders;
 import grid.Grid;
 import java.util.List;
 import java.util.ArrayList;
 import grid.Position;
+import tile.Tile;
 
 public class SameColorExplode implements IExploder{
     public List<Position>explode(Grid g, int row, int col)

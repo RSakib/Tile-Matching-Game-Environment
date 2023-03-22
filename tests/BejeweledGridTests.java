@@ -10,8 +10,8 @@ import grid.Grid;
 import grid.Position;
 import tile.Color;
 import tile.EmptyTile;
-import tile.SquareExplode;
 import tile.BejeweledTiles.BejeweledTile;
+import tile.exploders.SquareExplode;
 
 public class BejeweledGridTests {
     private void assertGridEquals(int[][] expected, Grid grid){

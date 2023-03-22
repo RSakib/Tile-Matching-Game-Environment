@@ -1,7 +1,10 @@
-package grid;
+package grid.matchingPatterns;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import grid.Grid;
+import grid.Position;
 
 public class TMatchingPattern implements IMatchingPattern {
 	public int legLength;

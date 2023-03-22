@@ -1,4 +1,7 @@
-package tile;
+package tile.matchers;
+
+import tile.EmptyTile;
+import tile.Tile;
 
 public class NonEmptyMatcher implements IMatcher{
     public boolean isMatch(Tile t1, Tile t2) {

@@ -1,5 +1,5 @@
 //Imported Libraries
-package tile;
+package tile.exploders;
 import java.util.List;
 import grid.Grid;
 import grid.Position;

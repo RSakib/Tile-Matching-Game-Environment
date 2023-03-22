@@ -19,9 +19,9 @@ import grid.TetrisGrid;
 import grid.IFallableBlocks.TetrisIBlock;
 import grid.IFallableBlocks.TetrisOBlock;
 import tile.EmptyTile;
-import tile.SelfExplode;
 import tile.TetrisTile;
 import tile.Tile;
+import tile.exploders.SelfExplode;
 
 public class TetrisGridTests {
     // class TetrisTile extends Tile {

@@ -1,4 +1,4 @@
-package tile;
+package tile.exploders;
 import java.util.List;
 import java.util.ArrayList;
 import grid.Grid;

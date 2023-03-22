@@ -1,4 +1,7 @@
-package tile;
+package tile.matchers;
+
+import tile.Color;
+import tile.Tile;
 
 public class SameColorMatcher implements IMatcher{
     public boolean isMatch(Tile t1, Tile t2)

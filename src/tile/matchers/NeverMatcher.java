@@ -1,4 +1,6 @@
-package tile;
+package tile.matchers;
+
+import tile.Tile;
 
 public class NeverMatcher implements IMatcher{
     @Override

@@ -1,7 +1,7 @@
 package tile.BejeweledTiles;
 
 import tile.Color;
-import tile.SameColorExplode;
+import tile.exploders.SameColorExplode;
 
 public class SameColorPowerUp extends BejeweledTile{
     public SameColorPowerUp()

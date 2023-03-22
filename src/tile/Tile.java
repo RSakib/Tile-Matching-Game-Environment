@@ -4,6 +4,8 @@ import java.util.List;
 
 import grid.Grid;
 import grid.Position;
+import tile.exploders.IExploder;
+import tile.matchers.IMatcher;
 
 public abstract class Tile {
 	private String imagePath;

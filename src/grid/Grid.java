@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tile.EmptyTile;
-import tile.IMatcher;
 import tile.Tile;
+import tile.matchers.IMatcher;
 
 public class Grid {
 	private int numRows;
@@ -126,7 +126,7 @@ public class Grid {
 
 	public boolean isEmptyRow(int rowNum) {
 		for (int i = 0; i < getNumCols(); i++) {
-            if ( tileAt(new Position(rowNum, i)).isEmpty()) {
+            if (! tileAt(new Position(rowNum, i)).isEmpty()) {
                 return false;
             }
         }

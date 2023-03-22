@@ -1,5 +1,8 @@
 package tile;
 
+import tile.exploders.NoExplode;
+import tile.matchers.NeverMatcher;
+
 public class EmptyTile extends Tile {
     
     public EmptyTile() {

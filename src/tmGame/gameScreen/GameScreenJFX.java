@@ -4,6 +4,7 @@ import grid.Grid;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import tmGame.TileMatchingGame;
 
 public abstract class GameScreenJFX {
 	protected Scene scene;
@@ -22,17 +23,17 @@ public abstract class GameScreenJFX {
 		this.scene = scene;
 	}
 
-	public int tileWidth(Grid g) {
-		return (int) (scene.getWidth() / g.getNumCols());
+	public int tileWidth(int numCols) {
+		return (int) (scene.getWidth() / numCols);
 	}
 
-	public int tileHeight(Grid g) {
-		return (int) (scene.getHeight() / g.getNumRows());
+	public int tileHeight(int numRows) {
+		return (int) (scene.getHeight() / numRows);
 	}
 
 	// public Parent getRoot() {
 	// 	return board;
 	// }
 	
-	public abstract void displayGrid(Grid grid);
+	public abstract void displayGrid(TileMatchingGame game);
 }

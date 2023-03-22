@@ -1,33 +1,32 @@
 package tmGame.gameScreen;
 
-import grid.BejeweledGrid;
 import grid.Grid;
 import grid.Position;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import tile.Color;
-import tile.SameColorExplode;
 import tile.Tile;
 import tile.BejeweledTiles.SameColorPowerUp;
 import tile.BejeweledTiles.SquareTilePowerUp;
+import tmGame.BejeweledGame;
+import tmGame.TileMatchingGame;
 
 public class BejeweledGameScreen extends GameScreenJFX{
 
     @Override
-    public void displayGrid(Grid grid) {
+    public void displayGrid(TileMatchingGame game) {
         GridPane gameBoard = new GridPane();
+        Grid grid = game.getGrid();
 
         for (int i = 0; i < grid.getNumRows(); i++) {
 			for (int j = 0; j < grid.getNumCols(); j++) {
                 Position pos = new Position(i, j);
                 Tile tile = grid.tileAt(pos);
 
-                int tileWidth = tileWidth(grid);
-                int tileHeight = tileHeight(grid);
+                int tileWidth = tileWidth(grid.getNumCols());
+                int tileHeight = tileHeight(grid.getNumRows());
 				Shape displayTile = new Rectangle(tileWidth, tileHeight);
 
                 if (tile instanceof SquareTilePowerUp) {
@@ -72,8 +71,8 @@ public class BejeweledGameScreen extends GameScreenJFX{
 
 
                 // outline selected position
-                BejeweledGrid bejeweledGrid = (BejeweledGrid) grid;
-                Position selected = bejeweledGrid.selectedPosition();
+                BejeweledGame bejeweledGame = (BejeweledGame) game;
+                Position selected = bejeweledGame.selectedPosition();
                 if (selected != null && selected.equals(pos)) {
                     displayTile.setStroke(javafx.scene.paint.Color.LIGHTGRAY);
                 } else {
