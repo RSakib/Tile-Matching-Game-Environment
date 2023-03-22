@@ -1,5 +1,6 @@
 package tmGame;
 
+import grid.BejeweledGrid;
 import grid.Grid;
 import grid.Position;
 import tmGame.InputHandler.BejeweledInputHandler;
@@ -18,7 +19,10 @@ public class BejeweledGame extends TileMatchingGame{
 
     @Override
     public void onClockTick() {
-        
+        BejeweledGrid bejeweledGrid = (BejeweledGrid) grid;
+        bejeweledGrid.applyGravity();
+        bejeweledGrid.fillEmpty();
+        bejeweledGrid.matchTiles();
     }
     
 }

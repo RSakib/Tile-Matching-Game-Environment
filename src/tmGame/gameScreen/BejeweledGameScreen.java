@@ -57,12 +57,15 @@ public class BejeweledGameScreen extends GameScreenJFX{
                     case PURPLE:
                         displayTile.setFill(javafx.scene.paint.Color.PURPLE);
                         break;
-                    case WHITE:
-                        displayTile.setFill(javafx.scene.paint.Color.WHITE);
+                    case SILVER:
+                        displayTile.setFill(javafx.scene.paint.Color.GRAY);
+                        break;
+                    case MULTICOLOR:
+                        displayTile.setFill(javafx.scene.paint.Color.BLACK);
                         break;
                 
                     default:
-                        displayTile.setFill(javafx.scene.paint.Color.GRAY);
+                        displayTile.setFill(javafx.scene.paint.Color.WHITE);
                         break;
                 }
 

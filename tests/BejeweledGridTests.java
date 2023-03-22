@@ -52,6 +52,13 @@ public class BejeweledGridTests {
         }
     }
 
+    private int matchTilesCycle(BejeweledGrid grid) {
+        int score = grid.matchTiles();
+        grid.applyGravity();
+        grid.fillEmpty();
+        return score;
+    }
+
     private BejeweledGrid grid;
 
     @Before
@@ -113,7 +120,7 @@ public class BejeweledGridTests {
         };
 
         setGrid(startGrid, grid);
-        int score = grid.matchTiles();
+        int score = matchTilesCycle(grid);
         assertEquals(BejeweledGrid.SCORE_MULTIPLIER*3, score);
         assertGridEquals(endGrid, grid);
     }
@@ -144,7 +151,7 @@ public class BejeweledGridTests {
         };
 
         setGrid(startGrid, grid);
-        int score = grid.matchTiles();
+        int score = matchTilesCycle(grid);
         assertEquals(BejeweledGrid.SCORE_MULTIPLIER*3, score);
         assertGridEquals(endGrid, grid);
     }
@@ -174,7 +181,7 @@ public class BejeweledGridTests {
         };
 
         setGrid(startGrid, grid);
-        int score = grid.matchTiles();
+        int score = matchTilesCycle(grid);
         assertEquals(BejeweledGrid.SCORE_MULTIPLIER*4, score);
         assertGridEquals(endGrid, grid);
         assertTrue(grid.tileAt(new Position(4, 5)).getExploder() instanceof SquareExplode);
@@ -216,10 +223,10 @@ public class BejeweledGridTests {
         };
 
         setGrid(startGrid, grid);
-        grid.matchTiles();
+        matchTilesCycle(grid);
         assertGridEquals(gridAfterFirstMatch, grid);
         assertTrue(grid.tileAt(new Position(2, 2)).getExploder() instanceof SquareExplode);
-        grid.matchTiles();
+        matchTilesCycle(grid);
         assertGridEquals(endGrid, grid);
     }
 
@@ -251,7 +258,7 @@ public class BejeweledGridTests {
         setGrid(startGrid, grid);
         grid.tileAt(new Position(2, 1)).setExploder(new SquareExplode());
         grid.tileAt(new Position(3, 0)).setExploder(new SquareExplode());
-        grid.matchTiles();
+        matchTilesCycle(grid);
         assertGridEquals(endGrid, grid);
     }
 
@@ -283,6 +290,7 @@ public class BejeweledGridTests {
         Position p1 = new Position(1, 2);
         Position p2 = new Position(2, 2);
         grid.swapTiles(p1, p2);
+        matchTilesCycle(grid);
         assertTrue(grid.tileAt(p2).getExploder() instanceof SquareExplode);
         assertGridEquals(endGrid, grid);
     }
@@ -316,6 +324,7 @@ public class BejeweledGridTests {
         Position p1 = new Position(1, 3);
         Position p2 = new Position(2, 3);
         grid.swapTiles(p1, p2);
+        matchTilesCycle(grid);
         assertGridEquals(endGrid, grid);
     }
 }

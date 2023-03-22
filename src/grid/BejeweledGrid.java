@@ -32,7 +32,7 @@ public class BejeweledGrid extends Grid{
     };
     public static int SCORE_MULTIPLIER = 100;
 
-    private Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.PURPLE, Color.WHITE};
+    private Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.PURPLE, Color.SILVER};
     private Random colorGenerator = new Random();
     private Position selectedPosition;
 
@@ -87,18 +87,13 @@ public class BejeweledGrid extends Grid{
         List<Position> positionsToCheck = new ArrayList<>();
         positionsToCheck.add(p1);
         positionsToCheck.add(p2);
-        int totalScore = matchTiles(positionsToCheck);
-        if (totalScore == 0) {
+        int score = matchTiles(positionsToCheck);
+        if (score == 0) {
             // swap tiles back because no match
             swapTilesAt(p1, p2);
         }
-        score = totalScore;
-        while (score > 0) {
-            score = matchTiles();
-            System.out.println("Extra score: " + score);
-            totalScore += score;
-        }
-        return totalScore;
+
+        return score;
     }
 
     private int matchTiles(List<Position> positionsToCheck) {
@@ -155,9 +150,6 @@ public class BejeweledGrid extends Grid{
         }
         // add powerup tiles to grid
         powerupTiles.forEach((p, t) -> setTile(p, t));
-        applyGravity();
-        fillEmpty();
-
 
         return score; 
     }
@@ -249,7 +241,7 @@ public class BejeweledGrid extends Grid{
         return currPosition;
     }
 
-    private void fillEmpty()
+    public void fillEmpty()
     {
         //Fill empty spaces with new, random Bejeweled Tiles
         for(int row = 0; row < getNumRows(); row++)
