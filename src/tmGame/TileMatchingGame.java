@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import grid.Grid;
-import grid.IMatchingPattern;
-import grid.Match;
-import grid.NoMatch;
 import grid.Position;
-import grid.IGravity.IGravity;
+import grid.gravity.IGravity;
+import grid.matchingPatterns.IMatchingPattern;
+import grid.matchingPatterns.Match;
+import grid.matchingPatterns.NoMatch;
 import tile.Tile;
 import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.GameOverCondition;
@@ -38,19 +38,28 @@ public abstract class TileMatchingGame {
 	}
 
 	public final void run() {
-		var nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
+		// var nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
 		while(isRunning()) {
-			if (clock.instant().compareTo(nextTick) > 0) {
+			// if (clock.instant().compareTo(nextTick) > 0) {
 				// System.out.println("It has been 1 second");
-				nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
-				onClockTick();
-				display();
+				// nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
+			onClockTick();
+			display();
+			//}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}
 	
 	public void display() {
-		screen.displayGrid(grid);
+		screen.displayGrid(this);
+	}
+
+	public Tile visibleTileAt(Position p) {
+		return grid.tileAt(p);
 	}
 
 	public boolean isRunning() {
@@ -58,11 +67,14 @@ public abstract class TileMatchingGame {
 	}
 
 	public void applyGravity() {
+		System.out.println("Applying Gravity");
 		gravity.applyGravity(grid);
 	}
 
 	public void checkGameOver() {
+		System.out.println("Checking for game over");
 		this.isRunning = !gameOver.isGameOver();
+		System.out.println("Game over: " + !this.isRunning);
 	}
 
 	public GameScreenJFX getScreen() {

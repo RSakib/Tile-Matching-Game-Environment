@@ -4,9 +4,6 @@ import java.util.Random;
 import java.util.Set;
 
 import grid.Grid;
-import grid.HorizontalMatchingPattern;
-import grid.IMatchingPattern;
-import grid.Match;
 import grid.Position;
 import grid.IFallableBlocks.IFallable;
 import grid.IFallableBlocks.TetrisIBlock;
@@ -16,7 +13,10 @@ import grid.IFallableBlocks.TetrisOBlock;
 import grid.IFallableBlocks.TetrisSBlock;
 import grid.IFallableBlocks.TetrisTBlock;
 import grid.IFallableBlocks.TetrisZBlock;
-import grid.IGravity.DropRowsDown;
+import grid.gravity.DropRowsDown;
+import grid.matchingPatterns.HorizontalMatchingPattern;
+import grid.matchingPatterns.IMatchingPattern;
+import grid.matchingPatterns.Match;
 import tmGame.InputHandler.FallingBlockInputHandler;
 import tmGame.gameOverConditions.GridOverflowed;
 import tmGame.gameScreen.TetrisGameScreen;
@@ -30,19 +30,17 @@ public class TetrisGame extends FallingBlockGame {
         super();
         this.grid = new Grid(ROWS + INVISIBLE_ROWS, COLS);
         this.screen = new TetrisGameScreen();
-        this.inputHandler = new FallingBlockInputHandler(this);
         this.gameOver = new GridOverflowed(this.grid, INVISIBLE_ROWS);
         this.matchingPatterns = new IMatchingPattern[] {
             new HorizontalMatchingPattern(COLS)
         };
         this.gravity = new DropRowsDown();
+        this.inputHandler = new FallingBlockInputHandler(this);
     }
 
     @Override
     public void onClockTick() {
-        if (isRunning()) {
-            moveFallerDown();
-        }
+        moveFallerDown();
     }
 
     @Override
@@ -116,6 +114,9 @@ public class TetrisGame extends FallingBlockGame {
     @Override
     public void rotateFaller() {
         IFallable currentFaller = getCurrentFaller();
+        if (currentFaller == null) {
+            return;
+        }
         currentFaller.rotateClockwise();
         Set<Position> rotatedPositions = currentFaller.getBlock().keySet();
 
@@ -127,8 +128,6 @@ public class TetrisGame extends FallingBlockGame {
                 return;
             }
         }
-
-        currentFaller.rotateClockwise();
     }
 
 

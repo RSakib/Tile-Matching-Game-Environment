@@ -4,12 +4,13 @@ import java.util.Set;
 
 import grid.Direction;
 import grid.Grid;
-import grid.IMatchingPattern;
 import grid.Position;
 import grid.IFallableBlocks.IFallable;
-import grid.IGravity.IGravity;
+import grid.gravity.IGravity;
+import grid.matchingPatterns.IMatchingPattern;
 import javafx.geometry.Pos;
 import tile.EmptyTile;
+import tile.Tile;
 import tmGame.gameOverConditions.GameOverCondition;
 import tmGame.gameScreen.GameScreenJFX;
 
@@ -31,6 +32,16 @@ public abstract class FallingBlockGame extends TileMatchingGame{
     }
 
 
+    @Override
+    public Tile visibleTileAt(Position p) {
+        if (currentFaller != null) {
+            Tile tile = currentFaller.getBlock().get(p);
+            return (tile != null) ? tile : super.visibleTileAt(p);
+        }
+        return super.visibleTileAt(p);
+    }
+
+
     public void shiftFaller(Direction direction) {
         if (canShiftFaller(direction)) {
             currentFaller.shift(direction);
@@ -48,11 +59,15 @@ public abstract class FallingBlockGame extends TileMatchingGame{
             currentFaller.shift(Direction.DOWN);
         } else {
             addFallerToGrid();
+            matchTiles();
         }
     }
 
 
     private boolean canShiftFaller(Direction direction) {
+        if (currentFaller == null) { 
+            return false; 
+        }
         Set<Position> fallerPositions = currentFaller.getBlock().keySet();
 
         for (Position p : fallerPositions) {
