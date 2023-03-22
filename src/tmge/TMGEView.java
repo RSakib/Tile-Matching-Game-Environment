@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -47,11 +48,11 @@ public class TMGEView {
 			}
 		};
 
-		Button button = new Button("Player LeaderBoard");
+		Button button = new Button("Player and Scores");
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				playerView = setPlayerView()
+				playerView = setPlayerView();
 				currentScene.setRoot(playerView);
 			}
 		});
@@ -104,7 +105,6 @@ public class TMGEView {
 	}
 
 	public Parent setPlayerView() {
-		Text leaderboardText = new Text("LeaderBoard");
 		Button backButton = new Button("Back to Main Menu");
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -114,7 +114,10 @@ public class TMGEView {
 			}
 			
 		});
-		FlowPane topBar = new FlowPane(backButton, leaderboardText);
+		GridPane buttonBox = new GridPane();
+		buttonBox.getChildren().add(backButton);
+		
+		FlowPane topBar = new FlowPane(buttonBox);
 		topBar.setAlignment(Pos.CENTER);
 
 
