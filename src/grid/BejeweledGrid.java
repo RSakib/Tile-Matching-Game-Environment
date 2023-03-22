@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javafx.geometry.Pos;
 import tile.Color;
 import tile.EmptyTile;
 import tile.IMatcher;
@@ -22,6 +23,8 @@ public class BejeweledGrid extends Grid{
     public static int COLS = 8;
     public static IMatcher IMATCHER = new SameColorMatcher();
     public static IMatchingPattern[] PATTERNS = {
+        new HorizontalMatchingPattern(5),
+        new VerticalMatchingPattern(5),
         new HorizontalMatchingPattern(4),
         new VerticalMatchingPattern(4),
         new HorizontalMatchingPattern(3),
@@ -31,6 +34,8 @@ public class BejeweledGrid extends Grid{
 
     private Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.PURPLE, Color.WHITE};
     private Random colorGenerator = new Random();
+    private Position selectedPosition;
+
 
     public BejeweledGrid()
     {
@@ -55,6 +60,26 @@ public class BejeweledGrid extends Grid{
     }
 
 
+    public void newSelectedPosition(Position p) {
+        if (selectedPosition == null) {
+            selectedPosition = p;
+        } else {
+            // if p adjacent to selectedPosition swap tiles
+            if (selectedPosition.adjacent(p)) {
+                swapTiles(p, selectedPosition);
+                selectedPosition = null;
+            } else {
+                System.out.println("positions not adjacent");
+                selectedPosition = p;
+            }
+        }
+    }
+
+    public Position selectedPosition() {
+        return selectedPosition;
+    }
+
+
     public int swapTiles(Position p1, Position p2) {
         // check if tiles are adjacent
 
@@ -62,12 +87,18 @@ public class BejeweledGrid extends Grid{
         List<Position> positionsToCheck = new ArrayList<>();
         positionsToCheck.add(p1);
         positionsToCheck.add(p2);
-        int score = matchTiles(positionsToCheck);
-        if (score == 0) {
+        int totalScore = matchTiles(positionsToCheck);
+        if (totalScore == 0) {
             // swap tiles back because no match
-            swapTiles(p1, p2);
+            swapTilesAt(p1, p2);
         }
-        return score;
+        score = totalScore;
+        while (score > 0) {
+            score = matchTiles();
+            System.out.println("Extra score: " + score);
+            totalScore += score;
+        }
+        return totalScore;
     }
 
     private int matchTiles(List<Position> positionsToCheck) {
@@ -87,6 +118,9 @@ public class BejeweledGrid extends Grid{
                     if ((matchPattern instanceof HorizontalMatchingPattern || matchPattern instanceof VerticalMatchingPattern) && m.getNumMatched() == 4) {
                         powerupTiles.put(pos, new SquareTilePowerUp(tile.getColor()));
                     }
+                    if ((matchPattern instanceof HorizontalMatchingPattern || matchPattern instanceof VerticalMatchingPattern) && m.getNumMatched() == 5) {
+                        powerupTiles.put(pos, new SameColorPowerUp());
+                    }
                 }
             }
         }
@@ -104,45 +138,76 @@ public class BejeweledGrid extends Grid{
             }
         }
 
+        List<Position> explodedTilesTest = new ArrayList<Position>();
+        for (int i = 0; i < getNumRows(); i++) {
+            for (int j = 0; j < getNumCols(); j++) {
+                if (tileAt(new Position(i, j)).isExploded()) {
+                    explodedTilesTest.add(new Position(i, j));
+                }
+            }
+        }
+
         //Calculate score
         int score = SCORE_MULTIPLIER*explodedPositions.size(); // if no matches, returns 0
         // remove exploded tiles and calculate score
-        if(score > 0)
-        {
-            for (Position p : explodedPositions) {
-                setTile(p, new EmptyTile());
-            }
-            // add powerup tiles to grid
-            powerupTiles.forEach((p, t) -> setTile(p, t));
-            applyGravity();
-            fillEmpty();
+        for (Position p : explodedTilesTest) {
+            setTile(p, new EmptyTile());
         }
+        // add powerup tiles to grid
+        powerupTiles.forEach((p, t) -> setTile(p, t));
+        applyGravity();
+        fillEmpty();
+
+
         return score; 
     }
 
 
     private void pullColumnsDown()
     {
-        for(int currRow = 0; currRow < getNumRows(); currRow++)
-        {
-            for(int currCol = 0; currCol < getNumCols(); currCol++)
-            {
-                ArrayList<Position>columnTiles = new ArrayList<Position>();
-                Position currPosition = new Position(currRow, currCol);
-                Tile currTile = tileAt(currPosition);
-                if((!(currTile instanceof EmptyTile)) && isBelowEmpty(currPosition))
-                {
-                    columnTiles = getColumnOrder(currPosition);
-                    Position floor = getFloorPosition(currPosition);
-                    for(int i = 0; i < columnTiles.size(); i++)
-                    {
-                        setTile(floor, tileAt(columnTiles.get(i)));
-                        floor.row--;
+        for (int c= 0; c < getNumCols(); c++) {
+            for (int r = getNumRows() - 1; r > 0; r--) {
+                Position p = new Position(r, c);
+                if (tileAt(p) instanceof EmptyTile) {
+                    Position nonEmptyPos = nonEmptyAbove(p);
+                    if (nonEmptyPos == null) {
+                        continue;
                     }
-                }
 
+                    swapTilesAt(p, nonEmptyPos);
+                }
             }
         }
+        // for(int currRow = 0; currRow < getNumRows(); currRow++)
+        // {
+        //     for(int currCol = 0; currCol < getNumCols(); currCol++)
+        //     {
+        //         ArrayList<Position>columnTiles = new ArrayList<Position>();
+        //         Position currPosition = new Position(currRow, currCol);
+        //         Tile currTile = tileAt(currPosition);
+        //         if((!(currTile instanceof EmptyTile)) && isBelowEmpty(currPosition))
+        //         {
+        //             columnTiles = getColumnOrder(currPosition);
+        //             Position floor = getFloorPosition(currPosition);
+        //             for(int i = 0; i < columnTiles.size(); i++)
+        //             {
+        //                 setTile(floor, tileAt(columnTiles.get(i)));
+        //                 floor.row--;
+        //             }
+        //         }
+
+        //     }
+        // }
+    }
+
+    private Position nonEmptyAbove(Position start) {
+        for (int r = start.row - 1; r >= 0; r--) {
+            Position p = new Position(r, start.col);
+            if (! (tileAt(p) instanceof EmptyTile)) {
+                return p;
+            }
+        }
+        return null;
     }
 
     private ArrayList<Position> getColumnOrder(Position currPosition)

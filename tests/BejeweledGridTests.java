@@ -17,8 +17,24 @@ public class BejeweledGridTests {
     private void assertGridEquals(int[][] expected, Grid grid){
         for (int r = 0; r < expected.length; r++) {
             for (int c = 0; c < expected[r].length; c++) {
+                Position p = new Position(r, c);
                 if (expected[r][c] != 0) {
-                    assertEquals(Color.values()[expected[r][c] - 1], grid.tileAt(new Position(r, c)).getColor());
+                    assertEquals("mismatch at position" + p, Color.values()[expected[r][c] - 1], grid.tileAt(p).getColor());
+                }
+            }
+        }
+
+        // assert no positions on grid share references
+        for (int r = 0; r < expected.length; r++) {
+            for (int c = 0; c < expected[r].length; c++) {
+                for (int i = 0; i < expected.length; i++) {
+                    for (int j = 0; j < expected.length; j++) {
+                        Position p1 = new Position(r, c);
+                        Position p2 = new Position(i, j);
+                        if (! p1.equals(p2)) {
+                            assertFalse(grid.tileAt(p1).equals(grid.tileAt(p2)));
+                        }
+                    }
                 }
             }
         }
@@ -170,38 +186,39 @@ public class BejeweledGridTests {
             {1, 2, 3, 4, 5, 6, 7, 1},
             {2, 3, 4, 1, 1, 3, 1, 2},
             {3, 4, 1, 1, 1, 1, 2, 3},
-            {4, 5, 6, 7, 7, 6, 3, 4},
+            {4, 5, 6, 7, 2, 6, 3, 4},
             {1, 2, 3, 4, 5, 2, 7, 1},
             {2, 3, 4, 5, 6, 7, 1, 2},
-            {1, 2, 3, 7, 3, 6, 7, 1},
-            {1, 2, 3, 4, 5, 6, 7, 1}
+            {1, 2, 6, 7, 3, 4, 7, 1},
+            {6, 4, 3, 4, 5, 6, 7, 1}
         };
 
         int[][] gridAfterFirstMatch = {
             {1, 2, 3, 0, 0, 0, 7, 1},
             {2, 3, 4, 4, 5, 6, 1, 2},
             {3, 4, 1, 1, 1, 3, 2, 3},
-            {4, 5, 6, 7, 7, 6, 3, 4},
+            {4, 5, 6, 7, 2, 6, 3, 4},
             {1, 2, 3, 4, 5, 2, 7, 1},
             {2, 3, 4, 5, 6, 7, 1, 2},
-            {1, 2, 3, 7, 3, 6, 7, 1},
-            {1, 2, 3, 4, 5, 6, 7, 1}
+            {1, 2, 6, 7, 3, 4, 7, 1},
+            {6, 4, 3, 4, 5, 6, 7, 1}
         };
 
         int[][] endGrid = {
             {1, 0, 0, 0, 0, 0, 7, 1},
             {2, 0, 0, 0, 0, 6, 1, 2},
             {3, 0, 0, 0, 5, 3, 2, 3},
-            {4, 2, 3, 0, 7, 6, 3, 4},
+            {4, 2, 3, 0, 2, 6, 3, 4},
             {1, 2, 3, 4, 5, 2, 7, 1},
             {2, 3, 4, 5, 6, 7, 1, 2},
-            {1, 2, 3, 7, 3, 6, 7, 1},
-            {1, 2, 3, 4, 5, 6, 7, 1}
+            {1, 2, 6, 7, 3, 4, 7, 1},
+            {6, 4, 3, 4, 5, 6, 7, 1}
         };
 
         setGrid(startGrid, grid);
         grid.matchTiles();
         assertGridEquals(gridAfterFirstMatch, grid);
+        assertTrue(grid.tileAt(new Position(2, 2)).getExploder() instanceof SquareExplode);
         grid.matchTiles();
         assertGridEquals(endGrid, grid);
     }
@@ -266,7 +283,39 @@ public class BejeweledGridTests {
         Position p1 = new Position(1, 2);
         Position p2 = new Position(2, 2);
         grid.swapTiles(p1, p2);
-        assertGridEquals(endGrid, grid);
         assertTrue(grid.tileAt(p2).getExploder() instanceof SquareExplode);
+        assertGridEquals(endGrid, grid);
+    }
+
+    @Test
+    public void CanSwapTilesInMiddleOfFiveInARow() {
+        int[][] startGrid = {
+            {1, 2, 3, 1, 5, 6, 7, 1},
+            {2, 3, 1, 1, 7, 3, 1, 2},
+            {3, 1, 5, 7, 1, 3, 2, 3},
+            {4, 5, 6, 1, 4, 6, 3, 4},
+            {1, 2, 3, 1, 5, 2, 7, 1},
+            {2, 3, 4, 4, 6, 7, 1, 2},
+            {1, 2, 3, 7, 3, 6, 7, 1},
+            {1, 2, 3, 4, 5, 6, 7, 1}
+        };
+
+        int[][] endGrid = {
+            {1, 2, 3, 0, 5, 6, 7, 1},
+            {2, 3, 1, 0, 7, 3, 1, 2},
+            {3, 1, 5, 0, 1, 3, 2, 3},
+            {4, 5, 6, 1, 4, 6, 3, 4},
+            {1, 2, 3, 7, 5, 2, 7, 1},
+            {2, 3, 4, 4, 6, 7, 1, 2},
+            {1, 2, 3, 7, 3, 6, 7, 1},
+            {1, 2, 3, 4, 5, 6, 7, 1}
+        };
+
+
+        setGrid(startGrid, grid);
+        Position p1 = new Position(1, 3);
+        Position p2 = new Position(2, 3);
+        grid.swapTiles(p1, p2);
+        assertGridEquals(endGrid, grid);
     }
 }

@@ -2,12 +2,15 @@ package tmGame.gameScreen;
 
 import grid.Grid;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 
 public abstract class GameScreenJFX {
 	protected Scene scene;
+	// protected GridPane board;
 	
 	public GameScreenJFX() {
 		scene = null;
+		// board = new GridPane();
 	}
 
 	public Scene getScene() {
@@ -17,7 +20,6 @@ public abstract class GameScreenJFX {
 	public void setScene(Scene scene) {
 		this.scene = scene;
 	}
-
 
 	public int tileWidth(Grid g) {
 		return (int) (scene.getWidth() / g.getNumCols());

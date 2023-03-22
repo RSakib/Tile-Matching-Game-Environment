@@ -4,9 +4,9 @@ import tile.Color;
 import tile.SameColorExplode;
 
 public class SameColorPowerUp extends BejeweledTile{
-    public SameColorPowerUp(Color color)
+    public SameColorPowerUp()
     {
-        super(color);
+        super(Color.MULTICOLOR);
         setExploder(new SameColorExplode());
     }
 }
