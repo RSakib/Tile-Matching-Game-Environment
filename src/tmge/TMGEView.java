@@ -1,6 +1,6 @@
 package tmge;
 
-import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -12,7 +12,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -21,21 +24,38 @@ import javafx.scene.text.Text;
 public class TMGEView {
 	private TMGE model;
 	private TMGEModelController controller;
-	private Scene scene;
-	Optional<String> name = null;
+	private Scene currentScene;
+	private Parent mainMenu;
+	private Parent playerView;
+	String playerName = "";
 	
 	public TMGEView(TMGE model, TMGEModelController controller, Scene scene) {
 		this.model = model;
 		this.controller = controller;
-		this.scene = scene;
+		this.currentScene = scene;
 		
-		setMainMenuScreen();
+		mainMenu = setMainMenuScreen();
+		playerView = setPlayerView();
+
+		scene.setRoot(mainMenu);
 	}
 	
-	public void setMainMenuScreen() {
-		Button button = new Button("Coolio");
-		button.setId("NULLGAME");
-		button.setOnAction(new GameOptionHandler());
+	public Parent setMainMenuScreen() {
+		class GameOptionHandler implements EventHandler<ActionEvent> {
+			@Override
+			public void handle(ActionEvent event) {
+				startGame(event);
+			}
+		};
+
+		Button button = new Button("Player and Scores");
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				playerView = setPlayerView();
+				currentScene.setRoot(playerView);
+			}
+		});
 		Button tetrisButton = new Button("Tetris");
 		tetrisButton.setId("TETRISGAME");
 		tetrisButton.setOnAction(new GameOptionHandler());
@@ -84,15 +104,38 @@ public class TMGEView {
 		mainMenuLayout.setTop(hbox);
 		mainMenuLayout.setCenter(menuLayout);
 		
-		scene.setRoot(mainMenuLayout);
+		return mainMenuLayout;
+	}
+
+	public Parent setPlayerView() {
+		Button backButton = new Button("Back to Main Menu");
+		backButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				currentScene.setRoot(mainMenu);
+			}
+			
+		});
+		GridPane buttonBox = new GridPane();
+		buttonBox.getChildren().add(backButton);
+		
+		FlowPane topBar = new FlowPane(buttonBox);
+		topBar.setAlignment(Pos.CENTER);
+
+
+		VBox PlayerLayout = new VBox();
+		PlayerLayout.getChildren().add(topBar);
+		for (Player player : model.getPlayers()) {
+
+			PlayerLayout.getChildren().add(new Text(player.getUsername() + " " + player.getHighScore()));
+		}
+		
+
+		return PlayerLayout;
 	}
 	
-	class GameOptionHandler implements EventHandler<ActionEvent> {
-	    @Override
-	    public void handle(ActionEvent event) {
-	    	startGame(event);
-	    }
-	};
+	
 	
 	public void startGame(ActionEvent event) 
     {
@@ -102,21 +145,29 @@ public class TMGEView {
             public void run()
             {
 				for(int i = 0; i < model.getCurrentNumPlayers(); i++) {
-					name = null;
+					final CountDownLatch latch = new CountDownLatch(1);
 					Platform.runLater(() -> {
-						name = popUpPlayerPrompt().showAndWait();
+						var popup = popUpPlayerPrompt().showAndWait();
+						while (!popup.isPresent()) {
+							popup = popUpPlayerPrompt().showAndWait();
+						}
+						playerName = popup.get();
+						latch.countDown();
 					});
 					
-					// Find a better way to do Nothing in a while loop
-					// Because the java compiler optimizes this wait away when its necessary
-					while (name == null) {
-						System.out.print("");
+					synchronized(playerName) {
+						try {
+							latch.await();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						controller.findOrCreatePlayer(playerName);
 					}
-					controller.findOrCreatePlayer(name.get());
+					
 
-					Parent prevRoot = scene.getRoot();
-					controller.runGame(((Button)event.getSource()).getId(), scene);
-					scene.setRoot(prevRoot);
+					Parent prevRoot = currentScene.getRoot();
+					controller.runGame(((Button)event.getSource()).getId(), currentScene);
+					currentScene.setRoot(prevRoot);
 				}
           	}
         };
