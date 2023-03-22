@@ -1,7 +1,5 @@
 package grid;
 
-import java.util.Objects;
-
 public class Position {
 	public int row;
 	public int col;
@@ -54,6 +52,10 @@ public class Position {
 		} else if (d == Direction.RIGHT) {
 			col += 1;
 		}
+	}
+
+	public boolean adjacent(Position other) {
+		return Math.abs(this.row - other.row) + Math.abs(this.col - other.col) <= 1;
 	}
 
 

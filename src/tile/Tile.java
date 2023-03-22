@@ -7,7 +7,7 @@ import grid.Position;
 
 public abstract class Tile {
 	private String imagePath;
-	private int color; // could change to enum
+	private Color color; // could change to enum
 	private boolean matched;
 	private boolean exploded;
 	private IExploder exploder;
@@ -17,11 +17,19 @@ public abstract class Tile {
 		return imagePath;
 	}
 
-	public int getColor() {
+	public Color getColor() {
 		return color;
 	}
 
+	public void setColor(Color c) {
+		color = c;
+	}
 
+	public IExploder getExploder() {
+		return exploder;
+	}
+
+	
 	public void setExploder(IExploder exploder) {
 		this.exploder = exploder;
 	}

@@ -59,6 +59,9 @@ public class TMGEView {
 		Button tetrisButton = new Button("Tetris");
 		tetrisButton.setId("TETRISGAME");
 		tetrisButton.setOnAction(new GameOptionHandler());
+		Button bejeweledButton = new Button("Bejeweled");
+		bejeweledButton.setId("BEJEWELEDGAME");
+		bejeweledButton.setOnAction(new GameOptionHandler());
 		
 		HBox hbox = new HBox();
 	    hbox.setPadding(new Insets(15, 12, 15, 12));
@@ -87,7 +90,7 @@ public class TMGEView {
 	    hbox.getChildren().addAll(buttonIncrement, buttonDecrement, numPlayerText);
 		
 		VBox buttonPanel = new VBox(
-			button, tetrisButton
+			button, tetrisButton, bejeweledButton
 		);
 
 		buttonPanel.setAlignment(Pos.CENTER);
@@ -165,8 +168,8 @@ public class TMGEView {
 					Parent prevRoot = currentScene.getRoot();
 					controller.runGame(((Button)event.getSource()).getId(), currentScene);
 					currentScene.setRoot(prevRoot);
-				    }
-          }
+				}
+          	}
         };
 			
 		// Run the task in a background thread

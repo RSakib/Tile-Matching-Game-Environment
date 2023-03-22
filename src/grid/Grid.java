@@ -87,15 +87,17 @@ public abstract class Grid {
 			return new ArrayList<>();
 		}
 
+		List<Position> allExplodedPositions = new ArrayList<>();
 		List<Position> explodedPositions = tile.explode(this, p);
+		allExplodedPositions.addAll(explodedPositions);
 		for (Position explodedPos: explodedPositions) {
 			Tile explodedTile = tileAt(explodedPos);
 			if (! explodedPos.equals(p)) {
-				explodedPositions.addAll(getExplodedTiles(explodedPos));
+				allExplodedPositions.addAll(getExplodedTiles(explodedPos));
 			}
 			explodedTile.setExploded(true);
 		}
-		return explodedPositions;
+		return allExplodedPositions;
 	}
 	
 	
@@ -115,6 +117,14 @@ public abstract class Grid {
 		//Else, return false
 		return false;
 	}
+
+
+	public void swapTilesAt(Position p1, Position p2) {
+		Tile temp = tileAt(p1);
+		setTile(p1, tileAt(p2));
+		setTile(p2, temp);
+	}
+	
 	
 	public void initializeGrid() {
 		for (int i = 0; i < numRows; i++) {
