@@ -31,6 +31,9 @@ public class TMGEModelController {
 	}
 	
 	public boolean findOrCreatePlayer(String playerName) {
+		if (playerName.contentEquals("enter any text")) {
+			playerName = "DefaultGuest";
+		}
 		Player player = model.findPlayer(playerName);
 		if(player == null) {
 			player = model.createNewPlayer(playerName);

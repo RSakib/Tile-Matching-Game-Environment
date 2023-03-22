@@ -52,5 +52,9 @@ public class TMGE {
 	public void setCurrentNumPlayers(int currentNumPlayers) {
 		this.currentNumPlayers = currentNumPlayers;
 	}
+
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
 	
 }
