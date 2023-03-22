@@ -35,7 +35,7 @@ public abstract class TileMatchingGame {
 		var nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
 		while(isGameRunning) {
 			if (clock.instant().compareTo(nextTick) > 0) {
-				System.out.println("It has been 1 second");
+				// System.out.println("It has been 1 second");
 				nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
 				onClockTick();
 				display();

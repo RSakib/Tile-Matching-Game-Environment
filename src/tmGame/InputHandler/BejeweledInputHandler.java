@@ -1,6 +1,7 @@
 package tmGame.InputHandler;
 
 
+import grid.BejeweledGrid;
 import grid.Position;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -18,8 +19,9 @@ public class BejeweledInputHandler extends InputHandlerJFX{
             Position p = positionFromClick(event);
             System.out.println(p);
 
-            BejeweledGame bejeweledGame = (BejeweledGame) game;
-            bejeweledGame.newSelectedPosition(p);
+            BejeweledGrid bejeweledGrid = (BejeweledGrid) game.getGrid();
+            bejeweledGrid.newSelectedPosition(p);
+            game.display();
         }
 
 

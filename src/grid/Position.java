@@ -54,6 +54,10 @@ public class Position {
 		}
 	}
 
+	public boolean adjacent(Position other) {
+		return Math.abs(this.row - other.row) + Math.abs(this.col - other.col) <= 1;
+	}
+
 
 	public String toString() {
 		return String.format("(row: %d, col: %d)", row, col);

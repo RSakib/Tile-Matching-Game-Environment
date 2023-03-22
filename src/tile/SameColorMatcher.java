@@ -5,7 +5,7 @@ public class SameColorMatcher implements IMatcher{
     {
         if(t1 == null || t2 == null)
             return false;
-        else if(t1.getColor() == t2.getColor()){
+        else if(t1.getColor() == t2.getColor() && t1.getColor() != Color.EMPTY){
             return true;
         }
         return false;
