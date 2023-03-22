@@ -35,7 +35,7 @@ public class BejeweledGame extends TileMatchingGame{
     public BejeweledGame() {
         super();
         this.grid = new Grid(ROWS, COLS);
-        this.screen = new BejeweledGameScreen();
+        this.screen = new BejeweledGameScreen(this);
         this.gameOver = new TimeUp(Clock.systemUTC());
         this.matchingPatterns = new IMatchingPattern[] {
             new HorizontalMatchingPattern(5),

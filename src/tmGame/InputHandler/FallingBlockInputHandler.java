@@ -17,6 +17,7 @@ public class FallingBlockInputHandler extends InputHandlerJFX {
     class InputSelect implements EventHandler<KeyEvent> {
 	    @Override
 	    public void handle(KeyEvent keyEvent) {
+            System.out.println("Key pressed");
             FallingBlockGame fbGame = (FallingBlockGame) game;
             KeyCode input = keyEvent.getCode();
             if(fbGame.isRunning()) {

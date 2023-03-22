@@ -29,7 +29,7 @@ public class TetrisGame extends FallingBlockGame {
     public TetrisGame() {
         super();
         this.grid = new Grid(ROWS + INVISIBLE_ROWS, COLS);
-        this.screen = new TetrisGameScreen();
+        this.screen = new TetrisGameScreen(this);
         this.gameOver = new GridOverflowed(this.grid, INVISIBLE_ROWS);
         this.matchingPatterns = new IMatchingPattern[] {
             new HorizontalMatchingPattern(COLS)

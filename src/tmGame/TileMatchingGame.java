@@ -55,7 +55,7 @@ public abstract class TileMatchingGame {
 	}
 	
 	public void display() {
-		screen.displayGrid(this);
+		screen.display();
 	}
 
 	public Tile visibleTileAt(Position p) {

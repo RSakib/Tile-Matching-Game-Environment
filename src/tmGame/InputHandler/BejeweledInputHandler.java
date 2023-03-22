@@ -28,9 +28,9 @@ public class BejeweledInputHandler extends InputHandlerJFX{
             double x = event.getX();
             double y = event.getY();
 
-            GameScreenJFX screen = game.getScreen();
-            int row = (int) (y / screen.tileHeight(game.getGrid().getNumRows()));
-            int col = (int) (x / screen.tileWidth(game.getGrid().getNumCols()));
+            GameScreenJFX  screen = game.getScreen();
+            int row = (int) (y / screen.tileHeight());
+            int col = (int) (x / screen.tileWidth());
             return new Position(row, col);
         }
 
@@ -39,7 +39,7 @@ public class BejeweledInputHandler extends InputHandlerJFX{
     public BejeweledInputHandler(TileMatchingGame game) {
         super(game);
         Platform.runLater(() -> {
-            game.getScreen().getScene().setOnMouseClicked(new OnClickHandler());
+            game.getScreen().getBoard().setOnMouseClicked(new OnClickHandler());
         });
     }
     
