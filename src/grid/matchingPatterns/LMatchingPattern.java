@@ -1,7 +1,10 @@
-package grid;
+package grid.matchingPatterns;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import grid.Grid;
+import grid.Position;
 
 public class LMatchingPattern implements IMatchingPattern {
 	private int legLength;
@@ -17,7 +20,7 @@ public class LMatchingPattern implements IMatchingPattern {
 	@Override
 	public Match findMatch(Grid grid, Position position) {
 		Match hzMatch = hzPattern.findMatch(grid, position);
-		if (! (hzMatch instanceof NoMatch)) {
+		if (hzMatch.isMatch()) {
 			Position left = hzMatch.getPositions().get(0);
 			Position right = hzMatch.getPositions().get(hzMatch.getNumMatched() - 1);
 
@@ -33,10 +36,13 @@ public class LMatchingPattern implements IMatchingPattern {
 			matches.add(rightDown);
 
 			for (Match m : matches) {
-				if (! (m instanceof NoMatch)) {
-					return new Match(this, m.getPositions());
+				if (m.isMatch()) {
+					List<Position> allPositions = hzMatch.getPositions();
+					allPositions.addAll(m.getPositions());
+					return new Match(this, allPositions);
 				}
 			}
+			return new NoMatch();
 		}
 
 		Match vtMatch = vtPattern.findMatch(grid, position);
@@ -46,10 +52,10 @@ public class LMatchingPattern implements IMatchingPattern {
 
 			// find match starting/ending at two ends of vtMatch.matchedPositions	
 			List<Match> matches = new ArrayList<>();
-			Match topLeft = vtPattern.matchStartsAt(grid, new Position(top.row, top.col - (legLength - 1)));
-			Match topRight = vtPattern.matchStartsAt(grid, new Position(top.row, top.col));
-			Match botLeft = vtPattern.matchStartsAt(grid, new Position(bot.row, bot.col - (legLength - 1)));
-			Match botRight = vtPattern.matchStartsAt(grid, new Position(bot.row, bot.col));
+			Match topLeft = hzPattern.matchStartsAt(grid, new Position(top.row, top.col - (legLength - 1)));
+			Match topRight = hzPattern.matchStartsAt(grid, new Position(top.row, top.col));
+			Match botLeft = hzPattern.matchStartsAt(grid, new Position(bot.row, bot.col - (legLength - 1)));
+			Match botRight = hzPattern.matchStartsAt(grid, new Position(bot.row, bot.col));
 			matches.add(topLeft);
 			matches.add(topRight);
 			matches.add(botLeft);
@@ -57,9 +63,12 @@ public class LMatchingPattern implements IMatchingPattern {
 
 			for (Match m : matches) {
 				if (! (m instanceof NoMatch)) {
-					return new Match(this, m.getPositions());
+					List<Position> allPositions = vtMatch.getPositions();
+					allPositions.addAll(m.getPositions());
+					return new Match(this, allPositions);
 				}
 			}
+			return new NoMatch();
 		}
 
 		return new NoMatch();

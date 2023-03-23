@@ -1,7 +1,6 @@
 package tmGame.InputHandler;
 
 
-import grid.BejeweledGrid;
 import grid.Position;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -10,7 +9,8 @@ import tmGame.BejeweledGame;
 import tmGame.TileMatchingGame;
 import tmGame.gameScreen.GameScreenJFX;
 
-public class BejeweledInputHandler extends InputHandlerJFX{
+public class BejeweledInputHandler implements InputHandlerJFX{
+    private BejeweledGame game;
 
     class OnClickHandler implements EventHandler<MouseEvent> {
 
@@ -19,8 +19,7 @@ public class BejeweledInputHandler extends InputHandlerJFX{
             Position p = positionFromClick(event);
             System.out.println(p);
 
-            BejeweledGrid bejeweledGrid = (BejeweledGrid) game.getGrid();
-            bejeweledGrid.newSelectedPosition(p);
+            game.newSelectedPosition(p);
             game.display();
         }
 
@@ -29,18 +28,20 @@ public class BejeweledInputHandler extends InputHandlerJFX{
             double x = event.getX();
             double y = event.getY();
 
-            GameScreenJFX screen = game.getScreen();
-            int row = (int) (y / screen.tileHeight(game.getGrid()));
-            int col = (int) (x / screen.tileWidth(game.getGrid()));
+            GameScreenJFX  screen = game.getScreen();
+            int row = (int) (y / screen.tileHeight());
+            int col = (int) (x / screen.tileWidth());
             return new Position(row, col);
         }
 
     }
 
-    public BejeweledInputHandler(TileMatchingGame game) {
-        super(game);
+
+    @Override
+    public void register(TileMatchingGame game) {
+        this.game = (BejeweledGame) game;
         Platform.runLater(() -> {
-            game.getScreen().getScene().setOnMouseClicked(new OnClickHandler());
+            game.getScreen().getBoard().setOnMouseClicked(new OnClickHandler());
         });
     }
     

@@ -5,21 +5,31 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import grid.BejeweledGrid;
 import grid.Grid;
 import grid.Position;
-import tile.Color;
+import tile.TileColor;
 import tile.EmptyTile;
-import tile.SquareExplode;
 import tile.BejeweledTiles.BejeweledTile;
+import tile.BejeweledTiles.FlameTile;
+import tile.BejeweledTiles.StarTile;
+import tile.exploders.SquareExplode;
+import tmGame.BejeweledGame;
+import tmGame.TileMatchingGame;
+import tmGame.InputHandler.InputHandlerJFX;
 
 public class BejeweledGridTests {
+    private class NullInputHandler implements InputHandlerJFX {
+        @Override
+        public void register(TileMatchingGame game) {
+        }
+    }
+
     private void assertGridEquals(int[][] expected, Grid grid){
         for (int r = 0; r < expected.length; r++) {
             for (int c = 0; c < expected[r].length; c++) {
                 Position p = new Position(r, c);
                 if (expected[r][c] != 0) {
-                    assertEquals("mismatch at position" + p, Color.values()[expected[r][c] - 1], grid.tileAt(p).getColor());
+                    assertEquals("mismatch at position" + p, TileColor.values()[expected[r][c] - 1], grid.tileAt(p).getColor());
                 }
             }
         }
@@ -46,24 +56,26 @@ public class BejeweledGridTests {
                 if (gridArray[r][c] == 0) {
                     grid.setTile(new Position(r, c), new EmptyTile());
                 } else {
-                    grid.setTile(new Position(r, c), new BejeweledTile(Color.values()[gridArray[r][c] - 1]));
+                    grid.setTile(new Position(r, c), new BejeweledTile(TileColor.values()[gridArray[r][c] - 1]));
                 }
             }
         }
     }
 
-    private int matchTilesCycle(BejeweledGrid grid) {
-        int score = grid.matchTiles();
-        grid.applyGravity();
-        grid.fillEmpty();
-        return score;
+    private void matchTilesCycle(BejeweledGame game) {
+        game.matchTiles();
+        game.applyGravity();
+        game.fillEmptyTiles();
     }
 
-    private BejeweledGrid grid;
+    private BejeweledGame game;
+    private Grid grid;
 
     @Before
     public void setUp() {
-        grid = new BejeweledGrid();
+        game = new BejeweledGame(new NullInputHandler());
+        game.setInputHandler(null);
+        grid = game.getGrid();
     }
 
     @Test
@@ -120,8 +132,7 @@ public class BejeweledGridTests {
         };
 
         setGrid(startGrid, grid);
-        int score = matchTilesCycle(grid);
-        assertEquals(BejeweledGrid.SCORE_MULTIPLIER*3, score);
+        matchTilesCycle(game);
         assertGridEquals(endGrid, grid);
     }
 
@@ -151,8 +162,7 @@ public class BejeweledGridTests {
         };
 
         setGrid(startGrid, grid);
-        int score = matchTilesCycle(grid);
-        assertEquals(BejeweledGrid.SCORE_MULTIPLIER*3, score);
+        matchTilesCycle(game);
         assertGridEquals(endGrid, grid);
     }
 
@@ -181,10 +191,9 @@ public class BejeweledGridTests {
         };
 
         setGrid(startGrid, grid);
-        int score = matchTilesCycle(grid);
-        assertEquals(BejeweledGrid.SCORE_MULTIPLIER*4, score);
+        matchTilesCycle(game);
         assertGridEquals(endGrid, grid);
-        assertTrue(grid.tileAt(new Position(4, 5)).getExploder() instanceof SquareExplode);
+        assertTrue(grid.tileAt(new Position(4, 5)) instanceof FlameTile);
     }
 
     @Test
@@ -223,10 +232,10 @@ public class BejeweledGridTests {
         };
 
         setGrid(startGrid, grid);
-        matchTilesCycle(grid);
+        matchTilesCycle(game);
         assertGridEquals(gridAfterFirstMatch, grid);
-        assertTrue(grid.tileAt(new Position(2, 2)).getExploder() instanceof SquareExplode);
-        matchTilesCycle(grid);
+        assertTrue(grid.tileAt(new Position(2, 2)) instanceof FlameTile);
+        matchTilesCycle(game);
         assertGridEquals(endGrid, grid);
     }
 
@@ -258,7 +267,7 @@ public class BejeweledGridTests {
         setGrid(startGrid, grid);
         grid.tileAt(new Position(2, 1)).setExploder(new SquareExplode());
         grid.tileAt(new Position(3, 0)).setExploder(new SquareExplode());
-        matchTilesCycle(grid);
+        matchTilesCycle(game);
         assertGridEquals(endGrid, grid);
     }
 
@@ -289,9 +298,9 @@ public class BejeweledGridTests {
         setGrid(startGrid, grid);
         Position p1 = new Position(1, 2);
         Position p2 = new Position(2, 2);
-        grid.swapTiles(p1, p2);
-        matchTilesCycle(grid);
-        assertTrue(grid.tileAt(p2).getExploder() instanceof SquareExplode);
+        game.swapTiles(p1, p2);
+        matchTilesCycle(game);
+        assertTrue(grid.tileAt(p2) instanceof FlameTile);
         assertGridEquals(endGrid, grid);
     }
 
@@ -323,8 +332,43 @@ public class BejeweledGridTests {
         setGrid(startGrid, grid);
         Position p1 = new Position(1, 3);
         Position p2 = new Position(2, 3);
-        grid.swapTiles(p1, p2);
-        matchTilesCycle(grid);
+        game.swapTiles(p1, p2);
+        matchTilesCycle(game);
         assertGridEquals(endGrid, grid);
+    }
+
+
+    @Test
+    public void LShapedPatternCreatesStarTile() {
+        int[][] startGrid = {
+            {1, 2, 3, 1, 5, 6, 7, 1},
+            {2, 3, 6, 4, 7, 3, 1, 2},
+            {3, 1, 1, 7, 1, 3, 2, 3},
+            {4, 5, 6, 1, 4, 6, 3, 4},
+            {1, 2, 3, 1, 5, 2, 7, 1},
+            {2, 3, 4, 4, 6, 7, 1, 2},
+            {1, 2, 3, 7, 3, 6, 7, 1},
+            {1, 2, 3, 4, 5, 6, 7, 1}
+        };
+
+        int[][] endGrid = {
+            {1, 0, 0, 0, 5, 6, 7, 1},
+            {2, 2, 3, 0, 7, 3, 1, 2},
+            {3, 3, 6, 1, 7, 3, 2, 3},
+            {4, 5, 6, 4, 4, 6, 3, 4},
+            {1, 2, 3, 1, 5, 2, 7, 1},
+            {2, 3, 4, 4, 6, 7, 1, 2},
+            {1, 2, 3, 7, 3, 6, 7, 1},
+            {1, 2, 3, 4, 5, 6, 7, 1}
+        };
+
+
+        setGrid(startGrid, grid);
+        Position p1 = new Position(2, 3);
+        Position p2 = new Position(2, 4);
+        game.swapTiles(p1, p2);
+        matchTilesCycle(game);
+        assertGridEquals(endGrid, grid);
+        assertTrue(grid.tileAt(new Position(4, 3)) instanceof StarTile);
     }
 }

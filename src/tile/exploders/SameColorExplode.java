@@ -1,8 +1,9 @@
-package tile;
+package tile.exploders;
 import grid.Grid;
 import java.util.List;
 import java.util.ArrayList;
 import grid.Position;
+import tile.Tile;
 
 public class SameColorExplode implements IExploder{
     public List<Position>explode(Grid g, int row, int col)
@@ -20,7 +21,7 @@ public class SameColorExplode implements IExploder{
                 //If colors are the same, add to list
                 Position currPosition = new Position(currRow, currCol);
                 Tile currTile = g.tileAt(currPosition);
-                if(targetTile.getColor() == currTile.getColor())
+                if(targetTile.getColor().equals(currTile.getColor()))
                 {
                     toExplode.add(currPosition);
                 }

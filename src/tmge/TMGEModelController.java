@@ -1,5 +1,9 @@
 package tmge;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import tmGame.TileMatchingGame;
 
@@ -14,7 +18,9 @@ public class TMGEModelController {
 		
 		TileMatchingGame game = model.createGame(gameName);
 		game.getScreen().setScene(pScene);
+		System.out.println("Set scene for game screen");
 		game.run();
+
 		updatePlayerHighScore(model.getCurrentPlayer(), game.getScore());
 		
 		return;

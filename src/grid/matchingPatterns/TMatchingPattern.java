@@ -1,7 +1,10 @@
-package grid;
+package grid.matchingPatterns;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import grid.Grid;
+import grid.Position;
 
 public class TMatchingPattern implements IMatchingPattern {
 	public int legLength;
@@ -30,7 +33,9 @@ public class TMatchingPattern implements IMatchingPattern {
 
 			for (Match m : matches) {
 				if (! (m instanceof NoMatch)) {
-					return new Match(this, m.getPositions());
+					List<Position> allPositions = hzMatch.getPositions();
+					allPositions.addAll(m.getPositions());
+					return new Match(this, allPositions);
 				}
 			}
 		}
@@ -41,14 +46,16 @@ public class TMatchingPattern implements IMatchingPattern {
 
 			// find match starting/ending at two ends of vtMatch.matchedPositions	
 			List<Match> matches = new ArrayList<>();
-			Match midLeft = vtPattern.matchStartsAt(grid, new Position(mid.row, mid.col - (legLength - 1)));
-			Match midRight = vtPattern.matchStartsAt(grid, new Position(mid.row, mid.col));
+			Match midLeft = hzPattern.matchStartsAt(grid, new Position(mid.row, mid.col - (legLength - 1)));
+			Match midRight = hzPattern.matchStartsAt(grid, new Position(mid.row, mid.col));
 			matches.add(midLeft);
 			matches.add(midRight);
 
 			for (Match m : matches) {
 				if (! (m instanceof NoMatch)) {
-					return new Match(this, m.getPositions());
+					List<Position> allPositions = vtMatch.getPositions();
+					allPositions.addAll(m.getPositions());
+					return new Match(this, allPositions);
 				}
 			}
 		}

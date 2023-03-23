@@ -1,16 +1,16 @@
 package tile.BejeweledTiles;
 
-import tile.Color;
-import tile.IExploder;
-import tile.SelfExplode;
+import tile.TileColor;
 import tile.Tile;
+import tile.exploders.IExploder;
+import tile.exploders.SelfExplode;
+import tile.matchers.SameColorMatcher;
 
 public class BejeweledTile extends Tile{
-    private static IExploder exploder = new SelfExplode();
-
-    public BejeweledTile(Color color)
+    public BejeweledTile(TileColor color)
     {
         setColor(color);
-        setExploder(exploder); //sets exploder to self explode
+        setMatcher(new SameColorMatcher());
+        setExploder(new SelfExplode()); //sets exploder to self explode
     }
 }

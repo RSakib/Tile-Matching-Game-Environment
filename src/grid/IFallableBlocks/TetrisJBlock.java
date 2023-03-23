@@ -1,6 +1,7 @@
 package grid.IFallableBlocks;
 
 import grid.Position;
+import tile.TileColor;
 
 public class TetrisJBlock extends TetrisBlock{
     private static Position[][] rotationPositions = {
@@ -11,7 +12,7 @@ public class TetrisJBlock extends TetrisBlock{
     };
 
     public TetrisJBlock(Position spawnPosition){
-        super(spawnPosition);
+        super(spawnPosition, TileColor.BLUE);
     }
 
     @Override

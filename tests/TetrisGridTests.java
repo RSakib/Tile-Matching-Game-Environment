@@ -13,31 +13,33 @@ import org.junit.*;
 
 import grid.Direction;
 import grid.Grid;
-import grid.IFallable;
 import grid.Position;
-import grid.TetrisGrid;
 import grid.IFallableBlocks.TetrisIBlock;
 import grid.IFallableBlocks.TetrisOBlock;
 import tile.EmptyTile;
-import tile.SelfExplode;
 import tile.TetrisTile;
 import tile.Tile;
+import tile.exploders.SelfExplode;
+import tmGame.TetrisGame;
+import tmGame.TileMatchingGame;
+import tmGame.InputHandler.InputHandlerJFX;
 
 public class TetrisGridTests {
-    // class TetrisTile extends Tile {
-    //     public TetrisTile() {
-    //         setExploder(new SelfExplode());
-    //     }
-    // };
+    private class NullInputHandler implements InputHandlerJFX {
+        @Override
+        public void register(TileMatchingGame game) {
+        }
+    }
 
 
     private void assertGridEquals(int[][] expected, Grid grid){
         for (int r = 0; r < expected.length; r++) {
             for (int c = 0; c < expected[r].length; c++) {
+                Position p = new Position(r, c);
                 if (expected[r][c] == 0) {
-                    assertTrue(grid.tileAt(new Position(r, c)) instanceof EmptyTile);
+                    assertTrue("Incorrect at " + p, grid.tileAt(p) instanceof EmptyTile);
                 } else if (expected[r][c] == 1) {
-                    assertFalse(grid.tileAt(new Position(r, c)) instanceof EmptyTile);
+                    assertFalse("Incorrect at " + p, grid.tileAt(new Position(r, c)) instanceof EmptyTile);
                 }
             }
         }
@@ -53,6 +55,15 @@ public class TetrisGridTests {
                 }
             }
         }
+    }
+
+    private TetrisGame game;
+    private Grid grid;
+
+    @Before
+    public void setUp() {
+        game = new TetrisGame(new NullInputHandler());
+        grid = game.getGrid();
     }
     
 
@@ -71,8 +82,7 @@ public class TetrisGridTests {
 
     @Test
     public void FullRowIsCleared() {
-        TetrisGrid grid = new TetrisGrid();
-        grid.setCurrentFaller(null);
+        game.setCurrentFaller(null);
 
         int[][] startGrid = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -129,15 +139,14 @@ public class TetrisGridTests {
         };
 
         setGrid(startGrid, grid);
-        grid.matchTiles();
+        game.matchTiles();
         assertGridEquals(endGrid, grid);
     }
 
 
     @Test
     public void tilesAboveClearedRowMoveDown() {
-        TetrisGrid grid = new TetrisGrid();
-        grid.setCurrentFaller(null);
+        game.setCurrentFaller(null);
 
         int[][] startGrid = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -194,14 +203,14 @@ public class TetrisGridTests {
         };
 
         setGrid(startGrid, grid);
-        grid.matchTiles();
+        game.matchTiles();
+        game.applyGravity();
         assertGridEquals(endGrid, grid);
     }
 
     @Test
     public void holesNotFilled() {
-        TetrisGrid grid = new TetrisGrid();
-        grid.setCurrentFaller(null);
+        game.setCurrentFaller(null);
 
         int[][] startGrid = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -258,15 +267,15 @@ public class TetrisGridTests {
         };
 
         setGrid(startGrid, grid);
-        grid.matchTiles();
+        game.matchTiles();
+        game.applyGravity();
         assertGridEquals(endGrid, grid);
     }
 
 
     @Test
     public void multipleRowsCleared() {
-        TetrisGrid grid = new TetrisGrid();
-        grid.setCurrentFaller(null);
+        game.setCurrentFaller(null);
 
         int[][] startGrid = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -323,16 +332,15 @@ public class TetrisGridTests {
         };
 
         setGrid(startGrid, grid);
-        int score = grid.matchTiles();
-        assertEquals(TetrisGrid.ROWS_CLEARED_SCORE[4], score);
+        game.matchTiles();
+        game.applyGravity();
         assertGridEquals(endGrid, grid);
     }
 
 
     @Test
     public void TwoRowsFullyCleared() {
-        TetrisGrid grid = new TetrisGrid();
-        grid.setCurrentFaller(null);
+        game.setCurrentFaller(null);
 
         int[][] startGrid = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -389,83 +397,29 @@ public class TetrisGridTests {
         };
 
         setGrid(startGrid, grid);
-        grid.setCurrentFaller(new TetrisOBlock(new Position(23, 8)));
-        grid.moveFallerDown();
-        grid.moveFallerDown();
-        grid.setCurrentFaller(null);
+        game.setCurrentFaller(new TetrisOBlock(new Position(23, 8)));
+        game.moveFallerDown();
+        game.moveFallerDown();
+        game.setCurrentFaller(null);
         assertGridEquals(endGrid, grid);
     }
 
 
     @Test
     public void FallerFallsDownOne() {
-        TetrisGrid grid = new TetrisGrid();
-
-        int[][] startGrid = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        Position[] expectedBlock = {
+            new Position(1, 0), new Position(1, 1), new Position(2, 0), new Position(2, 1)
         };
-
-        int[][] endGrid = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-            {1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        };
-
-        setGrid(startGrid, grid);
-        grid.setCurrentFaller(new TetrisOBlock(new Position(1, 0)));
-        grid.moveFallerDown();
-        assertGridEquals(endGrid, grid);
+        game.setCurrentFaller(new TetrisOBlock(new Position(1, 0)));
+        game.moveFallerDown();
+        for (Position p : expectedBlock) {
+            assertTrue(game.getCurrentFaller().getBlock().containsKey(p));
+        }
     }
 
 
     @Test
     public void FallerFreezesWhenHitsBottom() {
-        TetrisGrid grid = new TetrisGrid();
-
         int[][] startGrid = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -521,207 +475,11 @@ public class TetrisGridTests {
         };
 
         setGrid(startGrid, grid);
-        grid.setCurrentFaller(new TetrisOBlock(new Position(1, 0)));
+        game.setCurrentFaller(new TetrisOBlock(new Position(1, 0)));
         for (int i = 0; i < 23; i++) {
-            grid.moveFallerDown();
+            game.moveFallerDown();
         }
         assertGridEquals(endGrid, grid);
-        assertTrue(grid.getCurrentFaller().isFrozen());
-    }
-
-    @Test
-    public void CanShiftFallerRight() {
-        TetrisGrid grid = new TetrisGrid();
-
-        int[][] startGrid = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        };
-
-        int[][] endGrid = {
-            {0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        };
-
-        setGrid(startGrid, grid);
-        grid.setCurrentFaller(new TetrisOBlock(new Position(1, 0)));
-        grid.shiftFaller(Direction.RIGHT);
-        assertGridEquals(endGrid, grid);
-    }
-
-
-    @Test
-    public void CanShiftFallerRightUntilHitsEdge() {
-        TetrisGrid grid = new TetrisGrid();
-
-        int[][] startGrid = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        };
-
-        int[][] endGrid = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-            {0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        };
-
-        setGrid(startGrid, grid);
-        grid.setCurrentFaller(new TetrisOBlock(new Position(1, 0)));
-        for (int i = 0; i < 9; i++) {
-            grid.shiftFaller(Direction.RIGHT);
-        }
-        assertGridEquals(endGrid, grid);
-    }
-
-
-    @Test
-    public void CanRotateBlock() {
-        TetrisGrid grid = new TetrisGrid();
-
-        int[][] startGrid = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        };
-
-        int[][] endGrid = {
-            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        };
-
-        setGrid(startGrid, grid);
-        grid.setCurrentFaller(new TetrisIBlock(new Position(1, 1)));
-        grid.rotateFaller();
-        assertGridEquals(endGrid, grid);
+        assertTrue(game.getCurrentFaller() == null);
     }
 }

@@ -1,14 +1,16 @@
 package tmGame.InputHandler;
 
 import grid.Direction;
-import grid.FallingBlockGrid;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import tmGame.FallingBlockGame;
 import tmGame.TileMatchingGame;
 
-public class FallingBlockInputHandler extends InputHandlerJFX {
+public class FallingBlockInputHandler implements InputHandlerJFX {
+    private FallingBlockGame game;
+
     KeyCode LEFTCODE = KeyCode.A;
     KeyCode RIGHTCODE = KeyCode.D;
     KeyCode UPCODE = KeyCode.W;
@@ -17,30 +19,33 @@ public class FallingBlockInputHandler extends InputHandlerJFX {
     class InputSelect implements EventHandler<KeyEvent> {
 	    @Override
 	    public void handle(KeyEvent keyEvent) {
+            System.out.println("Key pressed");
             KeyCode input = keyEvent.getCode();
-            if(game.isGameRunning() && !((FallingBlockGrid)game.getGrid()).getCurrentFaller().isFrozen()) {
+            if(game.isRunning()) {
                 if (input == LEFTCODE) {
-                    ((FallingBlockGrid)game.getGrid()).shiftFaller(Direction.LEFT);
+                    game.shiftFaller(Direction.LEFT);
                 }
                 else if (input == RIGHTCODE) {
-                    ((FallingBlockGrid)game.getGrid()).shiftFaller(Direction.RIGHT);
+                    game.shiftFaller(Direction.RIGHT);
                 }
                 else if (input == UPCODE || input == ACTIONCODE) {
-                    ((FallingBlockGrid)game.getGrid()).rotateFaller();
+                    game.rotateFaller();
                 }
                 else if (input == DOWNCODE) {
-                    ((FallingBlockGrid)game.getGrid()).moveFallerDown();
+                    game.moveFallerDown();
                 }
                 else {
                     return;
                 }
-            game.display();
+                game.display();
             }
 	    }
 	};
 
-    public FallingBlockInputHandler(TileMatchingGame game) {
-        super(game);
+
+    @Override
+    public void register(TileMatchingGame game) {
+        this.game = (FallingBlockGame) game;
         Platform.runLater(() -> {
             game.getScreen().getScene().setOnKeyPressed(new InputSelect());
         });

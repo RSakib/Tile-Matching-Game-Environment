@@ -1,6 +1,8 @@
-package grid;
+package grid.matchingPatterns;
 
 import java.util.List;
+
+import grid.Position;
 
 public class Match {
     private IMatchingPattern pattern;
@@ -23,5 +25,9 @@ public class Match {
 
     public int getNumMatched() {
         return this.matchedPositions.size();
+    }
+
+    public boolean isMatch() {
+        return ! (this instanceof NoMatch);
     }
 }

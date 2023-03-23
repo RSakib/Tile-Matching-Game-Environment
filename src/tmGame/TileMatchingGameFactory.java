@@ -9,10 +9,10 @@ public class TileMatchingGameFactory {
 			return new NullGame();
 		}
 		else if(title.contentEquals("TETRISGAME")) {
-			return new TetrisGame(new TetrisGrid());
+			return new TetrisGame();
 		}
 		else if(title.contentEquals("BEJEWELEDGAME")) {
-			return new BejeweledGame(new BejeweledGrid());
+			return new BejeweledGame();
 		}
 		return null;
 	}
