@@ -6,21 +6,30 @@ import grid.Direction;
 import grid.Grid;
 import grid.Position;
 import grid.IFallableBlocks.IFallable;
+import grid.gravity.DropRowsDown;
 import grid.gravity.IGravity;
 import grid.matchingPatterns.IMatchingPattern;
 import javafx.geometry.Pos;
 import tile.EmptyTile;
 import tile.Tile;
+import tmGame.InputHandler.FallingBlockInputHandler;
+import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.GameOverCondition;
+import tmGame.gameOverConditions.GridOverflowed;
 import tmGame.gameScreen.GameScreenJFX;
+import tmGame.gameScreen.TetrisGameScreen;
 
 public abstract class FallingBlockGame extends TileMatchingGame{
     private IFallable currentFaller;
 
-    public FallingBlockGame() {
-        super();
-        currentFaller = null;
-    }
+    @Override
+	public void initializeGame(		
+		Grid grid, GameScreenJFX screen, InputHandlerJFX input, 
+		GameOverCondition gameOver, IMatchingPattern[] matchingPatterns, IGravity gravity) 
+	{
+		super.initializeGame(grid, screen, input, gameOver, matchingPatterns, gravity);
+        this.currentFaller = null;
+	}
 
 
     public IFallable getCurrentFaller() {

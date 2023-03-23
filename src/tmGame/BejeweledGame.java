@@ -12,14 +12,19 @@ import grid.Position;
 import grid.gravity.DropTilesDown;
 import grid.matchingPatterns.HorizontalMatchingPattern;
 import grid.matchingPatterns.IMatchingPattern;
+import grid.matchingPatterns.LMatchingPattern;
 import grid.matchingPatterns.Match;
+import grid.matchingPatterns.TMatchingPattern;
 import grid.matchingPatterns.VerticalMatchingPattern;
 import tile.Color;
 import tile.Tile;
 import tile.BejeweledTiles.BejeweledTile;
-import tile.BejeweledTiles.SameColorPowerUp;
-import tile.BejeweledTiles.SquareTilePowerUp;
+import tile.BejeweledTiles.FlameTile;
+import tile.BejeweledTiles.HypercubeTile;
+import tile.BejeweledTiles.StarTile;
+import tile.exploders.SameColorExplode;
 import tmGame.InputHandler.BejeweledInputHandler;
+import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.TimeUp;
 import tmGame.gameScreen.BejeweledGameScreen;
 
@@ -27,32 +32,57 @@ public class BejeweledGame extends TileMatchingGame{
     private static int ROWS = 8;
     private static int COLS = 8;
     private static int SCORE_MULTIPLIER = 100;
+    private static int GAME_LENGTH = 90;
 
     private Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.PURPLE, Color.SILVER};
     private Random colorGenerator = new Random();
     private Position selectedPosition;
 
     public BejeweledGame() {
-        super();
-        this.grid = new Grid(ROWS, COLS);
-        this.screen = new BejeweledGameScreen(this);
-        this.gameOver = new TimeUp(Clock.systemUTC());
-        this.matchingPatterns = new IMatchingPattern[] {
-            new HorizontalMatchingPattern(5),
-            new VerticalMatchingPattern(5),
-            new HorizontalMatchingPattern(4),
-            new VerticalMatchingPattern(4),
-            new HorizontalMatchingPattern(3),
-            new VerticalMatchingPattern(3)
-        };
-        this.gravity = new DropTilesDown();
-        this.inputHandler = new BejeweledInputHandler(this);
-        this.selectedPosition = null;
+        initializeGame(
+            new Grid(ROWS, COLS),
+            new BejeweledGameScreen(), 
+            new BejeweledInputHandler(),
+            new TimeUp(Clock.systemUTC(), GAME_LENGTH),
+            new IMatchingPattern[] {
+                new HorizontalMatchingPattern(5),
+                new VerticalMatchingPattern(5),
+                new LMatchingPattern(3),
+                new TMatchingPattern(3),
+                new HorizontalMatchingPattern(4),
+                new VerticalMatchingPattern(4),
+                new HorizontalMatchingPattern(3),
+                new VerticalMatchingPattern(3)
+            },
+            new DropTilesDown()
+        );
+        grid.setTile(new Position(1, 1), new HypercubeTile());
+    }
+
+    public BejeweledGame(InputHandlerJFX input) {
+        initializeGame(
+            new Grid(ROWS, COLS),
+            new BejeweledGameScreen(), 
+            input,
+            new TimeUp(Clock.systemUTC(), GAME_LENGTH),
+            new IMatchingPattern[] {
+                new HorizontalMatchingPattern(5),
+                new VerticalMatchingPattern(5),
+                new LMatchingPattern(3),
+                new TMatchingPattern(3),
+                new HorizontalMatchingPattern(4),
+                new VerticalMatchingPattern(4),
+                new HorizontalMatchingPattern(3),
+                new VerticalMatchingPattern(3)
+            },
+            new DropTilesDown()
+        );
     }
 
 
     @Override
     public void onClockTick() {
+        checkGameOver();
         applyGravity();
         fillEmptyTiles();
         matchTiles();
@@ -76,6 +106,20 @@ public class BejeweledGame extends TileMatchingGame{
         List<Position> positionsToCheck = new ArrayList<>();
         positionsToCheck.add(p1);
         positionsToCheck.add(p2);
+        
+        // process hypercube switching 
+        Tile t1 = grid.tileAt(p1);
+        Tile t2 = grid.tileAt(p2);
+        if (t1 instanceof HypercubeTile) {
+            t2.setMatched(true);
+            t1.setMatched(true);
+            t2.setExploder(new SameColorExplode());
+        }
+        if (t2 instanceof HypercubeTile) {
+            t2.setMatched(true);
+            t1.setMatched(true);
+            t1.setExploder(new SameColorExplode());
+        }
         if (! matchTiles(positionsToCheck)) {
             // swap tiles back because no match
             grid.swapTilesAt(p1, p2);
@@ -122,10 +166,13 @@ public class BejeweledGame extends TileMatchingGame{
                     // if match is horizontal or vertical 4, make powerup
                     IMatchingPattern matchPattern = m.getPattern();
                     if ((matchPattern instanceof HorizontalMatchingPattern || matchPattern instanceof VerticalMatchingPattern) && m.getNumMatched() == 4) {
-                        powerupTiles.put(pos, new SquareTilePowerUp(tile.getColor()));
+                        powerupTiles.put(pos, new FlameTile(tile.getColor()));
                     }
                     if ((matchPattern instanceof HorizontalMatchingPattern || matchPattern instanceof VerticalMatchingPattern) && m.getNumMatched() == 5) {
-                        powerupTiles.put(pos, new SameColorPowerUp());
+                        powerupTiles.put(pos, new HypercubeTile());
+                    }
+                    if ((matchPattern instanceof LMatchingPattern || matchPattern instanceof TMatchingPattern)) {
+                        powerupTiles.put(pos, new StarTile(tile.getColor()));
                     }
                 }
             }
@@ -151,7 +198,7 @@ public class BejeweledGame extends TileMatchingGame{
     }
 
 
-    private void fillEmptyTiles() {
+    public void fillEmptyTiles() {
         //Fill empty spaces with new, random Bejeweled Tiles
         for(int row = 0; row < grid.getNumRows(); row++)
         {

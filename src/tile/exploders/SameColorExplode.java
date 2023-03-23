@@ -21,7 +21,7 @@ public class SameColorExplode implements IExploder{
                 //If colors are the same, add to list
                 Position currPosition = new Position(currRow, currCol);
                 Tile currTile = g.tileAt(currPosition);
-                if(targetTile.getColor() == currTile.getColor())
+                if(targetTile.getColor().equals(currTile.getColor()))
                 {
                     toExplode.add(currPosition);
                 }

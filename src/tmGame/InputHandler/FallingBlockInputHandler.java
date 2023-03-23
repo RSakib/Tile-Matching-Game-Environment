@@ -8,7 +8,9 @@ import javafx.scene.input.KeyEvent;
 import tmGame.FallingBlockGame;
 import tmGame.TileMatchingGame;
 
-public class FallingBlockInputHandler extends InputHandlerJFX {
+public class FallingBlockInputHandler implements InputHandlerJFX {
+    private FallingBlockGame game;
+
     KeyCode LEFTCODE = KeyCode.A;
     KeyCode RIGHTCODE = KeyCode.D;
     KeyCode UPCODE = KeyCode.W;
@@ -18,31 +20,32 @@ public class FallingBlockInputHandler extends InputHandlerJFX {
 	    @Override
 	    public void handle(KeyEvent keyEvent) {
             System.out.println("Key pressed");
-            FallingBlockGame fbGame = (FallingBlockGame) game;
             KeyCode input = keyEvent.getCode();
-            if(fbGame.isRunning()) {
+            if(game.isRunning()) {
                 if (input == LEFTCODE) {
-                    fbGame.shiftFaller(Direction.LEFT);
+                    game.shiftFaller(Direction.LEFT);
                 }
                 else if (input == RIGHTCODE) {
-                    fbGame.shiftFaller(Direction.RIGHT);
+                    game.shiftFaller(Direction.RIGHT);
                 }
                 else if (input == UPCODE || input == ACTIONCODE) {
-                    fbGame.rotateFaller();
+                    game.rotateFaller();
                 }
                 else if (input == DOWNCODE) {
-                    fbGame.moveFallerDown();
+                    game.moveFallerDown();
                 }
                 else {
                     return;
                 }
-                fbGame.display();
+                game.display();
             }
 	    }
 	};
 
-    public FallingBlockInputHandler(FallingBlockGame game) {
-        super(game);
+
+    @Override
+    public void register(TileMatchingGame game) {
+        this.game = (FallingBlockGame) game;
         Platform.runLater(() -> {
             game.getScreen().getScene().setOnKeyPressed(new InputSelect());
         });

@@ -11,6 +11,7 @@ import grid.gravity.IGravity;
 import grid.matchingPatterns.IMatchingPattern;
 import grid.matchingPatterns.Match;
 import grid.matchingPatterns.NoMatch;
+import javafx.stage.Screen;
 import tile.Tile;
 import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.GameOverCondition;
@@ -28,8 +29,20 @@ public abstract class TileMatchingGame {
 
 	protected static java.time.Clock clock = Clock.systemUTC();
 
-	public TileMatchingGame() {
+	public void initializeGame(		
+		Grid grid, GameScreenJFX screen, InputHandlerJFX input, 
+		GameOverCondition gameOver, IMatchingPattern[] matchingPatterns, IGravity gravity) 
+	{
+		this.grid = grid;
+		this.screen = screen;
+		this.inputHandler = input;
+		this.gameOver = gameOver;
+		this.matchingPatterns = matchingPatterns;
+		this.gravity = gravity;
 		this.isRunning = true;
+		this.score = 0;
+
+		inputHandler.register(this);
 	}
 
 
@@ -55,7 +68,7 @@ public abstract class TileMatchingGame {
 	}
 	
 	public void display() {
-		screen.display();
+		screen.display(this);
 	}
 
 	public Tile visibleTileAt(Position p) {
@@ -73,7 +86,7 @@ public abstract class TileMatchingGame {
 
 	public void checkGameOver() {
 		System.out.println("Checking for game over");
-		this.isRunning = !gameOver.isGameOver();
+		this.isRunning = !gameOver.isGameOver(this);
 		System.out.println("Game over: " + !this.isRunning);
 	}
 

@@ -18,6 +18,7 @@ import grid.matchingPatterns.HorizontalMatchingPattern;
 import grid.matchingPatterns.IMatchingPattern;
 import grid.matchingPatterns.Match;
 import tmGame.InputHandler.FallingBlockInputHandler;
+import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.GridOverflowed;
 import tmGame.gameScreen.TetrisGameScreen;
 
@@ -27,15 +28,31 @@ public class TetrisGame extends FallingBlockGame {
     private static int INVISIBLE_ROWS = 4;
 
     public TetrisGame() {
-        super();
-        this.grid = new Grid(ROWS + INVISIBLE_ROWS, COLS);
-        this.screen = new TetrisGameScreen(this);
-        this.gameOver = new GridOverflowed(this.grid, INVISIBLE_ROWS);
-        this.matchingPatterns = new IMatchingPattern[] {
-            new HorizontalMatchingPattern(COLS)
-        };
-        this.gravity = new DropRowsDown();
-        this.inputHandler = new FallingBlockInputHandler(this);
+        Grid grid = new Grid(ROWS + INVISIBLE_ROWS, COLS);
+        initializeGame(
+            grid,
+            new TetrisGameScreen(),
+            new FallingBlockInputHandler(),
+            new GridOverflowed(INVISIBLE_ROWS),
+            new IMatchingPattern[] {
+                new HorizontalMatchingPattern(COLS)
+            },
+            new DropRowsDown()
+        );
+    }
+
+    public TetrisGame(InputHandlerJFX input) {
+        Grid grid = new Grid(ROWS + INVISIBLE_ROWS, COLS);
+        initializeGame(
+            grid,
+            new TetrisGameScreen(),
+            input,
+            new GridOverflowed(INVISIBLE_ROWS),
+            new IMatchingPattern[] {
+                new HorizontalMatchingPattern(COLS)
+            },
+            new DropRowsDown()
+        );
     }
 
     @Override

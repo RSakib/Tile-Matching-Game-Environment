@@ -2,30 +2,29 @@ package tmGame.gameOverConditions;
 
 import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
+
+import javax.management.InstanceNotFoundException;
+
+import tmGame.TileMatchingGame;
 
 public class TimeUp implements GameOverCondition{
 //Only one instance of timeup is created at the start of the game. Currently WIP
-    private Clock startTime;
-    private Clock maxTime; 
-    private long gameLength = 3; 
+    private Clock clock; 
+    private Instant endTime;
 
-    public TimeUp(Clock startTime)
+    public TimeUp(Clock clock, int seconds)
     {
         //This clock is the time that the player started.
-        this.startTime = startTime;
-        maxTime = Clock.offset(startTime, Duration.ofMinutes(gameLength)); //testing something
+        this.clock = clock;
+        this.endTime = clock.instant().plusSeconds(seconds);
     }
 
     @Override
-    public boolean isGameOver() {
+    public boolean isGameOver(TileMatchingGame game) {
         //Calculate current time and subtract -- work in progress
-        Clock currTime = Clock.systemUTC();
-        int compareResults = currTime.instant().compareTo(maxTime.instant());
-        if(compareResults == 0 || compareResults == 1)
-        {
-            //Game over
-            return true;
-        }
-        return false;
+        long secondsRemaining = Duration.between(clock.instant(), endTime).getSeconds();
+        System.out.println("Seconds Remainig: " + secondsRemaining);
+        return secondsRemaining <= 0;
     }
 }

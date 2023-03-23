@@ -3,11 +3,19 @@ package tmGame.gameScreen;
 import grid.Grid;
 import grid.Position;
 import javafx.application.Platform;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import tile.Tile;
 import tmGame.TileMatchingGame;
@@ -15,29 +23,35 @@ import tmGame.TileMatchingGame;
 public abstract class GameScreenJFX {
 	protected TileMatchingGame game;
 	protected Scene scene;
-	protected BorderPane gamePane;
+	protected GridPane gamePane;
 	protected GridPane boardPane;
 	protected GridPane scorePane;
 	protected Text scoreText;
 
 	private boolean setRoot = false;
 	
-	public GameScreenJFX(TileMatchingGame game) {
-		this.game = game;
+	public GameScreenJFX() {
 		scene = null;
-		gamePane = new BorderPane();
+		gamePane = new GridPane();
+		ColumnConstraints col1 = new ColumnConstraints();
+		col1.setPercentWidth(15);
+		ColumnConstraints col2 = new ColumnConstraints();
+		col2.setPercentWidth(70);
+		ColumnConstraints col3 = new ColumnConstraints();
+		col3.setPercentWidth(15);
+		RowConstraints row1 = new RowConstraints();
+		row1.setPercentHeight(100);
+		gamePane.getColumnConstraints().addAll(col1,col2,col3);
+		gamePane.getRowConstraints().addAll(row1);
+
 		boardPane = new GridPane();
-		boardPane.setPrefSize(300, 300);
-		boardPane.setMaxSize(300, 300);
 
 		scorePane = new GridPane();
 		scoreText = new Text();
-
 		scorePane.getChildren().add(scoreText);
 
-		gamePane.setLeft(scorePane);
-		gamePane.setCenter(boardPane);
-		gamePane.setRight(new Text("hello"));
+		gamePane.add(scorePane, 0, 0);
+		gamePane.add(boardPane, 1, 0);
 	}
 
 	public Scene getScene() {
@@ -52,18 +66,27 @@ public abstract class GameScreenJFX {
 		this.scene = scene;
 	}
 
-	public int tileWidth() {
-		return (int) (boardPane.getPrefWidth() / game.getGrid().getNumCols());
+	public double tileWidth() {
+		return boardPane.getWidth() / game.getGrid().getNumCols();
 	}
 
-	public int tileHeight() {
-		return (int) (boardPane.getPrefHeight() / game.getGrid().getNumRows());
+	public double tileHeight() {
+		return boardPane.getHeight() / game.getGrid().getNumRows();
+	}
+
+	public int minTileWidth() {
+		return 30;
+	}
+
+	public int minTileHeight() {
+		return 30;
 	}
 
 	// public Parent getRoot() {
 	// 	return board;
 	// }
-	public void display() {
+	public void display(TileMatchingGame game) {
+		this.game = game;
 		Platform.runLater(() -> {
 			displayGrid();
 			displayScore();
@@ -79,12 +102,15 @@ public abstract class GameScreenJFX {
 	public void displayGrid() {
 		int rows = game.getGrid().getNumRows();
         int cols = game.getGrid().getNumCols();
+		boardPane.getChildren().clear();
 
 		for (int r = 0; r < rows; r++) {
 			for (int c = 0; c < cols; c++) {
 				Position p = new Position(r, c);
 				Tile tile = game.visibleTileAt(p);
-				displayTile(p, tile);
+				Node tileElement = getTileElement(p, tile);
+				boardPane.add(new AnchorPane(tileElement), c, r);
+				GridPane.setConstraints(tileElement, c, r, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 			}
         }
 	}
@@ -94,5 +120,5 @@ public abstract class GameScreenJFX {
 	}
 
 
-	public abstract void displayTile(Position p, Tile t);
+	public abstract Node getTileElement(Position p, Tile t);
 }

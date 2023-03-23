@@ -7,17 +7,16 @@ import tile.EmptyTile;
 import tile.Tile;
 import tmGame.TileMatchingGame;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
+import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
-public class TetrisGameScreen extends GameScreenJFX{
-
-    public TetrisGameScreen(TileMatchingGame game) {
-        super(game);
-    }
+public class TetrisGameScreen extends GameScreenJFX {
+    private TileMatchingGame game;
 
     @Override
-    public void displayTile(Position pos, Tile tile) {
+    public Node getTileElement(Position pos, Tile tile) {
         Rectangle displayTile = new Rectangle(tileWidth(), tileHeight());
 
         if(tile.isEmpty()) {
@@ -29,9 +28,11 @@ public class TetrisGameScreen extends GameScreenJFX{
         else {
             displayTile.setFill(Color.RED);
         }
+
+        displayTile.setStrokeType(StrokeType.INSIDE);
         displayTile.setStroke(Color.BLACK);
 
-        boardPane.add(new StackPane(displayTile), pos.col, pos.row);
+        return displayTile;
     }
     
 }

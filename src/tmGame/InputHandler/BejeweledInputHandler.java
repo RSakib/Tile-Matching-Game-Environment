@@ -9,7 +9,8 @@ import tmGame.BejeweledGame;
 import tmGame.TileMatchingGame;
 import tmGame.gameScreen.GameScreenJFX;
 
-public class BejeweledInputHandler extends InputHandlerJFX{
+public class BejeweledInputHandler implements InputHandlerJFX{
+    private BejeweledGame game;
 
     class OnClickHandler implements EventHandler<MouseEvent> {
 
@@ -18,9 +19,8 @@ public class BejeweledInputHandler extends InputHandlerJFX{
             Position p = positionFromClick(event);
             System.out.println(p);
 
-            BejeweledGame bejeweledGame = (BejeweledGame) game;
-            bejeweledGame.newSelectedPosition(p);
-            bejeweledGame.display();
+            game.newSelectedPosition(p);
+            game.display();
         }
 
 
@@ -36,8 +36,10 @@ public class BejeweledInputHandler extends InputHandlerJFX{
 
     }
 
-    public BejeweledInputHandler(TileMatchingGame game) {
-        super(game);
+
+    @Override
+    public void register(TileMatchingGame game) {
+        this.game = (BejeweledGame) game;
         Platform.runLater(() -> {
             game.getScreen().getBoard().setOnMouseClicked(new OnClickHandler());
         });

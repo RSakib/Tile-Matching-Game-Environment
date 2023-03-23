@@ -2,35 +2,51 @@ package tmGame.gameScreen;
 
 import grid.Grid;
 import grid.Position;
+import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeType;
 import tile.Tile;
-import tile.BejeweledTiles.SameColorPowerUp;
-import tile.BejeweledTiles.SquareTilePowerUp;
+import tile.BejeweledTiles.HypercubeTile;
+import tile.BejeweledTiles.StarTile;
+import tile.BejeweledTiles.FlameTile;
 import tmGame.BejeweledGame;
 import tmGame.TileMatchingGame;
 
 public class BejeweledGameScreen extends GameScreenJFX{
 
-    public BejeweledGameScreen(TileMatchingGame game) {
-        super(game);
+    public BejeweledGameScreen() {
     }
 
     @Override
-    public void displayTile(Position pos, Tile tile) {
-        int tileWidth = tileWidth();
-        int tileHeight = tileHeight();
+    public Node getTileElement(Position pos, Tile tile) {
+        double tileWidth = tileWidth();
+        double tileHeight = tileHeight();
+        
         Shape displayTile = new Rectangle(tileWidth, tileHeight);
 
-        if (tile instanceof SquareTilePowerUp) {
-            ((Rectangle) displayTile).setArcHeight(10);
-            ((Rectangle) displayTile).setArcWidth(10);
+        if (tile instanceof FlameTile) {
+            Rectangle rect = new Rectangle(tileWidth, tileHeight);
+            rect.setArcHeight(20);
+            rect.setArcWidth(20);
+            displayTile = rect;
         }
-        if (tile instanceof SameColorPowerUp) {
-            displayTile = new Ellipse(tileWidth/2, tileHeight/2);
+        if (tile instanceof StarTile) {
+            Polygon triangle = new Polygon();
+            triangle.getPoints().addAll( new Double[] {
+                tileWidth/2, 0.0,
+                0.0, tileHeight,
+                tileWidth, tileHeight
+            });
+            displayTile = triangle;
+        }
+        if (tile instanceof HypercubeTile) {
+            Ellipse circle = new Ellipse(tileWidth/2, tileHeight/2, tileWidth/2, tileHeight/2);
+            displayTile = circle;
         }
         
         switch (tile.getColor()) {
@@ -67,14 +83,15 @@ public class BejeweledGameScreen extends GameScreenJFX{
         // outline selected position
         BejeweledGame bejeweledGame = (BejeweledGame) game;
         Position selected = bejeweledGame.selectedPosition();
+
+        displayTile.setStrokeType(StrokeType.INSIDE);
         if (selected != null && selected.equals(pos)) {
             displayTile.setStroke(javafx.scene.paint.Color.LIGHTGRAY);
         } else {
             displayTile.setStroke(javafx.scene.paint.Color.BLACK);
         }
 
-        boardPane.add(new StackPane(displayTile), pos.col, pos.row);
-
+        return displayTile;
     }
     
 }

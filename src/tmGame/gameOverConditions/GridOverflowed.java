@@ -3,21 +3,21 @@ import grid.Grid;
 import grid.Position;
 import tile.EmptyTile;
 import tile.Tile;
+import tmGame.TileMatchingGame;
 
 public class GridOverflowed implements GameOverCondition{
-    private Grid grid;
     private int invisibleRows;
 
-    public GridOverflowed(Grid grid, int invisibleRows)
+    public GridOverflowed(int invisibleRows)
     {
-        this.grid = grid;
         this.invisibleRows = invisibleRows;
     }
 
 
     @Override
-    public boolean isGameOver() {
+    public boolean isGameOver(TileMatchingGame game) {
         //Check if there are any blocks in the invisible rows
+        Grid grid = game.getGrid();
         int maxCol = grid.getNumCols();
         for(int row = invisibleRows - 1; row >= 0; row--)
         {
