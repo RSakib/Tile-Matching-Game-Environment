@@ -25,9 +25,9 @@ public abstract class FallingBlockGame extends TileMatchingGame{
     @Override
 	public void initializeGame(		
 		Grid grid, GameScreenJFX screen, InputHandlerJFX input, 
-		GameOverCondition gameOver, IMatchingPattern[] matchingPatterns, IGravity gravity) 
+		GameOverCondition gameOver, IMatchingPattern[] matchingPatterns, IGravity gravity, double secondsPerTick) 
 	{
-		super.initializeGame(grid, screen, input, gameOver, matchingPatterns, gravity);
+		super.initializeGame(grid, screen, input, gameOver, matchingPatterns, gravity, secondsPerTick);
         this.currentFaller = null;
 	}
 

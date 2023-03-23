@@ -86,8 +86,10 @@ public abstract class GameScreenJFX {
 	// 	return board;
 	// }
 	public void display(TileMatchingGame game) {
+		
 		this.game = game;
 		Platform.runLater(() -> {
+			System.out.println("displaying grid");
 			displayGrid();
 			displayScore();
 	

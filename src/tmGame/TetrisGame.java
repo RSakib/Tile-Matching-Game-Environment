@@ -26,6 +26,7 @@ public class TetrisGame extends FallingBlockGame {
     private static int ROWS = 20;
     private static int COLS = 10;
     private static int INVISIBLE_ROWS = 4;
+    private static double SECONDS_PER_TICK = 0.5;
 
     public TetrisGame() {
         Grid grid = new Grid(ROWS + INVISIBLE_ROWS, COLS);
@@ -37,7 +38,8 @@ public class TetrisGame extends FallingBlockGame {
             new IMatchingPattern[] {
                 new HorizontalMatchingPattern(COLS)
             },
-            new DropRowsDown()
+            new DropRowsDown(),
+            SECONDS_PER_TICK
         );
     }
 
@@ -51,7 +53,8 @@ public class TetrisGame extends FallingBlockGame {
             new IMatchingPattern[] {
                 new HorizontalMatchingPattern(COLS)
             },
-            new DropRowsDown()
+            new DropRowsDown(),
+            SECONDS_PER_TICK
         );
     }
 

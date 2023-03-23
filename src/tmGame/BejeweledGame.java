@@ -33,6 +33,7 @@ public class BejeweledGame extends TileMatchingGame{
     private static int COLS = 8;
     private static int SCORE_MULTIPLIER = 100;
     private static int GAME_LENGTH = 90;
+    private static double SECONDS_PER_TICK = 1;
 
     private TileColor[] colors = {TileColor.RED, TileColor.ORANGE, TileColor.YELLOW, TileColor.GREEN, TileColor.BLUE, TileColor.PURPLE, TileColor.SILVER};
     private Random colorGenerator = new Random();
@@ -54,9 +55,10 @@ public class BejeweledGame extends TileMatchingGame{
                 new HorizontalMatchingPattern(3),
                 new VerticalMatchingPattern(3)
             },
-            new DropTilesDown()
+            new DropTilesDown(),
+            SECONDS_PER_TICK
         );
-        grid.setTile(new Position(1, 1), new HypercubeTile());
+        fillEmptyTiles();
     }
 
     public BejeweledGame(InputHandlerJFX input) {
@@ -75,8 +77,10 @@ public class BejeweledGame extends TileMatchingGame{
                 new HorizontalMatchingPattern(3),
                 new VerticalMatchingPattern(3)
             },
-            new DropTilesDown()
+            new DropTilesDown(),
+            SECONDS_PER_TICK
         );
+        fillEmptyTiles();
     }
 
 
@@ -120,6 +124,8 @@ public class BejeweledGame extends TileMatchingGame{
             t1.setMatched(true);
             t1.setExploder(new SameColorExplode());
         }
+
+        // match tiles
         if (! matchTiles(positionsToCheck)) {
             // swap tiles back because no match
             grid.swapTilesAt(p1, p2);
@@ -150,7 +156,6 @@ public class BejeweledGame extends TileMatchingGame{
 
     private boolean matchTiles(List<Position> positionsToCheck) {
         Map<Position, Tile> powerupTiles = new HashMap<>();
-        boolean foundMatch = false;
 
         // Mark matched tiles
         for (Position pos : positionsToCheck) {
@@ -158,8 +163,6 @@ public class BejeweledGame extends TileMatchingGame{
             if (! tile.isMatched()) {
                 Match m = matchAt(pos);
                 if (m.isMatch()) {
-                    foundMatch = true;
-
                     for (Position p : m.getPositions()) {
                         grid.tileAt(p).setMatched(true);
                     }
@@ -179,12 +182,14 @@ public class BejeweledGame extends TileMatchingGame{
         }
 
         // explode tiles
+        boolean foundMatch = false;
         for (int row = 0; row < grid.getNumRows(); row++) {
             for (int col = 0; col < grid.getNumCols(); col++) {
                 Position pos = new Position(row, col);
                 if (grid.tileAt(pos).isMatched()) {
                     List<Position> exploded = explodeAt(pos);
                     score += SCORE_MULTIPLIER * exploded.size();
+                    foundMatch = true;
                 }
             }
         }
