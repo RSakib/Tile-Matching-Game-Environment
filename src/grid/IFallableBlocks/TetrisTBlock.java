@@ -1,5 +1,6 @@
 package grid.IFallableBlocks;
 import grid.Position;
+import tile.TileColor;
 
 
 public class TetrisTBlock extends TetrisBlock{
@@ -11,7 +12,7 @@ public class TetrisTBlock extends TetrisBlock{
     };
 
     public TetrisTBlock(Position spawnPosition){
-        super(spawnPosition);
+        super(spawnPosition, TileColor.PURPLE);
     }
 
     @Override

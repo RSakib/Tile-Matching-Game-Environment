@@ -1,11 +1,11 @@
 package tile.BejeweledTiles;
 
-import tile.Color;
+import tile.TileColor;
 import tile.exploders.CrossExplode;
 
 public class StarTile extends BejeweledTile{
 
-    public StarTile(Color color) {
+    public StarTile(TileColor color) {
         super(color);
         setExploder(new CrossExplode());
     }

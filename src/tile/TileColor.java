@@ -1,5 +1,5 @@
 package tile;
 
-public enum Color {
+public enum TileColor {
     RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, SILVER, MULTICOLOR, EMPTY
 }

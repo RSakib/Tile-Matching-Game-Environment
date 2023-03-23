@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import grid.Grid;
 import grid.Position;
-import tile.Color;
+import tile.TileColor;
 import tile.EmptyTile;
 import tile.BejeweledTiles.BejeweledTile;
 import tile.BejeweledTiles.FlameTile;
@@ -29,7 +29,7 @@ public class BejeweledGridTests {
             for (int c = 0; c < expected[r].length; c++) {
                 Position p = new Position(r, c);
                 if (expected[r][c] != 0) {
-                    assertEquals("mismatch at position" + p, Color.values()[expected[r][c] - 1], grid.tileAt(p).getColor());
+                    assertEquals("mismatch at position" + p, TileColor.values()[expected[r][c] - 1], grid.tileAt(p).getColor());
                 }
             }
         }
@@ -56,7 +56,7 @@ public class BejeweledGridTests {
                 if (gridArray[r][c] == 0) {
                     grid.setTile(new Position(r, c), new EmptyTile());
                 } else {
-                    grid.setTile(new Position(r, c), new BejeweledTile(Color.values()[gridArray[r][c] - 1]));
+                    grid.setTile(new Position(r, c), new BejeweledTile(TileColor.values()[gridArray[r][c] - 1]));
                 }
             }
         }

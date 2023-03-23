@@ -52,6 +52,7 @@ public abstract class TileMatchingGame {
 
 	public final void run() {
 		// var nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
+		display();
 		while(isRunning()) {
 			// if (clock.instant().compareTo(nextTick) > 0) {
 				// System.out.println("It has been 1 second");

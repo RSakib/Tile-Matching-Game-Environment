@@ -16,7 +16,7 @@ import grid.matchingPatterns.LMatchingPattern;
 import grid.matchingPatterns.Match;
 import grid.matchingPatterns.TMatchingPattern;
 import grid.matchingPatterns.VerticalMatchingPattern;
-import tile.Color;
+import tile.TileColor;
 import tile.Tile;
 import tile.BejeweledTiles.BejeweledTile;
 import tile.BejeweledTiles.FlameTile;
@@ -34,7 +34,7 @@ public class BejeweledGame extends TileMatchingGame{
     private static int SCORE_MULTIPLIER = 100;
     private static int GAME_LENGTH = 90;
 
-    private Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.PURPLE, Color.SILVER};
+    private TileColor[] colors = {TileColor.RED, TileColor.ORANGE, TileColor.YELLOW, TileColor.GREEN, TileColor.BLUE, TileColor.PURPLE, TileColor.SILVER};
     private Random colorGenerator = new Random();
     private Position selectedPosition;
 

@@ -9,7 +9,7 @@ import tile.matchers.IMatcher;
 
 public abstract class Tile {
 	private String imagePath;
-	private Color color; // could change to enum
+	private TileColor color; // could change to enum
 	private IExploder exploder;
 	private IMatcher matcher;
 	private boolean matched;
@@ -23,7 +23,7 @@ public abstract class Tile {
 		return imagePath;
 	}
 
-	public Color getColor() {
+	public TileColor getColor() {
 		return color;
 	}
 
@@ -31,7 +31,7 @@ public abstract class Tile {
 		return exploder;
 	}
 
-	public void setColor(Color c) {
+	public void setColor(TileColor c) {
 		color = c;
 	}
 

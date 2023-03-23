@@ -8,16 +8,19 @@ import java.util.*;
 
 import tile.TetrisTile;
 import tile.Tile;
+import tile.TileColor;
 
 public abstract class TetrisBlock implements IFallable {
     private Position rotationPoint;
     private int rotationIndex;
     private boolean isFrozen;
+    private TileColor color;
 
-    public TetrisBlock(Position spawnPosition){
+    public TetrisBlock(Position spawnPosition, TileColor color){
         this.rotationPoint = spawnPosition;
         this.rotationIndex = 0;
         this.isFrozen = false;
+        this.color = color;
     }
 
     public abstract Position[][] rotationPositions();
@@ -57,7 +60,7 @@ public abstract class TetrisBlock implements IFallable {
     }
 
     public Tile createTile() {
-        return new TetrisTile();
+        return new TetrisTile(color);
     }
 }
 

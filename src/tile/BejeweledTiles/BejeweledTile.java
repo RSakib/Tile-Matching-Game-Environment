@@ -1,13 +1,13 @@
 package tile.BejeweledTiles;
 
-import tile.Color;
+import tile.TileColor;
 import tile.Tile;
 import tile.exploders.IExploder;
 import tile.exploders.SelfExplode;
 import tile.matchers.SameColorMatcher;
 
 public class BejeweledTile extends Tile{
-    public BejeweledTile(Color color)
+    public BejeweledTile(TileColor color)
     {
         setColor(color);
         setMatcher(new SameColorMatcher());
