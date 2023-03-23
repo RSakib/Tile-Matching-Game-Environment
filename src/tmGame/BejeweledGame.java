@@ -23,16 +23,17 @@ import tile.BejeweledTiles.FlameTile;
 import tile.BejeweledTiles.HypercubeTile;
 import tile.BejeweledTiles.StarTile;
 import tile.exploders.SameColorExplode;
-import tmGame.InputHandler.BejeweledInputHandler;
-import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.TimeUp;
 import tmGame.gameScreen.BejeweledGameScreen;
+import tmGame.inputHandlers.BejeweledInputHandler;
+import tmGame.inputHandlers.InputHandler;
 
 public class BejeweledGame extends TileMatchingGame{
     private static int ROWS = 8;
     private static int COLS = 8;
     private static int SCORE_MULTIPLIER = 100;
     private static int GAME_LENGTH = 90;
+    private static double SECONDS_PER_TICK = 1;
 
     private TileColor[] colors = {TileColor.RED, TileColor.ORANGE, TileColor.YELLOW, TileColor.GREEN, TileColor.BLUE, TileColor.PURPLE, TileColor.SILVER};
     private Random colorGenerator = new Random();
@@ -42,7 +43,7 @@ public class BejeweledGame extends TileMatchingGame{
         initializeGame(
             new Grid(ROWS, COLS),
             new BejeweledGameScreen(), 
-            new BejeweledInputHandler(),
+            new BejeweledInputHandler(this),
             new TimeUp(Clock.systemUTC(), GAME_LENGTH),
             new IMatchingPattern[] {
                 new HorizontalMatchingPattern(5),
@@ -54,29 +55,10 @@ public class BejeweledGame extends TileMatchingGame{
                 new HorizontalMatchingPattern(3),
                 new VerticalMatchingPattern(3)
             },
-            new DropTilesDown()
+            new DropTilesDown(),
+            SECONDS_PER_TICK
         );
-        grid.setTile(new Position(1, 1), new HypercubeTile());
-    }
-
-    public BejeweledGame(InputHandlerJFX input) {
-        initializeGame(
-            new Grid(ROWS, COLS),
-            new BejeweledGameScreen(), 
-            input,
-            new TimeUp(Clock.systemUTC(), GAME_LENGTH),
-            new IMatchingPattern[] {
-                new HorizontalMatchingPattern(5),
-                new VerticalMatchingPattern(5),
-                new LMatchingPattern(3),
-                new TMatchingPattern(3),
-                new HorizontalMatchingPattern(4),
-                new VerticalMatchingPattern(4),
-                new HorizontalMatchingPattern(3),
-                new VerticalMatchingPattern(3)
-            },
-            new DropTilesDown()
-        );
+        fillEmptyTiles();
     }
 
 
@@ -120,6 +102,8 @@ public class BejeweledGame extends TileMatchingGame{
             t1.setMatched(true);
             t1.setExploder(new SameColorExplode());
         }
+
+        // match tiles
         if (! matchTiles(positionsToCheck)) {
             // swap tiles back because no match
             grid.swapTilesAt(p1, p2);
@@ -150,7 +134,6 @@ public class BejeweledGame extends TileMatchingGame{
 
     private boolean matchTiles(List<Position> positionsToCheck) {
         Map<Position, Tile> powerupTiles = new HashMap<>();
-        boolean foundMatch = false;
 
         // Mark matched tiles
         for (Position pos : positionsToCheck) {
@@ -158,8 +141,6 @@ public class BejeweledGame extends TileMatchingGame{
             if (! tile.isMatched()) {
                 Match m = matchAt(pos);
                 if (m.isMatch()) {
-                    foundMatch = true;
-
                     for (Position p : m.getPositions()) {
                         grid.tileAt(p).setMatched(true);
                     }
@@ -179,12 +160,14 @@ public class BejeweledGame extends TileMatchingGame{
         }
 
         // explode tiles
+        boolean foundMatch = false;
         for (int row = 0; row < grid.getNumRows(); row++) {
             for (int col = 0; col < grid.getNumCols(); col++) {
                 Position pos = new Position(row, col);
                 if (grid.tileAt(pos).isMatched()) {
                     List<Position> exploded = explodeAt(pos);
                     score += SCORE_MULTIPLIER * exploded.size();
+                    foundMatch = true;
                 }
             }
         }

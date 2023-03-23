@@ -24,7 +24,6 @@ public class TimeUp implements GameOverCondition{
     public boolean isGameOver(TileMatchingGame game) {
         //Calculate current time and subtract -- work in progress
         long secondsRemaining = Duration.between(clock.instant(), endTime).getSeconds();
-        System.out.println("Seconds Remainig: " + secondsRemaining);
         return secondsRemaining <= 0;
     }
 }

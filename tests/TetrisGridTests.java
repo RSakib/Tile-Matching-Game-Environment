@@ -11,6 +11,8 @@ import java.util.Set;
 
 import org.junit.*;
 
+import com.sun.prism.paint.Color;
+
 import grid.Direction;
 import grid.Grid;
 import grid.Position;
@@ -19,19 +21,13 @@ import grid.IFallableBlocks.TetrisOBlock;
 import tile.EmptyTile;
 import tile.TetrisTile;
 import tile.Tile;
+import tile.TileColor;
 import tile.exploders.SelfExplode;
 import tmGame.TetrisGame;
 import tmGame.TileMatchingGame;
-import tmGame.InputHandler.InputHandlerJFX;
+import tmGame.inputHandlers.InputHandler;
 
 public class TetrisGridTests {
-    private class NullInputHandler implements InputHandlerJFX {
-        @Override
-        public void register(TileMatchingGame game) {
-        }
-    }
-
-
     private void assertGridEquals(int[][] expected, Grid grid){
         for (int r = 0; r < expected.length; r++) {
             for (int c = 0; c < expected[r].length; c++) {
@@ -51,7 +47,7 @@ public class TetrisGridTests {
                 if (gridArray[r][c] == 0) {
                     grid.setTile(new Position(r, c), new EmptyTile());
                 } else if (gridArray[r][c] == 1) {
-                    grid.setTile(new Position(r, c), new TetrisTile());
+                    grid.setTile(new Position(r, c), new TetrisTile(TileColor.RED));
                 }
             }
         }
@@ -62,7 +58,7 @@ public class TetrisGridTests {
 
     @Before
     public void setUp() {
-        game = new TetrisGame(new NullInputHandler());
+        game = new TetrisGame();
         grid = game.getGrid();
     }
     
@@ -71,9 +67,6 @@ public class TetrisGridTests {
     public void PositionsHashCorrectly() {
         Set<Position> positions = new HashSet<>();
         positions.add(new Position(0, 0));
-        int hashCode = new Position(0, 0).hashCode();
-        int hashCode2 = new Position(0, 0).hashCode();
-        System.out.println(hashCode);
         Position p = new Position(0, 0);
         assertTrue(p.equals(new Position(0, 0)));
         assertTrue(positions.contains(new Position(0, 0)));

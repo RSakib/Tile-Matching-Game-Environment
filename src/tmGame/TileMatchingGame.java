@@ -1,7 +1,6 @@
 package tmGame;
 
 import java.time.Clock;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,27 +10,27 @@ import grid.gravity.IGravity;
 import grid.matchingPatterns.IMatchingPattern;
 import grid.matchingPatterns.Match;
 import grid.matchingPatterns.NoMatch;
-import javafx.stage.Screen;
 import tile.Tile;
-import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.GameOverCondition;
 import tmGame.gameScreen.GameScreenJFX;
+import tmGame.inputHandlers.InputHandler;
 
 public abstract class TileMatchingGame {
 	protected Grid grid;
 	protected GameScreenJFX screen;
-	protected InputHandlerJFX inputHandler;
+	protected InputHandler inputHandler;
 	protected GameOverCondition gameOver;
 	protected IMatchingPattern[] matchingPatterns;
 	protected IGravity gravity;
 	protected int score;
+	protected long sleepMilliseconds;
 	private boolean isRunning;
 
 	protected static java.time.Clock clock = Clock.systemUTC();
 
 	public void initializeGame(		
-		Grid grid, GameScreenJFX screen, InputHandlerJFX input, 
-		GameOverCondition gameOver, IMatchingPattern[] matchingPatterns, IGravity gravity) 
+		Grid grid, GameScreenJFX screen, InputHandler input, 
+		GameOverCondition gameOver, IMatchingPattern[] matchingPatterns, IGravity gravity, double secondsPerTick) 
 	{
 		this.grid = grid;
 		this.screen = screen;
@@ -41,8 +40,7 @@ public abstract class TileMatchingGame {
 		this.gravity = gravity;
 		this.isRunning = true;
 		this.score = 0;
-
-		inputHandler.register(this);
+		this.sleepMilliseconds = (long) (1000*secondsPerTick);
 	}
 
 
@@ -51,6 +49,7 @@ public abstract class TileMatchingGame {
 	}
 
 	public final void run() {
+		inputHandler.registerEventHandlers();
 		// var nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
 		display();
 		while(isRunning()) {
@@ -61,7 +60,7 @@ public abstract class TileMatchingGame {
 			display();
 			//}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(sleepMilliseconds);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -81,14 +80,11 @@ public abstract class TileMatchingGame {
 	}
 
 	public void applyGravity() {
-		System.out.println("Applying Gravity");
 		gravity.applyGravity(grid);
 	}
 
 	public void checkGameOver() {
-		System.out.println("Checking for game over");
 		this.isRunning = !gameOver.isGameOver(this);
-		System.out.println("Game over: " + !this.isRunning);
 	}
 
 	public GameScreenJFX getScreen() {
@@ -107,7 +103,7 @@ public abstract class TileMatchingGame {
 		this.screen = screen;
 	}
 
-	public void setInputHandler(InputHandlerJFX inputHandler) {
+	public void setInputHandler(InputHandler inputHandler) {
 		this.inputHandler = inputHandler;
 	}
 
