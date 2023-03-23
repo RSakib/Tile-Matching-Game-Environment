@@ -31,13 +31,15 @@ public class TetrisGameScreen extends GameScreenJFX {
 
     @Override
     public Node getTileElement(Position pos, Tile tile) {
+        if (pos.row < 4) {
+            return new Rectangle(0,0);
+        }
+
         Rectangle displayTile = new Rectangle(tileWidth(), tileHeight());
 
         if(tile.isEmpty()) {
             displayTile.setFill(Color.GREY);
-            if (pos.row < 4) {
-                displayTile.setFill(Color.BLACK);
-            }
+            
         }
         else {
             displayTile.setFill(colorMap.get(tile.getColor()));
