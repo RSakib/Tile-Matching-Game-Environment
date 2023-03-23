@@ -17,10 +17,10 @@ import grid.gravity.DropRowsDown;
 import grid.matchingPatterns.HorizontalMatchingPattern;
 import grid.matchingPatterns.IMatchingPattern;
 import grid.matchingPatterns.Match;
-import tmGame.InputHandler.FallingBlockInputHandler;
-import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.GridOverflowed;
 import tmGame.gameScreen.TetrisGameScreen;
+import tmGame.inputHandlers.FallingBlockInputHandler;
+import tmGame.inputHandlers.InputHandler;
 
 public class TetrisGame extends FallingBlockGame {
     private static int ROWS = 20;
@@ -33,7 +33,7 @@ public class TetrisGame extends FallingBlockGame {
         initializeGame(
             grid,
             new TetrisGameScreen(),
-            new FallingBlockInputHandler(),
+            new FallingBlockInputHandler(this),
             new GridOverflowed(INVISIBLE_ROWS),
             new IMatchingPattern[] {
                 new HorizontalMatchingPattern(COLS)
@@ -42,21 +42,7 @@ public class TetrisGame extends FallingBlockGame {
             SECONDS_PER_TICK
         );
     }
-
-    public TetrisGame(InputHandlerJFX input) {
-        Grid grid = new Grid(ROWS + INVISIBLE_ROWS, COLS);
-        initializeGame(
-            grid,
-            new TetrisGameScreen(),
-            input,
-            new GridOverflowed(INVISIBLE_ROWS),
-            new IMatchingPattern[] {
-                new HorizontalMatchingPattern(COLS)
-            },
-            new DropRowsDown(),
-            SECONDS_PER_TICK
-        );
-    }
+    
 
     @Override
     public void onClockTick() {

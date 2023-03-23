@@ -11,14 +11,14 @@ import grid.matchingPatterns.IMatchingPattern;
 import grid.matchingPatterns.Match;
 import grid.matchingPatterns.NoMatch;
 import tile.Tile;
-import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.GameOverCondition;
 import tmGame.gameScreen.GameScreenJFX;
+import tmGame.inputHandlers.InputHandler;
 
 public abstract class TileMatchingGame {
 	protected Grid grid;
 	protected GameScreenJFX screen;
-	protected InputHandlerJFX inputHandler;
+	protected InputHandler inputHandler;
 	protected GameOverCondition gameOver;
 	protected IMatchingPattern[] matchingPatterns;
 	protected IGravity gravity;
@@ -29,7 +29,7 @@ public abstract class TileMatchingGame {
 	protected static java.time.Clock clock = Clock.systemUTC();
 
 	public void initializeGame(		
-		Grid grid, GameScreenJFX screen, InputHandlerJFX input, 
+		Grid grid, GameScreenJFX screen, InputHandler input, 
 		GameOverCondition gameOver, IMatchingPattern[] matchingPatterns, IGravity gravity, double secondsPerTick) 
 	{
 		this.grid = grid;
@@ -41,8 +41,6 @@ public abstract class TileMatchingGame {
 		this.isRunning = true;
 		this.score = 0;
 		this.sleepMilliseconds = (long) (1000*secondsPerTick);
-
-		inputHandler.register(this);
 	}
 
 
@@ -51,6 +49,7 @@ public abstract class TileMatchingGame {
 	}
 
 	public final void run() {
+		inputHandler.registerEventHandlers();
 		// var nextTick = Clock.offset(clock, Duration.ofSeconds(1)).instant();
 		display();
 		while(isRunning()) {
@@ -104,7 +103,7 @@ public abstract class TileMatchingGame {
 		this.screen = screen;
 	}
 
-	public void setInputHandler(InputHandlerJFX inputHandler) {
+	public void setInputHandler(InputHandler inputHandler) {
 		this.inputHandler = inputHandler;
 	}
 

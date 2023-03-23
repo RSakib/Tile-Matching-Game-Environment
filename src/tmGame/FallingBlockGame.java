@@ -12,19 +12,19 @@ import grid.matchingPatterns.IMatchingPattern;
 import javafx.geometry.Pos;
 import tile.EmptyTile;
 import tile.Tile;
-import tmGame.InputHandler.FallingBlockInputHandler;
-import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.GameOverCondition;
 import tmGame.gameOverConditions.GridOverflowed;
 import tmGame.gameScreen.GameScreenJFX;
 import tmGame.gameScreen.TetrisGameScreen;
+import tmGame.inputHandlers.FallingBlockInputHandler;
+import tmGame.inputHandlers.InputHandler;
 
 public abstract class FallingBlockGame extends TileMatchingGame{
     private IFallable currentFaller;
 
     @Override
 	public void initializeGame(		
-		Grid grid, GameScreenJFX screen, InputHandlerJFX input, 
+		Grid grid, GameScreenJFX screen, InputHandler input, 
 		GameOverCondition gameOver, IMatchingPattern[] matchingPatterns, IGravity gravity, double secondsPerTick) 
 	{
 		super.initializeGame(grid, screen, input, gameOver, matchingPatterns, gravity, secondsPerTick);

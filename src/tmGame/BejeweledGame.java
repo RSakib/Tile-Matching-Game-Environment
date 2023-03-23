@@ -23,10 +23,10 @@ import tile.BejeweledTiles.FlameTile;
 import tile.BejeweledTiles.HypercubeTile;
 import tile.BejeweledTiles.StarTile;
 import tile.exploders.SameColorExplode;
-import tmGame.InputHandler.BejeweledInputHandler;
-import tmGame.InputHandler.InputHandlerJFX;
 import tmGame.gameOverConditions.TimeUp;
 import tmGame.gameScreen.BejeweledGameScreen;
+import tmGame.inputHandlers.BejeweledInputHandler;
+import tmGame.inputHandlers.InputHandler;
 
 public class BejeweledGame extends TileMatchingGame{
     private static int ROWS = 8;
@@ -43,29 +43,7 @@ public class BejeweledGame extends TileMatchingGame{
         initializeGame(
             new Grid(ROWS, COLS),
             new BejeweledGameScreen(), 
-            new BejeweledInputHandler(),
-            new TimeUp(Clock.systemUTC(), GAME_LENGTH),
-            new IMatchingPattern[] {
-                new HorizontalMatchingPattern(5),
-                new VerticalMatchingPattern(5),
-                new LMatchingPattern(3),
-                new TMatchingPattern(3),
-                new HorizontalMatchingPattern(4),
-                new VerticalMatchingPattern(4),
-                new HorizontalMatchingPattern(3),
-                new VerticalMatchingPattern(3)
-            },
-            new DropTilesDown(),
-            SECONDS_PER_TICK
-        );
-        fillEmptyTiles();
-    }
-
-    public BejeweledGame(InputHandlerJFX input) {
-        initializeGame(
-            new Grid(ROWS, COLS),
-            new BejeweledGameScreen(), 
-            input,
+            new BejeweledInputHandler(this),
             new TimeUp(Clock.systemUTC(), GAME_LENGTH),
             new IMatchingPattern[] {
                 new HorizontalMatchingPattern(5),

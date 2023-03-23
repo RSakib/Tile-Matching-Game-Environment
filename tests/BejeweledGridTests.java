@@ -15,15 +15,9 @@ import tile.BejeweledTiles.StarTile;
 import tile.exploders.SquareExplode;
 import tmGame.BejeweledGame;
 import tmGame.TileMatchingGame;
-import tmGame.InputHandler.InputHandlerJFX;
+import tmGame.inputHandlers.InputHandler;
 
 public class BejeweledGridTests {
-    private class NullInputHandler implements InputHandlerJFX {
-        @Override
-        public void register(TileMatchingGame game) {
-        }
-    }
-
     private void assertGridEquals(int[][] expected, Grid grid){
         for (int r = 0; r < expected.length; r++) {
             for (int c = 0; c < expected[r].length; c++) {
@@ -73,7 +67,7 @@ public class BejeweledGridTests {
 
     @Before
     public void setUp() {
-        game = new BejeweledGame(new NullInputHandler());
+        game = new BejeweledGame();
         game.setInputHandler(null);
         grid = game.getGrid();
     }
