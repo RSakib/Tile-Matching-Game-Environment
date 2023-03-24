@@ -1,6 +1,6 @@
 You must update to the newest version of Java
 
-If you are one a windows PC, simply click RunGame.Bat to get the TMGE running
+If you are on a windows PC, simply click RunGame.Bat to get the TMGE running
 
 else, input the equivalent of this into your OS's command line
 
