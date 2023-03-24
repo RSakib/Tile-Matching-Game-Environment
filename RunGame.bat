@@ -1,0 +1,1 @@
+java -jar --module-path javafx-sdk-19.0.2.1/lib --add-modules=javafx.controls,javafx.media,javafx.fxml,javafx.graphics Tile-Matching-Game-Environment.jar
