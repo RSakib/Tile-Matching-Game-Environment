@@ -6,14 +6,11 @@ import grid.Position;
 import javafx.scene.paint.Color;
 import tile.TileColor;
 import tile.Tile;
-import tmGame.TileMatchingGame;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.Node;
 
 public class TetrisGameScreen extends GameScreenJFX {
-    private TileMatchingGame game;
-
     private static Map<TileColor, Color> colorMap = Map.of(
         TileColor.SILVER, Color.CYAN,
         TileColor.BLUE, Color.BLUE,

@@ -17,8 +17,6 @@ public class VerticalMatchingPattern implements IMatchingPattern{
 
 	@Override
 	public Match findMatch(Grid grid, Position position) {
-		Tile startTile = grid.tileAt(position);
-
 		for (int rowOffset = 0; rowOffset > -numMatching; rowOffset--) {
 			Match m = matchStartsAt(grid, new Position(position.row + rowOffset, position.col));
 			if (m.isMatch()) {

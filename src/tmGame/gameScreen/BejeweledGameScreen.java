@@ -16,6 +16,7 @@ import tmGame.BejeweledGame;
 public class BejeweledGameScreen extends GameScreenJFX{
 
     public BejeweledGameScreen() {
+        super();
     }
 
     @Override
