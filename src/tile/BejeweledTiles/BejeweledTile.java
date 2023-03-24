@@ -2,7 +2,6 @@ package tile.BejeweledTiles;
 
 import tile.TileColor;
 import tile.Tile;
-import tile.exploders.IExploder;
 import tile.exploders.SelfExplode;
 import tile.matchers.SameColorMatcher;
 

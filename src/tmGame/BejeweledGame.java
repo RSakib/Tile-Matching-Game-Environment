@@ -26,7 +26,6 @@ import tile.exploders.SameColorExplode;
 import tmGame.gameOverConditions.TimeUp;
 import tmGame.gameScreen.BejeweledGameScreen;
 import tmGame.inputHandlers.BejeweledInputHandler;
-import tmGame.inputHandlers.InputHandler;
 
 public class BejeweledGame extends TileMatchingGame{
     private static int ROWS = 8;

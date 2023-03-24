@@ -1,7 +1,6 @@
 package tile.BejeweledTiles;
 
 import tile.TileColor;
-import tile.exploders.SameColorExplode;
 import tile.exploders.SelfExplode;
 
 public class HypercubeTile extends BejeweledTile{

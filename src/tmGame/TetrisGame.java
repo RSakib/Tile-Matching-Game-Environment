@@ -20,7 +20,6 @@ import grid.matchingPatterns.Match;
 import tmGame.gameOverConditions.GridOverflowed;
 import tmGame.gameScreen.TetrisGameScreen;
 import tmGame.inputHandlers.FallingBlockInputHandler;
-import tmGame.inputHandlers.InputHandler;
 
 public class TetrisGame extends FallingBlockGame {
     private static int ROWS = 20;

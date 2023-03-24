@@ -5,7 +5,6 @@ import java.util.Map;
 import grid.Direction;
 import javafx.scene.input.KeyCode;
 import tmGame.FallingBlockGame;
-import tmGame.TileMatchingGame;
 import tmGame.inputHandlers.eventHandlers.Action;
 import tmGame.inputHandlers.eventHandlers.KeyboardInputHandler;
 
@@ -28,6 +27,7 @@ public class FallingBlockInputHandler implements InputHandler {
             LEFTCODE, () -> game.shiftFaller(Direction.LEFT),
             RIGHTCODE, () -> game.shiftFaller(Direction.RIGHT),
             UPCODE, () -> game.rotateFaller(),
+            ACTIONCODE, () -> game.rotateFaller(),
             DOWNCODE, () -> game.moveFallerDown()
         );
         new KeyboardInputHandler(game, keyBindings);

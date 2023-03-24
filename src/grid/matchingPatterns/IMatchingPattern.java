@@ -1,7 +1,5 @@
 package grid.matchingPatterns;
 
-import java.util.List;
-
 import grid.Grid;
 import grid.Position;
 

@@ -4,8 +4,6 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 
-import javax.management.InstanceNotFoundException;
-
 import tmGame.TileMatchingGame;
 
 public class TimeUp implements GameOverCondition{

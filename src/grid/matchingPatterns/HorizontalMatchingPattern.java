@@ -6,7 +6,6 @@ import java.util.List;
 import grid.Grid;
 import grid.Position;
 import tile.Tile;
-import tile.matchers.IMatcher;
 
 public class HorizontalMatchingPattern implements IMatchingPattern{
 	private int numMatching;

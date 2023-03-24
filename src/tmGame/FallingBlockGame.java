@@ -6,17 +6,11 @@ import grid.Direction;
 import grid.Grid;
 import grid.Position;
 import grid.IFallableBlocks.IFallable;
-import grid.gravity.DropRowsDown;
 import grid.gravity.IGravity;
 import grid.matchingPatterns.IMatchingPattern;
-import javafx.geometry.Pos;
-import tile.EmptyTile;
 import tile.Tile;
 import tmGame.gameOverConditions.GameOverCondition;
-import tmGame.gameOverConditions.GridOverflowed;
 import tmGame.gameScreen.GameScreenJFX;
-import tmGame.gameScreen.TetrisGameScreen;
-import tmGame.inputHandlers.FallingBlockInputHandler;
 import tmGame.inputHandlers.InputHandler;
 
 public abstract class FallingBlockGame extends TileMatchingGame{

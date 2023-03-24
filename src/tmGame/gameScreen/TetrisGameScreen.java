@@ -1,20 +1,15 @@
 package tmGame.gameScreen;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import grid.Grid;
 import grid.Position;
 import javafx.scene.paint.Color;
 import tile.TileColor;
-import tile.EmptyTile;
 import tile.Tile;
 import tmGame.TileMatchingGame;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 
 public class TetrisGameScreen extends GameScreenJFX {
     private TileMatchingGame game;

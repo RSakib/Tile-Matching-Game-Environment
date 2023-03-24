@@ -1,10 +1,7 @@
 package tmGame.gameScreen;
 
-import grid.Grid;
 import grid.Position;
 import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -15,7 +12,6 @@ import tile.BejeweledTiles.HypercubeTile;
 import tile.BejeweledTiles.StarTile;
 import tile.BejeweledTiles.FlameTile;
 import tmGame.BejeweledGame;
-import tmGame.TileMatchingGame;
 
 public class BejeweledGameScreen extends GameScreenJFX{
 

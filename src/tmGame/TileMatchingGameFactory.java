@@ -1,7 +1,5 @@
 package tmGame;
 
-import grid.*;
-
 
 public class TileMatchingGameFactory {
 	public TileMatchingGame createGame(String title) {

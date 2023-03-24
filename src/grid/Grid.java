@@ -5,7 +5,6 @@ import java.util.List;
 
 import tile.EmptyTile;
 import tile.Tile;
-import tile.matchers.IMatcher;
 
 public class Grid {
 	private int numRows;
