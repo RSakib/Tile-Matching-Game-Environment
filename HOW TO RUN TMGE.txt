@@ -1,0 +1,29 @@
+If you are one a windows PC, simply click RunGame.Bat to get the TMGE running
+
+else, input the equivalent of this into your OS's command line
+
+java -jar --module-path javafx-sdk-19.0.2.1/lib --add-modules=javafx.controls,javafx.media,javafx.fxml,javafx.graphics Tile-Matching-Game-Environment.jar
+
+
+Once the game is running, there's a few things that can be done
+
+There is a button to increase or decrease the amount of players that will be playing, Players are done as a turn system
+Think similar to the original Super Mario Bros., one player goes until their game ends and then hands it off to the next
+player
+
+There is a button to view the players and scores
+	This will show highest scores and player names as you play through games
+There are two buttons labeled "Tetris" and "Bejeweled"
+
+Clicking on either button will run the respective game
+However Before a game starts, it will ask for a player name as a player profile
+	It will do this before every game for as many players that were inputed in the main menu screen
+
+Tetris Controls:
+rotate : W or SpaceBar
+ShiftLeft : A
+ShiftRight : D
+ShiftDown : S
+
+Bejeweled Controls:
+Simply use the mouse to point and select which tiles you need
